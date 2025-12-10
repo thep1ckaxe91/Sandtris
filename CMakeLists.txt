@@ -8,6 +8,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
+set(SDLMIXER_VENDORED ON CACHE BOOL "Force vendored libraries for SDL_mixer")
+add_subdirectory(vendored/SDL_mixer)
+
+set(SDLIMAGE_VENDORED ON CACHE BOOL "Force vendored libraries for SDL_image")
+add_subdirectory(vendored/SDL_image)
+
+set(SDLTTF_VENDORED ON CACHE BOOL "Force vendored libraries for SDL_ttf")
+add_subdirectory(vendored/SDL_ttf)
+
+add_subdirectory(src/engine)
+
 set(SOURCE_FILES
     src/main.cpp
     src/Animation.cpp
@@ -50,24 +61,6 @@ set(SOURCE_FILES
     src/Tetrimino.cpp
     src/TetriminoController.cpp
     src/tetriminoes.cpp
-    src/engine/color.cpp
-    src/engine/display.cpp
-    src/engine/draw.cpp
-    src/engine/engine.cpp
-    src/engine/event.cpp
-    src/engine/font.cpp
-    src/engine/image.cpp
-    src/engine/key.cpp
-    src/engine/math.cpp
-    src/engine/mixer.cpp
-    src/engine/mouse.cpp
-    src/engine/music.cpp
-    src/engine/random.cpp
-    src/engine/rect.cpp
-    src/engine/sprite.cpp
-    src/engine/surface.cpp
-    src/engine/time.cpp
-    src/engine/transform.cpp
 )
 
 include_directories(
@@ -76,7 +69,7 @@ include_directories(
 
 add_executable(Sandtris ${SOURCE_FILES})
 
-target_link_libraries(Sandtris PRIVATE SDL3::SDL3)
+target_link_libraries(Sandtris PRIVATE GameEngine SDL3::SDL3 SDL3_mixer::SDL3_mixer SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
 
 add_custom_command(TARGET Sandtris POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
