@@ -10,6 +10,64 @@ add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 
 set(SOURCE_FILES
     src/main.cpp
+    src/Animation.cpp
+    src/AudioManager.cpp
+    src/BackButton.cpp
+    src/Button.cpp
+    src/Credit.cpp
+    src/CreditButton.cpp
+    src/flags.cpp
+    src/Game.cpp
+    src/GameOver.cpp
+    src/GamePlay.cpp
+    src/Grid.cpp
+    src/HowToPlay.cpp
+    src/HTPButton.cpp
+    src/Images.cpp
+    src/MainMenu.cpp
+    src/MenuButton.cpp
+    src/Option.cpp
+    src/OptionButton.cpp
+    src/OptionElement.cpp
+    src/Pause.cpp
+    src/PauseButton.cpp
+    src/PBButton.cpp
+    src/PersonalBest.cpp
+    src/QuitButton.cpp
+    src/ResumeButton.cpp
+    src/RetryButton.cpp
+    src/Sand.cpp
+    src/SaveData.cpp
+    src/scene_transitions.cpp
+    src/Scene.cpp
+    src/SceneTransition.cpp
+    src/SFX.cpp
+    src/Slider.cpp
+    src/splash_screens.cpp
+    src/SplashScreen.cpp
+    src/StartButton.cpp
+    src/State.cpp
+    src/Tetrimino.cpp
+    src/TetriminoController.cpp
+    src/tetriminoes.cpp
+    src/engine/color.cpp
+    src/engine/display.cpp
+    src/engine/draw.cpp
+    src/engine/engine.cpp
+    src/engine/event.cpp
+    src/engine/font.cpp
+    src/engine/image.cpp
+    src/engine/key.cpp
+    src/engine/math.cpp
+    src/engine/mixer.cpp
+    src/engine/mouse.cpp
+    src/engine/music.cpp
+    src/engine/random.cpp
+    src/engine/rect.cpp
+    src/engine/sprite.cpp
+    src/engine/surface.cpp
+    src/engine/time.cpp
+    src/engine/transform.cpp
 )
 
 include_directories(
