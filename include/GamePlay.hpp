@@ -1,5 +1,4 @@
-#ifndef GAMEPLAY_HPP
-#define GAMEPLAY_HPP
+#pragma once
 #include "Game.hpp"
 #include "Scene.hpp"
 #include "TetriminoController.hpp"
@@ -39,4 +38,3 @@ public:
     ~GamePlay();
 };
 
-#endif

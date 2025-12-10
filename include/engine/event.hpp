@@ -1,10 +1,8 @@
 #pragma once
-#ifndef SDLGAME_EVENT_
-#define SDLGAME_EVENT_
-#include "SDL2/SDL_events.h"
+#include "SDL3/SDL_events.h"
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 namespace sdlgame{
     namespace event
     {
@@ -14,7 +12,7 @@ namespace sdlgame{
         class Event
         {
         private:
-            std::map<std::string, int64_t> dict;
+            std::unordered_map<std::string, int64_t> dict;
 
         public:
             Uint32 type;
@@ -31,5 +29,3 @@ namespace sdlgame{
         void post(Uint32 event_type);
     }
 }
-
-#endif

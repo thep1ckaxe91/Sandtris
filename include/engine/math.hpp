@@ -1,8 +1,6 @@
 #pragma once
-#ifndef SDLGAME_MATH_
-#define SDLGAME_MATH_
 #include <cmath>
-#include "SDL2/SDL.h"
+#include "SDL3/SDL.h"
 #include <string>
 namespace sdlgame {
     /**
@@ -98,5 +96,3 @@ namespace sdlgame {
         sdlgame::math::Vector2 operator*(const double &scalar, const sdlgame::math::Vector2 &v);
     }
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SCENE_TRANSITION_HPP
-#define SCENE_TRANSITION_HPP
+#pragma once
 
 using namespace std;
 /**
@@ -17,4 +16,3 @@ public:
     virtual ~SceneTransition();
 };
 
-#endif

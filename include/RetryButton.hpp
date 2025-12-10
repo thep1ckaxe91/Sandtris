@@ -1,5 +1,4 @@
-#ifndef RETRYBUTTON_HPP
-#define RETRYBUTTON_HPP
+#pragma once
 #include "Button.hpp"
 #include "Game.hpp"
 class RetryButton : public Button
@@ -12,4 +11,3 @@ public:
     void handle_event(Event &event);
     void update();
 };
-#endif

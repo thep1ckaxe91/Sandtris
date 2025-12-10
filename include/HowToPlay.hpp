@@ -1,5 +1,4 @@
-#ifndef HOW_TO_PLAY_HPP
-#define HOW_TO_PLAY_HPP
+#pragma once
 
 #include "Scene.hpp"
 #include "BackButton.hpp"
@@ -17,4 +16,3 @@ public:
 };
 
 
-#endif

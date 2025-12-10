@@ -1,7 +1,7 @@
 #include "display.hpp"
 #include <stdio.h>
-#include "SDL2/SDL_hints.h"
-#include "SDL2/SDL_image.h"
+#include "SDL3/SDL_hints.h"
+#include "SDL3_image/SDL_image.h"
 #include "surface.hpp"
 #include "math.hpp"
 SDL_Window *sdlgame::display::window;
@@ -29,18 +29,18 @@ sdlgame::surface::Surface &sdlgame::display::set_mode(int width, int height, Uin
     resolution = sdlgame::math::Vector2(width, height);
     if(!SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER,"direct3d11",SDL_HINT_OVERRIDE))
     {
-        printf("Set renderer driver hint failed\n");
+        SDL_Log("Set renderer driver hint failed\n");
     }
     window = SDL_CreateWindow("SDLgame Custom Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
     if (window == nullptr)
     {
-        printf("Failed to create a window object\nErr: %s\n", SDL_GetError());
+        SDL_Log("Failed to create a window object\nErr: %s\n", SDL_GetError());
         exit(0);
     }
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
     if (renderer == nullptr)
     {
-        printf("Failed to create a renderer\nErr: %s\n", SDL_GetError());
+        SDL_Log("Failed to create a renderer\nErr: %s\n", SDL_GetError());
         exit(0);
     }
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
@@ -114,10 +114,11 @@ sdlgame::surface::Surface &sdlgame::display::get_surf()
 }
 
 double sdlgame::display::get_width()
-{
+{ 
+    //FIXME: these should just be assert
     if (win_surf.getWidth() == 0)
     {
-        printf("Display not yet set mode\n");
+        SDL_Log("Display not yet set mode\n");
         exit(0);
     }
     return win_surf.getWidth();
@@ -126,7 +127,7 @@ double sdlgame::display::get_height()
 {
     if (win_surf.getHeight() == 0)
     {
-        printf("Display not yet set mode\n");
+        SDL_Log("Display not yet set mode\n");
         exit(0);
     }
     return win_surf.getHeight();

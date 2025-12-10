@@ -1,5 +1,4 @@
-#ifndef SLIDER_HPP
-#define SLIDER_HPP
+#pragma once
 
 #include "engine/engine.hpp"
 #include <bits/stdc++.h>
@@ -35,4 +34,3 @@ public:
     virtual void on_change_value()=0;
 };
 
-#endif

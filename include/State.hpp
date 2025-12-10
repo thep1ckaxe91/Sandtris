@@ -1,5 +1,4 @@
-#ifndef STATE_HPP
-#define STATE_HPP
+#pragma once
 #include "engine/engine.hpp"
 class State
 {
@@ -10,4 +9,3 @@ public:
 };
 
 
-#endif

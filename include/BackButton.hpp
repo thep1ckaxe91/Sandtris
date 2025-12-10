@@ -1,5 +1,4 @@
-#ifndef BACKBUTTON_HPP
-#define BACKBUTTON_HPP
+#pragma once
 #include "Button.hpp"
 #include "Game.hpp"
 class BackButton : public Button
@@ -13,4 +12,3 @@ public:
     void update();
 };
 
-#endif

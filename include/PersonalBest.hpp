@@ -1,5 +1,4 @@
-#ifndef PERSONAL_BEST_HPP
-#define PERSONAL_BEST_HPP
+#pragma once
 
 #include "Scene.hpp"
 #include "Game.hpp"
@@ -20,4 +19,3 @@ public:
     void handle_event(Event &event);
 };
 
-#endif

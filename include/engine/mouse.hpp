@@ -1,5 +1,4 @@
-#ifndef SDLGAME_MOUSE_
-#define SDLGAME_MOUSE_
+#pragma once
 #include <vector>
 #include "math.hpp"
 namespace sdlgame{
@@ -17,4 +16,3 @@ namespace sdlgame{
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef TETRIS_CONSTANT_HPP
-#define TETRIS_CONSTANT_HPP
+#pragma once
 #include "engine/engine.hpp"
 const std::string base_path = sdlgame::get_base_path();
 typedef enum
@@ -80,4 +79,3 @@ const double gameplay_bg_speed = 10;
 const double gforce = 1; //pix/sec^2
 const int client_cores = std::thread::hardware_concurrency();
 const std::string font_path = base_path + "data\\fonts\\sandtris pixel.ttf";
-#endif

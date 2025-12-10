@@ -1,7 +1,6 @@
-#ifndef SDLGAME_KEY_
-#define SDLGAME_KEY_
+#pragma once
 
-#include "SDL2/SDL_scancode.h"
+#include "SDL3/SDL_scancode.h"
 #include <vector>
 
 
@@ -17,4 +16,3 @@ namespace sdlgame{
         std::vector<bool> &get_pressed();
     }
 }
-#endif

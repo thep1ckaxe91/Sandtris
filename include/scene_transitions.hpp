@@ -1,5 +1,4 @@
-#ifndef SCENE_TRANSITIONS_HPP
-#define SCENE_TRANSITIONS_HPP
+#pragma once
 #include "SceneTransition.hpp"
 #include "engine/engine.hpp"
 class OutSwipeDown : public SceneTransition
@@ -43,4 +42,3 @@ public:
     void update(double delta_time);
     void draw();
 };
-#endif

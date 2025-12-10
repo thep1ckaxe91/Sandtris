@@ -1,7 +1,5 @@
 #pragma once
-#ifndef SDLGAME_SURFACE_
-#define SDLGAME_SURFACE_
-#include "SDL2/SDL.h"
+#include "SDL3/SDL.h"
 #include "color.hpp"
 #include "rect.hpp"
 #include "math.hpp"
@@ -47,5 +45,3 @@ namespace sdlgame
         };
     }
 }
-
-#endif

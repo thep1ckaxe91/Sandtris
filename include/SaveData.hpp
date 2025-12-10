@@ -1,5 +1,4 @@
-#ifndef SAVEDATA_HPP
-#define SAVEDATA_HPP
+#pragma once
 #include "constant.hpp"
 #include "Grid.hpp"
 using namespace std;
@@ -23,4 +22,3 @@ Grid load_grid_data(Game *game);
 bool save_window_info(int x,int y, int width, int height);
 pair<pair<int,int>,pair<int,int>> load_window_info();
 
-#endif

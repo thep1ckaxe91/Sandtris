@@ -1,5 +1,4 @@
-#ifndef GAME_HPP
-#define GAME_HPP
+#pragma once
 #include "engine/engine.hpp"
 #include "Images.hpp"
 #include "Scene.hpp"
@@ -48,4 +47,3 @@ public:
     // void pop_scene(T1* out, T2* next, T3* in);
     void pop_scene(SceneTransition* out, Scene* next, SceneTransition* in);
 };
-#endif

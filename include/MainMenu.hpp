@@ -1,5 +1,4 @@
-#ifndef MAINMENU_HPP
-#define MAINMENU_HPP
+#pragma once
 #include "Scene.hpp"
 #include "StartButton.hpp"
 #include "QuitButton.hpp"
@@ -27,4 +26,3 @@ public:
     ~MainMenu();
 };
 
-#endif

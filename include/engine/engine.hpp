@@ -4,18 +4,13 @@
  * email: ThePickaxe91@gmail.com
  *
  * @brief this is also a replicate for pygame in c++, but due to some exploitation, redoing and still testing
- *
- * REQUIREMENT: SDL2 installed to your mingw/include directory, SDL_image/mixer/ttf in a folder named SDL3 also in your mingw/include
- *
- * all pixel format is RGBA32, fixed
- *
- * @warning this is not thread-safe, recommend only sigle threading, currently only support window OS
+ * *
+ * @warning this is not thread-safe, recommend only single threading, currently only support windows OS
  *
  * @copyright if you want to use this file, please contact for permission, after that, feel free to use and modify this file
  */
 #pragma once
-#ifndef ENGINE_HPP
-#define ENGINE_HPP
+
 #include <bits/stdc++.h>
 #include "math.hpp"
 #include "rect.hpp"
@@ -53,5 +48,3 @@ namespace sdlgame
     void init();
     void quit();
 }
-
-#endif

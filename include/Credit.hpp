@@ -1,5 +1,4 @@
-#ifndef CREDIT_HPP
-#define CREDIT_HPP
+#pragma once
 
 #include "Scene.hpp"
 #include "BackButton.hpp"
@@ -15,5 +14,3 @@ public:
     void draw();
 };
 
-
-#endif

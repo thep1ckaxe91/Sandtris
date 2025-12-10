@@ -1,5 +1,4 @@
-#ifndef ELEMENT_HPP
-#define ELEMENT_HPP
+#pragma once
 
 
 class Element
@@ -8,4 +7,3 @@ class Element
 };
 
 
-#endif

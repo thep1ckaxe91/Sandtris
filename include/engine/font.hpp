@@ -1,6 +1,5 @@
-#ifndef SDLGAME_FONT_
-#define SDLGAME_FONT_
-#include "SDL2/SDL_ttf.h"
+#pragma once
+#include "SDL3_ttf/SDL_ttf.h"
 #include <string>
 #include <map>
 #include "surface.hpp"
@@ -48,4 +47,3 @@ namespace sdlgame {
         };
     }
 }
-#endif

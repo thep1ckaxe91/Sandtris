@@ -1,5 +1,4 @@
-#ifndef TETRIMINO_CONTROLLER_HPP
-#define TETRIMINO_CONTROLLER_HPP
+#pragma once
 #include "engine/engine.hpp"
 #include "Tetrimino.hpp"
 #include "Sand.hpp"
@@ -39,4 +38,3 @@ public:
     void handle_event(Event &event);
 };
 
-#endif

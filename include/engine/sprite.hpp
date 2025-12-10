@@ -1,5 +1,4 @@
-#ifndef SDLGAME_SPRITE_
-#define SDLGAME_SPRITE_
+#pragma once
 #include <vector>
 #include <set>
 #include "math.hpp"
@@ -98,4 +97,3 @@ namespace sdlgame
     }
 }
 
-#endif

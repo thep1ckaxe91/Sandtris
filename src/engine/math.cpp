@@ -1,6 +1,8 @@
 #include "math.hpp"
-#include "SDL2/SDL.h"
-#include <bits/stdc++.h>
+#include "SDL3/SDL.h"
+#include <cmath>
+#include <algorithm>
+#include <string>
 #define M_PI 3.14159265358979323846
 double sdlgame::math::degree_to_radian(double deg)
 {

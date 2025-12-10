@@ -1,5 +1,4 @@
-#ifndef SDLGAME_RANDOM_
-#define SDLGAME_RANDOM_
+#pragma once
 #include <bits/stdc++.h>
 namespace sdlgame {
     namespace random
@@ -19,4 +18,3 @@ namespace sdlgame {
     }
 }
 
-#endif

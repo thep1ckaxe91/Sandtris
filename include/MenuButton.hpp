@@ -1,5 +1,4 @@
-#ifndef MENUBUTTON_HPP
-#define MENUBUTTON_HPP
+#pragma once
 #include "Button.hpp"
 #include "Game.hpp"
 class MenuButton : public Button
@@ -12,4 +11,3 @@ public:
     void handle_event(Event &event);
     void update();
 };
-#endif

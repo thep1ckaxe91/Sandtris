@@ -1,5 +1,4 @@
-#ifndef PAUSE_HPP
-#define PAUSE_HPP
+#pragma once
 
 #include "Scene.hpp"
 #include "MenuButton.hpp"
@@ -26,4 +25,3 @@ public:
     void draw();
 };
 
-#endif

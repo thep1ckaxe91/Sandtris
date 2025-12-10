@@ -1,7 +1,7 @@
 #include "key.hpp"
-#include "SDL2/SDL_events.h"
-#include "SDL2/SDL_keyboard.h"
-const Uint8 *sdlgame::key::keyState;
+#include "SDL3/SDL_events.h"
+#include "SDL3/SDL_keyboard.h"
+const bool *sdlgame::key::keyState;
 std::vector<bool> sdlgame::key::keys;
 std::vector<bool> &sdlgame::key::get_pressed()
 {

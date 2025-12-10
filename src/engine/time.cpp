@@ -1,7 +1,7 @@
 #include "time.hpp"
 Uint64 sdlgame::time::get_ticks()
 {
-    return SDL_GetTicks64();
+    return SDL_GetTicks();
 }
 /**
  * get time from init in milisecond

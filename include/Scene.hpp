@@ -1,5 +1,4 @@
-#ifndef SCENE_HPP
-#define SCENE_HPP
+#pragma once
 #include "Game.hpp"
 using namespace std;
 class Game;
@@ -19,4 +18,3 @@ public:
     virtual void handle_event(Event &event)=0;
     virtual ~Scene();
 };
-#endif

@@ -1,5 +1,4 @@
-#ifndef SPLASH_SCREENS_HPP
-#define SPLASH_SCREENS_HPP
+#pragma once
 
 #include "SplashScreen.hpp"
 
@@ -24,4 +23,3 @@ public:
     void on_finish() override;
 };
 
-#endif

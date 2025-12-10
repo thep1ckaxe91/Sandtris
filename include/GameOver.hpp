@@ -1,5 +1,4 @@
-#ifndef GAMEOVER_HPP
-#define GAMEOVER_HPP
+#pragma once
 
 #include "Scene.hpp"
 #include "engine/engine.hpp"
@@ -23,4 +22,3 @@ public:
     void update();
     void draw();
 };
-#endif

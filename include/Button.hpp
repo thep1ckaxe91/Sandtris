@@ -1,5 +1,4 @@
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#pragma once
 #include "engine/engine.hpp"
 class Button : public sdlgame::sprite::Sprite
 {
@@ -16,4 +15,3 @@ public:
 
 };
 
-#endif

@@ -1,8 +1,6 @@
 #pragma once
-#ifndef SDLGAME_DISPLAY_
-#define SDLGAME_DISPLAY_
-#include "SDL2/SDL_video.h"
-#include "SDL2/SDL_render.h"
+#include "SDL3/SDL_video.h"
+#include "SDL3/SDL_render.h"
 #include <stdio.h>
 #include "surface.hpp"
 #include "math.hpp"
@@ -73,5 +71,3 @@ namespace sdlgame
     }
 }
 
-
-#endif

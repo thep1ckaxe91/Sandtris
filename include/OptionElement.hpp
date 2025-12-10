@@ -1,5 +1,4 @@
-#ifndef OPTION_ELEMENT_HPP
-#define OPTION_ELEMENT_HPP
+#pragma once
 #include "Slider.hpp"
 #include "Game.hpp"
 using namespace std;
@@ -56,4 +55,3 @@ public:
 //     void draw();
 // };
 
-#endif

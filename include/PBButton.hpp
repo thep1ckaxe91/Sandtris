@@ -1,5 +1,4 @@
-#ifndef PBBUTTON_HPP
-#define PBBUTTON_HPP
+#pragma once
 #include "Button.hpp"
 #include "Game.hpp"
 
@@ -14,4 +13,3 @@ public:
     void handle_event(Event &event);
 };
 
-#endif

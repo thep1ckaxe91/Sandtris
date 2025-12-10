@@ -1,5 +1,5 @@
 #include "rect.hpp"
-#include "SDL2/SDL_rect.h"
+#include "SDL3/SDL_rect.h"
 sdlgame::rect::Rect::Rect()
 {
     x = y = left = top = bottom = right = w = h = width = height = centerx = centery = 0;

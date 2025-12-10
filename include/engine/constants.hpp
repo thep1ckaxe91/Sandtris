@@ -1,8 +1,5 @@
 #pragma once
-
-#ifndef SDLGAME_CONSTANTS_
-#define SDLGAME_CONSTANTS_
-#include "SDL2/SDL.h"
+#include "SDL3/SDL.h"
 namespace sdlgame
 {
 
@@ -151,5 +148,3 @@ namespace sdlgame
 
     const Uint32 WINDOWPOS_CENTERED = SDL_WINDOWPOS_CENTERED;
 }
-
-#endif

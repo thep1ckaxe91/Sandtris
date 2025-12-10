@@ -1,5 +1,4 @@
-#ifndef SPLASH_SCREEN_HPP
-#define SPLASH_SCREEN_HPP
+#pragma once
 #include "Animation.hpp"
 #include "Scene.hpp"
 #include "scene_transitions.hpp"
@@ -26,4 +25,3 @@ public:
     ~SplashScreen();
 };
 
-#endif

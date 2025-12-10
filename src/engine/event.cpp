@@ -8,40 +8,36 @@ Event sdlgame::event::tmp;
 sdlgame::event::Event::Event() = default;
 sdlgame::event::Event::Event(SDL_Event e)
 {
-    tmp_e = e;
+    tmp_e = e; // This really should just save a SDL_Event as sdl_event, allow direct access when needed
     type = e.type;
     /**
      * @todo: leave these here in case need, now type only is good enough
      */
-    if (e.type == SDL_WINDOWEVENT)
+    if (e.type >= SDL_EVENT_WINDOW_FIRST and e.type <= SDL_EVENT_WINDOW_LAST)
     {
         timestamp = e.window.timestamp;
         dict["windowID"] = e.window.windowID; /**< The associated window */
-        dict["event"] = e.window.event;
+        dict["event"] = e.type; // FIXME: this is reduntdant, but for the purpose of "it work first", we leave it there for now
     }
-    else if (e.type == SDL_KEYDOWN or e.type == SDL_KEYUP)
+    else if (e.type == SDL_EVENT_KEY_DOWN or e.type == SDL_EVENT_KEY_UP)
     {
         timestamp = e.key.timestamp;
-        dict["key"] = e.key.keysym.scancode;
+        dict["key"] = e.key.scancode;
     }
-    else if (e.type == SDL_QUIT)
-    {
-        // lol, just here to write const event
-    }
-    else if (e.type == SDL_MOUSEWHEEL)
+    else if (e.type == SDL_EVENT_MOUSE_WHEEL)
     {
         timestamp = e.wheel.timestamp;
         dict["x"] = e.wheel.x;
         dict["y"] = e.wheel.y;
     }
-    else if (e.type == SDL_MOUSEBUTTONUP or e.type == SDL_MOUSEBUTTONDOWN)
+    else if (e.type == SDL_EVENT_MOUSE_BUTTON_UP or e.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
     {
         timestamp = e.button.timestamp;
         dict["button"] = e.button.button;
         dict["x"] = e.button.x;
         dict["y"] = e.button.y;
     }
-    else if (e.type == SDL_MOUSEMOTION)
+    else if (e.type == SDL_EVENT_MOUSE_MOTION)
     {
         timestamp = e.motion.timestamp;
         dict["x"] = e.motion.x;

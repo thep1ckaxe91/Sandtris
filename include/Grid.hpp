@@ -1,5 +1,4 @@
-#ifndef GRID_HPP
-#define GRID_HPP
+#pragma once
 #include "Sand.hpp"
 #include "constant.hpp"
 #include "Tetrimino.hpp"
@@ -66,4 +65,3 @@ pair<Uint8,Uint8> step(int i,int j, int times);
 extern std::thread grid_draw_thread[2][2];
 void draw_part(const Sand **grid ,Game *game , int top,const int left, const int w, const int h);
 
-#endif

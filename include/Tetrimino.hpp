@@ -1,5 +1,4 @@
-#ifndef TETRIMINO_HPP
-#define TETRIMINO_HPP
+#pragma once
 #include "Sand.hpp"
 #include "engine/engine.hpp"
 using namespace std;
@@ -99,4 +98,3 @@ struct Tetrimino
     void rotate();
 };
 
-#endif

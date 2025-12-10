@@ -1,7 +1,5 @@
 #pragma once
-#ifndef SDLGAME_MIXER_
-#define SDLGAME_MIXER_
-#include "SDL2/SDL_mixer.h"
+#include "SDL3_mixer/SDL_mixer.h"
 #include <string>
 #include <map>
 namespace sdlgame 
@@ -82,5 +80,3 @@ namespace sdlgame
 
     }
 }
-
-#endif

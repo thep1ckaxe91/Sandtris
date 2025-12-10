@@ -1,7 +1,5 @@
 #pragma once
-#ifndef SDLGAME_IMAGE_
-#define SDLGAME_IMAGE_
-#include "SDL2/SDL_image.h"
+#include "SDL3_image/SDL_image.h"
 #include "surface.hpp"
 #include <string>
 namespace sdlgame{
@@ -17,4 +15,3 @@ namespace sdlgame{
         sdlgame::surface::Surface load(std::string path);
     }
 }
-#endif

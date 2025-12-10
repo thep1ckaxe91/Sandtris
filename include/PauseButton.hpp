@@ -1,5 +1,4 @@
-#ifndef PAUSE_BUTTON_HPP
-#define PAUSE_BUTTON_HPP
+#pragma once
 
 #include "Button.hpp"
 #include "Game.hpp"
@@ -15,4 +14,3 @@ public:
     void handle_event(Event &event);
 };
 
-#endif

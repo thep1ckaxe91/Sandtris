@@ -7,12 +7,12 @@ sdlgame::surface::Surface sdlgame::transform::flip(sdlgame::surface::Surface sur
     {
         printf("Failed to set target: %s\n", SDL_GetError());
     }
-    SDL_RendererFlip flipType = SDL_FLIP_NONE;
+    SDL_FlipMode flipType = SDL_FLIP_NONE;
     if (flip_x)
-        flipType = (SDL_RendererFlip)(flipType | SDL_FLIP_HORIZONTAL);
+        flipType = (SDL_FlipMode)(flipType | SDL_FLIP_HORIZONTAL);
     if (flip_y)
-        flipType = (SDL_RendererFlip)(flipType | SDL_FLIP_VERTICAL);
-    if (SDL_RenderCopyEx(sdlgame::display::renderer, surface.texture, NULL, NULL, 0, NULL, flipType))
+        flipType = (SDL_FlipMode)(flipType | SDL_FLIP_VERTICAL);
+    if (SDL_RenderTextureRotated(sdlgame::display::renderer, surface.texture, NULL, NULL, 0, NULL, flipType))
         printf("Failed to flip\n");
     if (SDL_SetRenderTarget(sdlgame::display::renderer, NULL))
     {
@@ -27,7 +27,7 @@ sdlgame::surface::Surface sdlgame::transform::scale(sdlgame::surface::Surface su
     {
         printf("Failed to set target: %s\n", SDL_GetError());
     }
-    SDL_RenderCopyF(sdlgame::display::renderer, surface.texture, NULL, NULL);
+    SDL_RenderTexture(sdlgame::display::renderer, surface.texture, NULL, NULL);
     if (SDL_SetRenderTarget(sdlgame::display::renderer, NULL))
     {
         printf("Failed to set target: %s\n", SDL_GetError());
@@ -60,7 +60,7 @@ sdlgame::surface::Surface sdlgame::transform::rotate(sdlgame::surface::Surface s
         printf("Failed to set target: %s\n", SDL_GetError());
     }
     SDL_FPoint tmp = {float(center.x), float(center.y)};
-    SDL_RenderCopyExF(sdlgame::display::renderer, surface.texture, NULL, NULL, angle_deg, &tmp, SDL_FLIP_NONE);
+    SDL_RenderTextureRotated(sdlgame::display::renderer, surface.texture, NULL, NULL, angle_deg, &tmp, SDL_FLIP_NONE);
     if (SDL_SetRenderTarget(sdlgame::display::renderer, NULL))
     {
         printf("Failed to set target: %s\n", SDL_GetError());

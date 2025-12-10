@@ -1,5 +1,4 @@
-#ifndef QUITBUTTON_HPP
-#define QUITBUTTON_HPP
+#pragma once
 #include "Button.hpp"
 #include "Game.hpp"
 class QuitButton : public Button
@@ -13,4 +12,3 @@ public:
     void update();
 };
 
-#endif

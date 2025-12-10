@@ -1,5 +1,4 @@
-#ifndef SFX_HPP
-#define SFX_HPP
+#pragma once
 
 //Load all sfx for use here
 #include "engine/mixer.hpp"
@@ -23,4 +22,3 @@ public:
     void load();
 };
 
-#endif

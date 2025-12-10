@@ -1,7 +1,6 @@
-#ifndef SDLGAME_TIME_
-#define SDLGAME_TIME_
+#pragma once
 #include <list>
-#include "SDL2/SDL.h"
+#include "SDL3/SDL.h"
 namespace sdlgame
 {
     namespace time

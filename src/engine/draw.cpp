@@ -17,7 +17,7 @@ void sdlgame::draw::rect(sdlgame::surface::Surface &surface, sdlgame::color::Col
     if (width == 0)
     {
         SDL_FRect tmp = rect.to_SDL_FRect();
-        if (SDL_RenderFillRectF(sdlgame::display::renderer, &tmp))
+        if (SDL_RenderFillRect(sdlgame::display::renderer, &tmp))
         {
             printf("Error filling a rectangle: %s\n", SDL_GetError());
             exit(0);
@@ -29,10 +29,10 @@ void sdlgame::draw::rect(sdlgame::surface::Surface &surface, sdlgame::color::Col
         SDL_FRect left = rect.inflate(width - rect.getWidth(), 0.0).to_SDL_FRect();
         SDL_FRect bottom = rect.inflate(0.0, width - rect.getHeight()).move(0.0, rect.getHeight() - width).to_SDL_FRect();
         SDL_FRect right = rect.inflate(width - rect.getWidth(), 0.0).move(rect.getWidth() - width, 0.0).to_SDL_FRect();
-        if (SDL_RenderFillRectF(sdlgame::display::renderer, &top) or
-            SDL_RenderFillRectF(sdlgame::display::renderer, &left) or
-            SDL_RenderFillRectF(sdlgame::display::renderer, &bottom) or
-            SDL_RenderFillRectF(sdlgame::display::renderer, &right))
+        if (SDL_RenderFillRect(sdlgame::display::renderer, &top) or
+            SDL_RenderFillRect(sdlgame::display::renderer, &left) or
+            SDL_RenderFillRect(sdlgame::display::renderer, &bottom) or
+            SDL_RenderFillRect(sdlgame::display::renderer, &right))
         {
             printf("Error drawing a rectangle: %s\n", SDL_GetError());
             exit(0);
@@ -52,7 +52,7 @@ void sdlgame::draw::line(sdlgame::surface::Surface &surface, sdlgame::color::Col
     }
     SDL_SetRenderDrawColor(sdlgame::display::renderer, color.r, color.g, color.b, color.a);
 
-    if (SDL_RenderDrawLineF(sdlgame::display::renderer, x1, y1, x2, y2))
+    if (SDL_RenderLine(sdlgame::display::renderer, x1, y1, x2, y2))
     {
         printf("Failed to draw a line: %s\n", SDL_GetError());
         exit(0);
@@ -70,7 +70,7 @@ void sdlgame::draw::line(sdlgame::surface::Surface &surface, sdlgame::color::Col
     }
     SDL_SetRenderDrawColor(sdlgame::display::renderer, color.r, color.g, color.b, color.a);
 
-    if (SDL_RenderDrawLineF(sdlgame::display::renderer, start.x, start.y, end.x, end.y))
+    if (SDL_RenderLine(sdlgame::display::renderer, start.x, start.y, end.x, end.y))
     {
         printf("Failed to draw a line: %s\n", SDL_GetError());
         exit(0);
@@ -95,7 +95,7 @@ void sdlgame::draw::circle(sdlgame::surface::Surface &surface, sdlgame::color::C
         for (int i = 0; i <= quality; i++)
         {
             sdlgame::math::Vector2 next = rad.rotate(360 / quality);
-            SDL_RenderDrawLineF(sdlgame::display::renderer, centerX + rad.x, centerY + rad.y, centerX + next.x, centerY + next.y);
+            SDL_RenderLine(sdlgame::display::renderer, centerX + rad.x, centerY + rad.y, centerX + next.x, centerY + next.y);
             rad = next;
         }
         
@@ -106,7 +106,7 @@ void sdlgame::draw::circle(sdlgame::surface::Surface &surface, sdlgame::color::C
         for (int i = -radius; i <= radius; i++)
         {
             x = radius * std::cos(std::asin(i * 1.0 / radius));
-            SDL_RenderDrawLineF(
+            SDL_RenderLine(
                 sdlgame::display::renderer,
                 x + centerX, i + centerY,
                 centerX - x, i + centerY);
@@ -136,7 +136,7 @@ void sdlgame::draw::point(sdlgame::surface::Surface &surface, sdlgame::color::Co
     }
     SDL_SetRenderDrawColor(sdlgame::display::renderer, color.r, color.g, color.b, color.a);
     SDL_FPoint point = {(float)x, (float)y};
-    if (SDL_RenderDrawPointsF(sdlgame::display::renderer, &point ,1))
+    if (SDL_RenderPoints(sdlgame::display::renderer, &point ,1))
     {
         printf("Failed to draw a point: %s\n", SDL_GetError());
         exit(0);
@@ -156,7 +156,7 @@ void sdlgame::draw::points(sdlgame::surface::Surface &surface, sdlgame::color::C
     SDL_SetRenderDrawColor(sdlgame::display::renderer, color.r, color.g, color.b, color.a);
     SDL_FPoint sdl_points[points.size()];
     for(int i=0;i<(int)points.size();i++) sdl_points[i] = points[i].to_SDL_FPoint();
-    if (SDL_RenderDrawPointsF(sdlgame::display::renderer, sdl_points, points.size()))
+    if (SDL_RenderPoints(sdlgame::display::renderer, sdl_points, points.size()))
     {
         printf("Failed to draw points: %s\n", SDL_GetError());
         exit(0);

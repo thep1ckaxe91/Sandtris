@@ -1,5 +1,4 @@
-#ifndef TETRIMINOES_HPP
-#define TETRIMINOES_HPP
+#pragma once
 #include "Tetrimino.hpp"
 namespace Tetriminoes
 {
@@ -20,4 +19,3 @@ namespace Tetriminoes
     Tetrimino randomTetrimino();
 }
 
-#endif 

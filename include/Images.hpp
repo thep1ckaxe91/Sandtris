@@ -1,5 +1,4 @@
-#ifndef IMAGES_HPP
-#define IMAGES_HPP
+#pragma once
 #include "engine/engine.hpp"
 
 class Images
@@ -62,4 +61,3 @@ public:
     void load();
 };
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef AUDIO_MANAGER_HPP
-#define AUDIO_MANAGER_HPP
+#pragma once
 #include "engine/engine.hpp"
 #include "SFX.hpp"
 class AudioManager
@@ -18,4 +17,3 @@ public:
     float get_music_volume();
 };
 
-#endif

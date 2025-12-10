@@ -1,5 +1,4 @@
-#ifndef SAND_HPP
-#define SAND_HPP
+#pragma once
 #include <map>
 #include "constant.hpp"
 using Color = sdlgame::color::Color;
@@ -17,4 +16,3 @@ struct Sand
     Sand(SandShift mask = EMPTY_SAND);
 };
 
-#endif

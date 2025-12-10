@@ -1,5 +1,4 @@
-#ifndef CREDIT_BUTTON_HPP
-#define CREDIT_BUTTON_HPP
+#pragma once
 
 #include "Button.hpp"
 #include "Game.hpp"
@@ -14,4 +13,3 @@ public:
     void on_click();
 };
 
-#endif

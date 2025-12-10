@@ -10,7 +10,7 @@ void sdlgame::font::init()
 {
     if (TTF_Init())
     {
-        printf("Failed to init font\n%s\n", TTF_GetError());
+        printf("Failed to init font\n%s\n", SDL_GetError());
         exit(0);
     }
     else
@@ -30,7 +30,7 @@ sdlgame::font::Font::Font(std::string path, int size)
     this->font = TTF_OpenFont(path.c_str(), size);
     if (!font)
     {
-        printf("Cant load font\n%s\n", TTF_GetError());
+        printf("Cant load font\n%s\n", SDL_GetError());
         exit(0);
     }
     __font_pool[this->font]=1;
@@ -63,7 +63,7 @@ sdlgame::surface::Surface sdlgame::font::Font::render(const std::string text, in
     }
     if (surface == NULL)
     {
-        printf("Error render font\n%s\n", TTF_GetError());
+        printf("Error render font\n%s\n", SDL_GetError());
         exit(0);
     }
     res = sdlgame::surface::Surface(surface->w,surface->h);

@@ -1,5 +1,4 @@
-#ifndef OPTION_HPP
-#define OPTION_HPP
+#pragma once
 
 #include "Game.hpp"
 #include "Scene.hpp"
@@ -18,4 +17,3 @@ public:
     void handle_event(Event &event);
     void draw();
 };
-#endif

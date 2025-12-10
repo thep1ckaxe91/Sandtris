@@ -1,5 +1,4 @@
-#ifndef STARTBUTTON_HPP
-#define STARTBUTTON_HPP
+#pragma once
 #include "Game.hpp"
 #include "Button.hpp"
 class StartButton : public Button
@@ -12,5 +11,3 @@ public:
     void handle_event(Event &event);
     void update();
 };
-
-#endif

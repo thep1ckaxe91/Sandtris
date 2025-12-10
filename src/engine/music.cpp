@@ -1,6 +1,6 @@
 #include"music.hpp"
 #include <string>
-#include "SDL2/SDL_mixer.h"
+
 Mix_Music *sdlgame::music::music;
 void sdlgame::music::load(std::string path)
 {
@@ -9,7 +9,7 @@ void sdlgame::music::load(std::string path)
     music = Mix_LoadMUS(path.c_str());
     if (!music)
     {
-        printf("Cant load music\nErr:%s\n", Mix_GetError());
+        SDL_Log("Cant load music\nErr:%s\n", Mix_GetError());
         exit(0);
     }
 }
@@ -18,7 +18,7 @@ void sdlgame::music::play(int loop, int fadein_ms)
     
     if(Mix_FadeInMusic(music, loop, fadein_ms))
     {
-        printf("Cant play music\nErr:%s\n", Mix_GetError());
+        SDL_Log("Cant play music\nErr:%s\n", Mix_GetError());
         exit(0);
     }
 }

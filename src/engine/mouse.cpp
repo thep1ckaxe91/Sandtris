@@ -1,13 +1,13 @@
 #include "mouse.hpp"
 #include "display.hpp"
-#include "SDL2/SDL_mouse.h"
+#include "SDL3/SDL_mouse.h"
 #include "math.hpp"
 #include <vector>
 sdlgame::math::Vector2 sdlgame::mouse::last_mouse_pos;
 bool sdlgame::mouse::isVisible;
 sdlgame::math::Vector2 sdlgame::mouse::get_pos()
 {
-    int x, y;
+    float x, y;
     SDL_GetMouseState(&x, &y);
     double reso_ratio = sdlgame::display::resolution.x / sdlgame::display::resolution.y;
     double win_ratio = sdlgame::display::win_surf.size.x / sdlgame::display::win_surf.size.y;
@@ -43,7 +43,10 @@ sdlgame::math::Vector2 sdlgame::mouse::get_rel()
 }
 void sdlgame::mouse::set_visible(int enable)
 {
-    isVisible = SDL_ShowCursor(enable);
+    if(enable)
+        isVisible = SDL_ShowCursor();
+    else
+        isVisible = !SDL_HideCursor();
 }
 bool sdlgame::mouse::get_visible()
 {

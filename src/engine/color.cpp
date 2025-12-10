@@ -239,7 +239,7 @@ SDL_Color sdlgame::color::Color::to_SDL_Color() const {
 }
 /**return Uint32 kind of color*/
 Uint32 sdlgame::color::Color::toUint32Color() const {
-    return SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA32), r, g, b, a);
+    return SDL_MapRGBA(SDL_GetPixelFormatDetails(SDL_PIXELFORMAT_RGBA32), nullptr, r, g, b, a);
 }
 std::string sdlgame::color::Color::toString() {
     return "Color(" + std::to_string(r) + "," + std::to_string(g) + "," +

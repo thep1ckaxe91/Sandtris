@@ -1,5 +1,4 @@
-#ifndef GPU_OPTIMIZE_
-#define GPU_OPTIMIZE_
+#pragma once
 
 extern "C"
 {
@@ -7,4 +6,3 @@ extern "C"
     __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 }
 
-#endif
