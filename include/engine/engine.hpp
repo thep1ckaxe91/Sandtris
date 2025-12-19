@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 /**
  * @authors thep1ckaxe
  * @contributor: Ngô Hoan Tài and many more from SDL2's developers
@@ -37,7 +40,6 @@ using Vector2 = sdlgame::math::Vector2;
 using Surface = sdlgame::surface::Surface;
 using Color = sdlgame::color::Color;
 using Sound = sdlgame::mixer::Sound;
-using Channel = sdlgame::mixer::Channel;
 using Font = sdlgame::font::Font;
 namespace sdlgame
 {

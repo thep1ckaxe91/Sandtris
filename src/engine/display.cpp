@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "display.hpp"
 #include <stdio.h>
 #include "SDL3/SDL_hints.h"
@@ -21,30 +24,32 @@ sdlgame::surface::Surface &sdlgame::display::set_mode(int width, int height, Uin
 {
     if (width == 0 || height == 0)
     {
-        SDL_DisplayMode DM;
-        SDL_GetDesktopDisplayMode(0, &DM);
-        width = DM.w;
-        height = DM.h;
+        SDL_DisplayID displayID = SDL_GetPrimaryDisplay();
+        const SDL_DisplayMode *dm = SDL_GetDesktopDisplayMode(displayID);
+        if (dm) {
+            width = dm->w;
+            height = dm->h;
+        }
     }
     resolution = sdlgame::math::Vector2(width, height);
-    if(!SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER,"direct3d11",SDL_HINT_OVERRIDE))
-    {
-        SDL_Log("Set renderer driver hint failed\n");
-    }
-    window = SDL_CreateWindow("SDLgame Custom Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
+    // if(!SDL_SetHint(SDL_HINT_RENDER_DRIVER,"direct3d11")) // removed due to platform specific code
+    // {
+    //     SDL_Log("Set renderer driver hint failed\n");
+    // }
+    window = SDL_CreateWindow("SDLgame Custom Engine", width, height, flags);
     if (window == nullptr)
     {
         SDL_Log("Failed to create a window object\nErr: %s\n", SDL_GetError());
         exit(0);
     }
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+    renderer = SDL_CreateRenderer(window, NULL);
     if (renderer == nullptr)
     {
         SDL_Log("Failed to create a renderer\nErr: %s\n", SDL_GetError());
         exit(0);
     }
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-    SDL_RenderSetLogicalSize(renderer, width, height);
+    SDL_SetHint(SDL_SCALEMODE, SDL_SCALEMODE_NEAREST);
+    SDL_SetRenderLogicalPresentation(renderer, width, height, SDL_LOGICAL_PRESENTATION_STRETCH);
     // printf("Initialize window and renderer: %p %p\n",window,renderer);
     win_surf.texture = NULL; // THIS IS INTENDED!
     win_surf.size.x = width;
@@ -54,32 +59,32 @@ sdlgame::surface::Surface &sdlgame::display::set_mode(int width, int height, Uin
 bool sdlgame::display::set_render_scale_quality(bool linear)
 {
     if (linear)
-        return SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "linear", SDL_HINT_OVERRIDE);
-    return SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "nearest", SDL_HINT_OVERRIDE);
+        return SDL_SetHint(SDL_HINT_SCALEMODE, "linear");
+    return SDL_SetHint(SDL_HINT_SCALEMODE, "nearest");
 }
 void sdlgame::display::maximize()
 {
-    SDL_SetWindowFullscreen(window, 0);
+    SDL_SetWindowFullscreen(window, false);
     SDL_MaximizeWindow(window);
 }
 
 void sdlgame::display::minimize()
 {
-    SDL_SetWindowFullscreen(window, 0);
+    SDL_SetWindowFullscreen(window, false);
     SDL_MinimizeWindow(window);
 }
 void sdlgame::display::restore()
 {
-    SDL_SetWindowFullscreen(window, 0);
+    SDL_SetWindowFullscreen(window, false);
     SDL_RestoreWindow(window);
 }
 void sdlgame::display::fullscreen()
 {
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+    SDL_SetWindowFullscreen(window, true);
 }
 bool sdlgame::display::is_fullscreen()
 {
-    return (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN_DESKTOP) || (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN);
+    return (SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN);
 }
 void sdlgame::display::set_window_size(int w,int h)
 {
@@ -106,7 +111,7 @@ sdlgame::math::Vector2 sdlgame::display::get_window_size()
 
 void sdlgame::display::fullscreen_desktop()
 {
-    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+    SDL_SetWindowFullscreen(window, true);
 }
 sdlgame::surface::Surface &sdlgame::display::get_surf()
 {
@@ -140,8 +145,8 @@ double sdlgame::display::get_height()
 bool sdlgame::display::grab(int enable)
 {
     if (enable == -1)
-        return SDL_GetWindowGrab(window);
-    SDL_SetWindowGrab(window, (enable ? SDL_TRUE : SDL_FALSE));
+        return SDL_GetWindowMouseGrab(window);
+    SDL_SetWindowMouseGrab(window, (SDL_bool)enable);
     return enable;
 }
 
@@ -158,7 +163,7 @@ bool sdlgame::display::borderless(int enable)
 {
     if (enable == -1)
         return (SDL_GetWindowFlags(window) & SDL_WINDOW_BORDERLESS);
-    SDL_SetWindowBordered(window, (enable ? SDL_FALSE : SDL_TRUE));
+    SDL_SetWindowBordered(window, (SDL_bool)!enable);
     return (SDL_GetWindowFlags(window) & SDL_WINDOW_BORDERLESS) > 0;
 }
 void sdlgame::display::set_caption(const char *title)

@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 // #define _CRTDBG_MAP_ALLOC
 #include "engine/engine.hpp"
 #include "splash_screens.hpp"
@@ -6,7 +9,6 @@
 #include "engine/gpu_optimize.hpp"
 #include "TetrisEvent.hpp"
 #include "Grid.hpp"
-#include "crtdbg.h"
 #include "flags.hpp"
 #include "SaveData.hpp"
 using namespace std;
@@ -42,8 +44,6 @@ public:
 #ifdef MULTITHREADING
         grid_mem_init();
 #endif
-        // cout<<this->images.start_button_idle.texture<<" "<<this->images.start_button_hover.texture<<" "<<this->images.start_button_click.texture<<endl;
-        // exit(0);
     }
     void update()
     {
@@ -102,6 +102,7 @@ public:
             }
         }
         audio_manager.update();
+        sdlgame::mixer::cleanup_finished_tracks();
     }
     void draw()
     {
@@ -134,13 +135,14 @@ public:
             clock.tick(MAXFPS);
             for (auto &event : sdlgame::event::get())
             {
-                if (event.type == sdlgame::QUIT or (event.type == sdlgame::WINDOWEVENT and event["event"] == sdlgame::WINDOWCLOSE))
+                if (event.type == sdlgame::QUIT or (event.type >= sdlgame::WINDOWFIRST and event.type <= sdlgame::WINDOWLAST and event["event"] == sdlgame::WINDOWCLOSE))
                 {
                     // game_ended = 1;
                     sdlgame::quit();
+                    sdlgame::mixer::quit();
                     exit(0);
                 }
-                else if (event.type == sdlgame::WINDOWEVENT)
+                else if (event.type >= sdlgame::WINDOWFIRST and event.type <= sdlgame::WINDOWLAST)
                 {
                     if (event["event"] == sdlgame::WINDOWFOCUSGAINED or event["event"] == sdlgame::WINDOWSHOWN)
                     {
@@ -191,10 +193,8 @@ public:
 };
 int main(int argc, char **argv)
 {
-    // _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     sdlgame::init();
     sdlgame::mixer::init();
-    sdlgame::mixer::set_num_channels(16);
     Sandtris game;
     game.run();
     return 0;

@@ -10,3 +10,4 @@ add_library(GameEngine STATIC ${ENGINE_SOURCES})
 
 # Make sure the engine can find its own header files in the `include` directory
 target_include_directories(GameEngine PUBLIC ../../include PRIVATE ../../include/engine)
+target_link_libraries(GameEngine PUBLIC SDL3_image::SDL3_image SDL3_mixer::SDL3_mixer SDL3_ttf::SDL3_ttf)

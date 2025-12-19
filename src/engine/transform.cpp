@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "transform.hpp"
 #include "display.hpp"
 sdlgame::surface::Surface sdlgame::transform::flip(sdlgame::surface::Surface surface, bool flip_x, bool flip_y)

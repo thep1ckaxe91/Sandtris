@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "OptionElement.hpp"
 #include "SaveData.hpp"
 SFXVolumeSlider::SFXVolumeSlider(Game &game, Vector2 topleft, float val, float length, float max_val) : Slider(topleft, val, length, max_val)

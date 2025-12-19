@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "Tetrimino.hpp"
 
 ShapeInfo::ShapeInfo(uint16_t m0, uint16_t m1, uint16_t m2, uint16_t m3, char shape) {

@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "font.hpp"
 #include "stdio.h"
 #include <string>
@@ -10,12 +13,12 @@ void sdlgame::font::init()
 {
     if (TTF_Init())
     {
-        printf("Failed to init font\n%s\n", SDL_GetError());
+        SDL_Log("Failed to init font\n%s\n", SDL_GetError());
         exit(0);
     }
     else
     {
-        printf("Font successfully initialized\n");
+        SDL_Log("Font successfully initialized\n");
         return;
     }
 }
@@ -30,7 +33,7 @@ sdlgame::font::Font::Font(std::string path, int size)
     this->font = TTF_OpenFont(path.c_str(), size);
     if (!font)
     {
-        printf("Cant load font\n%s\n", SDL_GetError());
+        SDL_Log("Cant load font\n%s\n", SDL_GetError());
         exit(0);
     }
     __font_pool[this->font]=1;
@@ -51,19 +54,19 @@ sdlgame::surface::Surface sdlgame::font::Font::render(const std::string text, in
     SDL_Surface *surface;
     if (!antialias)
     {
-        surface = TTF_RenderUTF8_Solid_Wrapped(font, text.c_str(), color.to_SDL_Color(), wrap_length);
+        surface = TTF_RenderText_Solid_Wrapped(font, text.c_str(), color.to_SDL_Color(), wrap_length);
     }
     else if (antialias == 1)
     {
-        surface = TTF_RenderUTF8_Shaded_Wrapped(font, text.c_str(), color.to_SDL_Color(), sdlgame::color::Color(0, 0, 0, 0).to_SDL_Color(), wrap_length);
+        surface = TTF_RenderText_Shaded_Wrapped(font, text.c_str(), color.to_SDL_Color(), sdlgame::color::Color(0, 0, 0, 0).to_SDL_Color(), wrap_length);
     }
     else
     {
-        surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), color.to_SDL_Color(), wrap_length);
+        surface = TTF_RenderText_Blended_Wrapped(font, text.c_str(), color.to_SDL_Color(), wrap_length);
     }
     if (surface == NULL)
     {
-        printf("Error render font\n%s\n", SDL_GetError());
+        SDL_Log("Error render font\n%s\n", SDL_GetError());
         exit(0);
     }
     res = sdlgame::surface::Surface(surface->w,surface->h);
@@ -71,18 +74,18 @@ sdlgame::surface::Surface sdlgame::font::Font::render(const std::string text, in
     SDL_Texture *tmp = SDL_CreateTextureFromSurface(sdlgame::display::renderer, surface);
     if(tmp == NULL)
     {
-        printf("Error convert surf to texture\n%s\n",SDL_GetError());
+        SDL_Log("Error convert surf to texture\n%s\n",SDL_GetError());
         exit(0);
     }
     SDL_SetRenderTarget(sdlgame::display::renderer, res.texture);
-    if (SDL_RenderCopy(sdlgame::display::renderer,tmp, NULL, NULL))
+    if (SDL_RenderTexture(sdlgame::display::renderer,tmp, NULL, NULL))
     {
-        printf("Error create a rendered font\n%s\n", SDL_GetError());
+        SDL_Log("Error create a rendered font\n%s\n", SDL_GetError());
         exit(0);
     }
     SDL_SetRenderTarget(sdlgame::display::renderer, NULL);
     SDL_DestroyTexture(tmp);
-    SDL_FreeSurface(surface);
+    SDL_DestroySurface(surface);
     return res;
 }
 int sdlgame::font::Font::get_height()const{return height;}

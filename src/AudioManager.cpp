@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #include "AudioManager.hpp"
 #include "TetrisEvent.hpp"
 #include "SaveData.hpp"
@@ -51,7 +54,7 @@ void AudioManager::update()
 {
 }
 void AudioManager::set_sfx_volume(float value)
-{
+{ // fixme: this can be improve by using Group in SDL2 or Tag in SDL3
     this->sfx_volume = value;
     sfx.button_click.set_volume(value);
     sfx.button_hover.set_volume(value);

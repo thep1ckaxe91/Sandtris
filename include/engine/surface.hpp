@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
 #pragma once
 #include "SDL3/SDL.h"
 #include "color.hpp"
@@ -19,7 +22,7 @@ namespace sdlgame
             sdlgame::math::Vector2 size;
             SDL_Texture *texture;
             Surface();
-
+            // anything but move constructor lol @@
             Surface(int width, int height);
 
             Surface(const Surface &oth);
