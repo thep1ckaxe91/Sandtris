@@ -4,6 +4,6 @@ cmake -S . -B build || exit 1
 
 cd build
 
-ninja -j $(nproc | tr -d $'\n') || exit 1
+cmake --build . -j $(nproc | tr -d '\n') || exit 1
 
 ./Sandtris
