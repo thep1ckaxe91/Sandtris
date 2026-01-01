@@ -1,7 +1,7 @@
 #ifndef SLIDER_HPP
 #define SLIDER_HPP
 
-#include "engine/engine.hpp"
+#include "engine.hpp"
 #include <bits/stdc++.h>
 /**
  * @brief Slider is expect to inherit.

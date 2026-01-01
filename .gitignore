@@ -18,5 +18,4 @@ bin/
 .DS_Store
 Thumbs.db
 
-vendored/
 .PVS-Studio

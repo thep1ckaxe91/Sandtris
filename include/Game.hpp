@@ -1,6 +1,6 @@
 #ifndef GAME_HPP
 #define GAME_HPP
-#include "engine/engine.hpp"
+#include "engine.hpp"
 #include "Images.hpp"
 #include "Scene.hpp"
 #include "SceneTransition.hpp"

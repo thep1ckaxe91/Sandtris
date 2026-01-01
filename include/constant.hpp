@@ -1,6 +1,6 @@
 #ifndef TETRIS_CONSTANT_HPP
 #define TETRIS_CONSTANT_HPP
-#include "engine/engine.hpp"
+#include "engine.hpp"
 const std::string base_path = sdlgame::get_base_path();
 typedef enum
 {

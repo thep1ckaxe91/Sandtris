@@ -3,7 +3,7 @@
 */
 #ifndef TETRIS_EVENT_HPP
 #define TETRIS_EVENT_HPP
-#include "engine/engine.hpp"
+#include "engine.hpp"
 //just custom user event, all event here is offset from sdlgame::USEREVENT
 typedef enum
 {

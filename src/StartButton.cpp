@@ -1,7 +1,7 @@
 #include "StartButton.hpp"
 #include "GamePlay.hpp"
 #include "scene_transitions.hpp"
-#include "engine/engine.hpp"
+#include "engine.hpp"
 StartButton::StartButton(Game &game) : Button()
 {
     this->game = &game;

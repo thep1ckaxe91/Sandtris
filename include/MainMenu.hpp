@@ -4,7 +4,7 @@
 #include "StartButton.hpp"
 #include "QuitButton.hpp"
 #include "CreditButton.hpp"
-#include "engine/engine.hpp"
+#include "engine.hpp"
 #include "PBButton.hpp"
 #include "HTPButton.hpp"
 #include "OptionButton.hpp"

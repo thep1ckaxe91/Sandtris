@@ -1,12 +1,11 @@
 // #define _CRTDBG_MAP_ALLOC
-#include "engine/engine.hpp"
+#include "engine.hpp"
 #include "splash_screens.hpp"
 #include "scene_transitions.hpp"
 #include "constant.hpp"
-#include "engine/gpu_optimize.hpp"
 #include "TetrisEvent.hpp"
 #include "Grid.hpp"
-#include "crtdbg.h"
+
 #include "flags.hpp"
 #include "SaveData.hpp"
 using namespace std;

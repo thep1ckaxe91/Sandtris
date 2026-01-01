@@ -4,79 +4,76 @@ project(Sandtris VERSION 0.2.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(SDL_ASSEMBLY OFF CACHE BOOL "" FORCE)
-add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
+# include to allow Cross Platform Compilation
+include(FetchContent)
 
-set(WAVPACK_ENABLE_ASM OFF CACHE BOOL "" FORCE)
-set(SDLMIXER_VENDORED ON CACHE BOOL "Force vendored libraries for SDL_mixer")
-add_subdirectory(vendored/SDL_mixer)
+find_package(SDL2 QUIET)
 
-set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE)
-set(SDLIMAGE_VENDORED ON CACHE BOOL "Force vendored libraries for SDL_image")
-add_subdirectory(vendored/SDL_image)
+if(SDL2_FOUND)
+    message(STATUS "Found installed SDL2. Using system version.")
+else()
+    # download and build if not found
+    message(STATUS "SDL2 not found. Fetching from GitHub...")
+    FetchContent_Declare(
+        SDL2
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        GIT_TAG release-2.28.5  # pin the version for stability
+    )
+    FetchContent_MakeAvailable(SDL2)
+endif()
 
-set(FT_DISABLE_ASSEMBLER ON CACHE BOOL "" FORCE)
-set(SDLTTF_VENDORED ON CACHE BOOL "Force vendored libraries for SDL_ttf")
-add_subdirectory(vendored/SDL_ttf)
+find_package(SDL2_image QUIET)
+if(NOT SDL2_image_FOUND)
+    message(STATUS "SDL2_image not found. Fetching...")
+    FetchContent_Declare(
+        SDL2_image
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
+        GIT_TAG release-2.8.0
+    )
+    FetchContent_MakeAvailable(SDL2_image)
+endif()
 
-add_subdirectory(src/engine)
+find_package(SDL2_mixer QUIET)
+if(NOT SDL2_mixer_FOUND)
+    message(STATUS "SDL2_mixer not found. Fetching...")
+    FetchContent_Declare(
+        SDL2_mixer
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
+        GIT_TAG release-2.8.0
+    )
+    FetchContent_MakeAvailable(SDL2_mixer)
+endif()
 
-set(SOURCE_FILES
-    src/main.cpp
-    src/Animation.cpp
-    src/AudioManager.cpp
-    src/BackButton.cpp
-    src/Button.cpp
-    src/Credit.cpp
-    src/CreditButton.cpp
-    src/flags.cpp
-    src/Game.cpp
-    src/GameOver.cpp
-    src/GamePlay.cpp
-    src/Grid.cpp
-    src/HowToPlay.cpp
-    src/HTPButton.cpp
-    src/Images.cpp
-    src/MainMenu.cpp
-    src/MenuButton.cpp
-    src/Option.cpp
-    src/OptionButton.cpp
-    src/OptionElement.cpp
-    src/Pause.cpp
-    src/PauseButton.cpp
-    src/PBButton.cpp
-    src/PersonalBest.cpp
-    src/QuitButton.cpp
-    src/ResumeButton.cpp
-    src/RetryButton.cpp
-    src/Sand.cpp
-    src/SaveData.cpp
-    src/scene_transitions.cpp
-    src/Scene.cpp
-    src/SceneTransition.cpp
-    src/SFX.cpp
-    src/Slider.cpp
-    src/splash_screens.cpp
-    src/SplashScreen.cpp
-    src/StartButton.cpp
-    src/State.cpp
-    src/Tetrimino.cpp
-    src/TetriminoController.cpp
-    src/tetriminoes.cpp
-)
+find_package(SDL2_ttf QUIET)
+if(NOT SDL2_ttf_FOUND)
+    message(STATUS "SDL2_mixer not found. Fetching...")
+    FetchContent_Declare(
+        SDL2_ttf
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+        GIT_TAG release-2.24.0
+    )
+    FetchContent_MakeAvailable(SDL2_ttf)
+endif()
 
-include_directories(
-    include/
-)
+
+add_subdirectory(engine)
+
+file(GLOB SOURCE_FILES "src/*.cpp")
 
 add_executable(Sandtris ${SOURCE_FILES})
 
-target_link_libraries(Sandtris PRIVATE GameEngine SDL3::SDL3)
+# linking stage, since we use fetch, the name might differ
+target_link_libraries(Sandtris PRIVATE GameEngine)
+
+
+target_include_directories(Sandtris PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 add_custom_command(TARGET Sandtris POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_CURRENT_SOURCE_DIR}/assets
         $<TARGET_FILE_DIR:Sandtris>/assets
+    COMMENT "Copying assets..."
 )

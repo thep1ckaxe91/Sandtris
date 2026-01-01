@@ -1,6 +1,6 @@
 #ifndef TETRIMINO_CONTROLLER_HPP
 #define TETRIMINO_CONTROLLER_HPP
-#include "engine/engine.hpp"
+#include "engine.hpp"
 #include "Tetrimino.hpp"
 #include "Sand.hpp"
 #include "Game.hpp"

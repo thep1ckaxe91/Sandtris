@@ -1,6 +1,6 @@
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
-#include "engine/engine.hpp"
+#include "engine.hpp"
 class Button : public sdlgame::sprite::Sprite
 {
 public:

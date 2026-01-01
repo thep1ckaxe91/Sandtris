@@ -1,7 +1,7 @@
 #ifndef TETRIMINO_HPP
 #define TETRIMINO_HPP
 #include "Sand.hpp"
-#include "engine/engine.hpp"
+#include "engine.hpp"
 using namespace std;
 typedef struct ShapeInfo {
     uint16_t mask[4];

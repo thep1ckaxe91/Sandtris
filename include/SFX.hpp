@@ -2,7 +2,7 @@
 #define SFX_HPP
 
 //Load all sfx for use here
-#include "engine/mixer.hpp"
+#include "mixer.hpp"
 #include "constant.hpp"
 const std::string sfx_path = "data/audio/sfx/";
 class SFX 

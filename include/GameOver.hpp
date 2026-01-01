@@ -2,7 +2,7 @@
 #define GAMEOVER_HPP
 
 #include "Scene.hpp"
-#include "engine/engine.hpp"
+#include "engine.hpp"
 #include "MenuButton.hpp"
 #include "RetryButton.hpp"
 

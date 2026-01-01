@@ -1,7 +1,7 @@
 #ifndef SCENE_TRANSITIONS_HPP
 #define SCENE_TRANSITIONS_HPP
 #include "SceneTransition.hpp"
-#include "engine/engine.hpp"
+#include "engine.hpp"
 class OutSwipeDown : public SceneTransition
 {
 public:
