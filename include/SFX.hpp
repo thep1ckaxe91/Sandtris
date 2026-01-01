@@ -4,7 +4,7 @@
 //Load all sfx for use here
 #include "mixer.hpp"
 #include "constant.hpp"
-const std::string sfx_path = "data/audio/sfx/";
+const std::string sfx_path = "assets/audio/sfx/";
 class SFX 
 {
 public:

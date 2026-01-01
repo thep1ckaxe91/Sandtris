@@ -10,7 +10,7 @@ GamePlay::GamePlay(Game &game) : Scene(game)
     this->game = &game;
     grid = Grid(game);
 
-    this->score_font = Font(base_path + "data\\fonts\\sandtris pixel.ttf", FONT_SIZE);
+    this->score_font = Font(base_path + "assets/fonts/sandtris pixel.ttf", FONT_SIZE);
     this->score_surf = score_font.render("0", 0, "white");
     this->score_rect = score_surf.getRect();
     score_rect.setCenter(score_display_center);
@@ -24,19 +24,19 @@ GamePlay::GamePlay(Game &game) : Scene(game)
     next_shape_surf = Surface(next_shape_display_rect.getWidth(), next_shape_display_rect.getHeight());
     redraw_next_shape();
     change_shape = Animation(game, 120);
-    change_shape.load(base_path + "data/animations/change_next_shape/");
+    change_shape.load(base_path + "assets/animations/change_next_shape/");
     Surface tmp = Surface(next_shape_display_area.getWidth(), next_shape_display_area.getHeight());
     tmp.fill("none");
     change_shape.set_default(tmp);
 
     count_down = Animation(game, 1);
-    count_down.load(base_path + "data/animations/count_down/");
+    count_down.load(base_path + "assets/animations/count_down/");
     tmp = Surface(count_down_display_rect.getWidth(), count_down_display_rect.getHeight());
     tmp.fill("none");
     count_down.set_default(tmp);
     count_down.play();
 
-    sdlgame::music::load(base_path + "data/audio/music/tetris_theme_loop_instrument.mp3");
+    sdlgame::music::load(base_path + "assets/audio/music/tetris_theme_loop_instrument.mp3");
     sdlgame::music::play(-1, 2000);
 
     pause_button = PauseButton(game);

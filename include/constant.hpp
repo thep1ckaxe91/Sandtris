@@ -79,5 +79,5 @@ const Vector2 midbottom_pb = Vector2(80,77);
 const double gameplay_bg_speed = 10;
 const double gforce = 1; //pix/sec^2
 const int client_cores = std::thread::hardware_concurrency();
-const std::string font_path = base_path + "data\\fonts\\sandtris pixel.ttf";
+const std::string font_path = base_path + "assets/fonts/sandtris pixel.ttf";
 #endif

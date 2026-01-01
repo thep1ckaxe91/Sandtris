@@ -37,7 +37,7 @@ public:
         images = Images();
         images.load();
         sdlgame::display::set_caption("Sandtris - Made by thep1ckaxe");
-        sdlgame::display::set_icon((base_path + "data/image/icon/icon.png").c_str());
+        sdlgame::display::set_icon((base_path + "assets/image/icon/icon.png").c_str());
 #ifdef MULTITHREADING
         grid_mem_init();
 #endif
@@ -123,7 +123,7 @@ public:
     void run()
     {
         Animation studiosc(*this, 10, 1);
-        studiosc.load(base_path + "data/animations/splash/studio/");
+        studiosc.load(base_path + "assets/animations/splash/studio/");
         studiosc.play();
         InFade *in = new InFade();
         StudioSC *next = new StudioSC(*this, studiosc, 8);

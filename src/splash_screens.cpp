@@ -38,7 +38,7 @@ void StudioSC::update()
 void StudioSC::on_finish()
 {
     Animation sdlsc(*game,30,1);
-    sdlsc.load(base_path + "data/animations/splash/sdl/");
+    sdlsc.load(base_path + "assets/animations/splash/sdl/");
     sdlsc.set_default(sdlsc.frames.back());
     sdlsc.play();
     OutFade *out = new OutFade(1);
