@@ -263,15 +263,13 @@ void Grid::collision_check(vector<pair<Uint8, Uint8>> &updated)
                             this->next = Tetriminoes::randomTetrimino();
                             sdlgame::event::post(MERGING);
                             update_ghost_shape();
-                            goto called;
+                            return;
                         }
                     }
                 }
             }
         }
     }
-called:
-    // exit(0);
 }
 
 pair<Uint8, Uint8> Grid::step(int i, int j, int times)
@@ -446,7 +444,11 @@ void Grid::draw()
 
     SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
 
-    SDL_RenderCopy(sdlgame::display::renderer, sand_texture, nullptr, &dst_rect);
+    if(SDL_RenderCopy(sdlgame::display::renderer, sand_texture, nullptr, &dst_rect))
+    {
+        printf("Failed to render the sand texture", SDL_GetError());
+        exit(1);
+    }
 
     controller.draw();
     draw_ghost();
