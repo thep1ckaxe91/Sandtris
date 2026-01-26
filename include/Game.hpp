@@ -26,8 +26,8 @@ public:
     std::vector<Scene *> scene_list;
     Images images;
     AudioManager audio_manager;
-    sdlgame::surface::Surface window;
-    sdlgame::surface::Surface window_object;
+    sdlgame::surface::Surface window; // window is an actual texture getting drawn on
+    sdlgame::surface::Surface window_object; // a NULL texture surface, represent the actual window
     sdlgame::time::Clock clock;
     Vector2 window_draw_offset;
     Game();

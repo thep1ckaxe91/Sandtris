@@ -3,7 +3,7 @@
 std::map<std::string, std::vector<uint8_t>> sdlgame::color::color_name;
 void sdlgame::color::init()
 {
-    color_name={
+    color_name = {
         {"maroon", {128, 0, 0}},
         {"dark red", {139, 0, 0}},
         {"brown", {165, 42, 42}},
@@ -147,8 +147,7 @@ void sdlgame::color::init()
         {"light grey", {211, 211, 211}},
         {"gainsboro", {220, 220, 220}},
         {"white smoke", {245, 245, 245}},
-        {"white", {255, 255, 255}}
-    };
+        {"white", {255, 255, 255}}};
 }
 sdlgame::color::Color::Color()
 {
@@ -170,7 +169,8 @@ sdlgame::color::Color::Color(const char *c_name)
     }
     for (char &c : name)
         c = std::tolower(c);
-    if(color_name.size()==0) sdlgame::color::init();
+    if (color_name.size() == 0)
+        sdlgame::color::init();
     if (color_name.find(name) == color_name.end())
     {
         // if(color_name.size()>0){
@@ -201,7 +201,8 @@ sdlgame::color::Color::Color(std::string name)
     }
     for (char &c : name)
         c = std::tolower(c);
-    if(color_name.size()==0) sdlgame::color::init();
+    if (color_name.size() == 0)
+        sdlgame::color::init();
     if (color_name.find(name) == color_name.end())
     {
         std::cout << "no such color: " << name << "\n";
@@ -212,12 +213,8 @@ sdlgame::color::Color::Color(std::string name)
     b = color_name[name][2];
     a = 255;
 }
-sdlgame::color::Color::Color(int _r, int _g, int _b)
+sdlgame::color::Color::Color(int _r, int _g, int _b) : r(_r), g(_g), b(_b), a(255)
 {
-    r = _r;
-    g = _g;
-    b = _b;
-    a = 255;
 }
 sdlgame::color::Color::Color(int _r, int _g, int _b, int _a)
 {
@@ -233,10 +230,12 @@ sdlgame::color::Color sdlgame::color::Color::add_value(Uint8 r, Uint8 g, Uint8 b
     int new_g = this->g + int(g);
     int new_b = this->b + int(b);
     return Color(
-        new_r < 0 ? 0 : new_r > 255 ? 255 : new_r,
-        new_g < 0 ? 0 : new_g > 255 ? 255 : new_g,
-        new_b < 0 ? 0 : new_b > 255 ? 255 : new_b
-    );
+        new_r < 0 ? 0 : new_r > 255 ? 255
+                                    : new_r,
+        new_g < 0 ? 0 : new_g > 255 ? 255
+                                    : new_g,
+        new_b < 0 ? 0 : new_b > 255 ? 255
+                                    : new_b);
 }
 
 SDL_Color sdlgame::color::Color::to_SDL_Color() const

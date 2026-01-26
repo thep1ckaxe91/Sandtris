@@ -114,7 +114,7 @@ sdlgame::rect::Rect sdlgame::surface::Surface::getRect() const
  * Blit a surface onto this surface with position and size, leave size be -1,-1 will be its original size
  * the surface or image will stretch or shrink acoording to the size
  */
-void sdlgame::surface::Surface::blit(Surface &source, sdlgame::math::Vector2 pos, sdlgame::math::Vector2 size, sdlgame::rect::Rect area)
+void sdlgame::surface::Surface::blit(const Surface &source, sdlgame::math::Vector2 pos, sdlgame::math::Vector2 size, sdlgame::rect::Rect area)
 {
     if (area == sdlgame::rect::Rect())
     {

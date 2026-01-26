@@ -20,27 +20,26 @@ public:
         this->window_object = sdlgame::display::set_mode(
             RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
             0
-                // |sdlgame::MAXIMIZED
+                | sdlgame::MAXIMIZED
                 | sdlgame::RESIZABLE);
         this->window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
-        sdlgame::display::get_window_size();
+        sdlgame::display::get_window_size(); // why did i call this?
 
-        auto res = load_window_info();
-        if (res.second.first == 0)
-            sdlgame::display::fullscreen_desktop();
-        else
-        {
-            sdlgame::display::set_window_size(res.second.first, res.second.second);
-            sdlgame::display::set_window_pos(res.first.first, res.first.second);
-        }
+        // comment this so that i get a free fps view at the caption
+        // auto res = load_window_info();
+        // if (res.second.first == 0)
+        //     sdlgame::display::fullscreen_desktop();
+        // else
+        // {
+            // sdlgame::display::set_window_size(res.second.first, res.second.second);
+            // sdlgame::display::set_window_pos(res.first.first, res.first.second);
+        // }
         audio_manager = AudioManager();
         images = Images();
         images.load();
         sdlgame::display::set_caption("Sandtris - Made by thep1ckaxe");
         sdlgame::display::set_icon((base_path + "assets/image/icon/icon.png").c_str());
-#ifdef MULTITHREADING
-        grid_mem_init();
-#endif
+
         // cout<<this->images.start_button_idle.texture<<" "<<this->images.start_button_hover.texture<<" "<<this->images.start_button_click.texture<<endl;
         // exit(0);
     }
@@ -101,6 +100,10 @@ public:
             }
         }
         audio_manager.update();
+        
+        
+
+        sdlgame::display::set_caption(std::to_string(std::round(clock.get_fps())).c_str());
     }
     void draw()
     {

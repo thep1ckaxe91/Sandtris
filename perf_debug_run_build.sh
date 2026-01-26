@@ -6,4 +6,6 @@ cd build
 
 cmake --build . -j $(nproc | tr -d '\n') || exit 1
 
-./Sandtris
+cd ..
+
+perf record -g --call-graph dwarf ./build/Sandtris
