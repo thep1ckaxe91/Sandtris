@@ -5,7 +5,7 @@ CreditButton::CreditButton(Game &game)
 {
     this->game = &game;
     set_images(this->game->images.credit_button_idle, this->game->images.credit_button_hover,this->game->images.credit_button_click);
-    this->rect = this->image.getRect();
+    this->rect = (*this->image).getRect();
 }
 CreditButton::CreditButton() = default;
 void CreditButton::update()

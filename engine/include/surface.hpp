@@ -12,7 +12,7 @@ namespace sdlgame
     {
         /**
          * @brief since the problem mostly related to the heavy draw and surface manage in pygame
-         * this module is mostly focus optimiszing the surface class, the texture pointer should be null if the surface is represent window
+         * this module is mostly focus optimizing the surface class, the texture pointer should be null if the surface is represent window
          * after set_mode is called
          */
         class Surface
@@ -21,7 +21,7 @@ namespace sdlgame
             sdlgame::math::Vector2 size;
             SDL_Texture *texture;
             Surface();
-
+            Surface(Surface&&);
             Surface(int width, int height);
 
             Surface(const Surface &oth);
@@ -30,6 +30,8 @@ namespace sdlgame
 
             Surface(SDL_Surface *surf);
             Surface &operator=(const Surface &other);
+            
+            Surface &operator=(Surface&&) noexcept;
             /**
              * Return a copy of the surface rect
              */

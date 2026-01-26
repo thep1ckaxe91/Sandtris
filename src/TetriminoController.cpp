@@ -28,7 +28,7 @@ void TetriminoController::draw()
 void TetriminoController::update()
 {
     //movement
-    this->redraw();
+    // this->redraw();
     auto keys = sdlgame::key::get_pressed();
     this->topleft.x +=
         (

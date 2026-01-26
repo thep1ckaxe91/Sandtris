@@ -5,7 +5,7 @@ MenuButton::MenuButton(Game &game)
 {
     this->game = &game;
     this->set_images(this->game->images.menu_button_idle,this->game->images.menu_button_hover, this->game->images.menu_button_click);
-    this->rect = this->image.getRect();
+    this->rect = (*this->image).getRect();
 }
 MenuButton::MenuButton()=default;
 void MenuButton::handle_event(Event &event)

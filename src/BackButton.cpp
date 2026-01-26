@@ -6,7 +6,7 @@ BackButton::BackButton(Game &game)
 {
     this->game = &game;
     this->set_images(this->game->images.back_button_idle,this->game->images.back_button_hover,this->game->images.back_button_click);
-    this->rect = this->image.getRect();
+    this->rect = (*this->image).getRect();
 }
 BackButton::BackButton(){}
 void BackButton::handle_event(Event &event)

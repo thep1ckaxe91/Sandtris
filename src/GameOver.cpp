@@ -5,11 +5,11 @@
 GameOver::GameOver(Game &game, int new_score) : Scene(game)
 {
     menu = MenuButton(game);
-    menu.rect = menu.image.getRect();
+    menu.rect = (*menu.image).getRect();
     menu.rect.setTopLeft(menu_button_pos);
 
     retry = RetryButton(game);
-    retry.rect = retry.image.getRect();
+    retry.rect = (*retry.image).getRect();
     retry.rect.setTopLeft(retry_button_pos);
 
     score_font = Font(font_path,FONT_SIZE);
@@ -48,8 +48,8 @@ void GameOver::update()
 void GameOver::draw()
 {
     this->game->window.blit(this->game->images.gameover_screen,Vector2());
-    this->game->window.blit(this->menu.image,menu.rect.getTopLeft());
-    this->game->window.blit(this->retry.image,retry.rect.getTopLeft());
+    this->game->window.blit((*this->menu.image),menu.rect.getTopLeft());
+    this->game->window.blit((*this->retry.image),retry.rect.getTopLeft());
 
     this->game->window.blit(this->new_score_surf,new_score_rect.getTopLeft());
     this->game->window.blit(this->pb_surf,pb_rect.getTopLeft());

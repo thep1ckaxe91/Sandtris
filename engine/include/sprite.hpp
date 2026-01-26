@@ -2,6 +2,7 @@
 #define SDLGAME_SPRITE_
 #include <vector>
 #include <set>
+#include <memory>
 #include "math.hpp"
 #include "surface.hpp"
 namespace sdlgame
@@ -11,6 +12,8 @@ namespace sdlgame
      * just use stack-alloc like normal
      * treat the pointer as a address holder only,
      * not an pointer to a heap allocated object
+     *
+     * what is that even mean lol
      */
     namespace sprite
     {
@@ -43,7 +46,7 @@ namespace sdlgame
         {
         public:
             sdlgame::rect::Rect rect;
-            sdlgame::surface::Surface image;
+            sdlgame::surface::Surface *image;
             std::set<Group *> group_list;
             Sprite(std::vector<Group *> groups = std::vector<Group *>());
             /**

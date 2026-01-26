@@ -139,7 +139,7 @@ void sdlgame::sprite::Group::draw(sdlgame::surface::Surface &surface)
 {
     for (auto &sprite : sprite_list)
     {
-        surface.blit(sprite->image, sprite->rect.getTopLeft());
+        surface.blit(*sprite->image, sprite->rect.getTopLeft());
     }
 }
 
@@ -161,7 +161,7 @@ void sdlgame::sprite::GroupSingle::update()
 }
 void sdlgame::sprite::GroupSingle::draw(sdlgame::surface::Surface &surface)
 {
-    surface.blit(sprite->image, sprite->rect.getTopLeft());
+    surface.blit(*sprite->image, sprite->rect.getTopLeft());
 }
 
 std::vector<sdlgame::sprite::Sprite *> spritecollide(sdlgame::sprite::Sprite *sprite, sdlgame::sprite::Group *group, bool dokill)

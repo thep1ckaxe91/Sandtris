@@ -48,9 +48,9 @@ void Pause::handle_event(Event &event)
 void Pause::draw()
 {
     this->game->window.blit(this->game->images.pause_background,Vector2());
-    this->game->window.blit(menu_button.image,menu_button.rect.getTopLeft());
-    this->game->window.blit(option_button.image,option_button.rect.getTopLeft());
-    this->game->window.blit(retry_button.image,retry_button.rect.getTopLeft());
-    this->game->window.blit(back_button.image,back_button.rect.getTopLeft());
+    this->game->window.blit(*menu_button.image,menu_button.rect.getTopLeft());
+    this->game->window.blit(*option_button.image,option_button.rect.getTopLeft());
+    this->game->window.blit(*retry_button.image,retry_button.rect.getTopLeft());
+    this->game->window.blit(*back_button.image,back_button.rect.getTopLeft());
     if(menu_button.hovering) display_message();
 }

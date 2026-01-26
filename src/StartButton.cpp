@@ -6,7 +6,7 @@ StartButton::StartButton(Game &game) : Button()
 {
     this->game = &game;
     this->set_images(this->game->images.start_button_idle,this->game->images.start_button_hover,this->game->images.start_button_click);
-    this->rect = this->image.getRect();
+    this->rect = (*this->image).getRect();
 }
 StartButton::StartButton() = default;
 void StartButton::handle_event(Event &event)

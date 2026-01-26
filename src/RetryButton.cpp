@@ -6,7 +6,7 @@ RetryButton::RetryButton(Game &game)
 {
     this->game = &game;
     this->set_images(this->game->images.retry_button_idle,this->game->images.retry_button_hover, this->game->images.retry_button_click);
-    this->rect = this->image.getRect();
+    this->rect = (*this->image).getRect();
 }
 RetryButton::RetryButton()=default;
 void RetryButton::handle_event(Event &event)

@@ -1,6 +1,6 @@
 #include "engine.hpp"
 #include "Game.hpp"
-// #include "bits/stdc++.h"
+
 class Animation : public sdlgame::sprite::Sprite
 {
 protected:

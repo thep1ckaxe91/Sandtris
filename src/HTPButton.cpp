@@ -5,7 +5,7 @@ HTPButton::HTPButton(Game &game)
 {
     this->game = &game;
     set_images(this->game->images.htp_button_idle, this->game->images.htp_button_hover,this->game->images.htp_button_click);
-    this->rect = this->image.getRect();
+    this->rect = (*this->image).getRect();
 }
 HTPButton::HTPButton() = default;
 void HTPButton::update()

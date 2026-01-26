@@ -38,4 +38,26 @@ Actually, if we look at the animation spike, we also found `Surface::operator=` 
 
 So let's do one thing, that is create a move operator for surface and ultilize it everywhere i should
 
+Current code is at: 673510e49a20314843ec09425acbe1de716736a8
+
+### `Surface` move semantics
+
+![Surface move](./04-%20Surface%20move%20semantics.png)
+
+Saying this is optimized by move semantic is kind of a scam, of course, looking at the result, we clearly see the spike literally disappear while the game rans fine, but for a different reason
+
+My old code is so scrap, all i was doing was just literally change the way `Sprite` class works, i change from leaving the entire `Sprite::image` as a `Surface` to a pointer instead, and refactor all where it use `Sprite::image`
+
+So all those optimization was just pointers, no move involve, but i guess we can save move for another optimization later on.
+
+Focus on the update func, there're 2 main spike:
+- `Grid::update_ghost_shape` (on the left of `redraw`)
+- `TetriminoController::redraw` (which update the shape of the tetrimino "but only when it rotate")
+
+But that's the thing, `redraw` only needed when rotate, but in `update` (which call every frame), i left it call `redraw` for some reason, so I simply remove it and do a quick re-profiling
+
+![Remove redraw call](./04-1%20Remove%20unnecessary%20redraw%20call.png)
+
+Which make the spike disappear completely.
+
 Current code is at:

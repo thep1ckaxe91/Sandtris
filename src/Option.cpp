@@ -28,5 +28,5 @@ void Option::draw()
     sfx_slider.draw();
     music_slider.draw();
     fs_slider.draw();
-    this->game->window.blit(this->back_button.image,this->back_button.rect.getTopLeft());
+    this->game->window.blit(*this->back_button.image,this->back_button.rect.getTopLeft());
 }

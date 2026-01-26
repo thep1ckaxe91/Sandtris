@@ -38,6 +38,6 @@ void SplashScreen::update()
 }
 void SplashScreen::draw()
 {
-    this->game->window.blit(this->splash.image,Vector2());
+    this->game->window.blit(*this->splash.image,Vector2());
 }
 SplashScreen::~SplashScreen() = default;

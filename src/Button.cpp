@@ -13,15 +13,15 @@ void Button::set_images(Surface &idle, Surface &hover, Surface &click)
     this->idle = &idle;
     this->hover = &hover;
     this->click = &click;
-    this->image = idle;
-    this->rect = this->image.getRect();
+    this->image = this->idle;
+    this->rect = (*this->image).getRect();
 }
 
 void Button::handle_event(Event &event)
 {
     if (event.type == sdlgame::MOUSEBUTTONDOWN and this->hovering)
     {
-        this->image = *this->click;
+        this->image = this->click;
     }
     else if (event.type == sdlgame::MOUSEBUTTONUP and this->hovering)
     {
@@ -36,12 +36,12 @@ void Button::update()
         this->hovering = 1;
     else
     {
-        this->image = *this->idle;
+        this->image = this->idle;
         this->hovering = 0;
     }
     if (this->hovering and !this->prev_hovered)
     {
-        this->image = *this->hover;
+        this->image = this->hover;
         sdlgame::event::post(BUTTON_HOVER);
     }
     this->prev_hovered = this->hovering;

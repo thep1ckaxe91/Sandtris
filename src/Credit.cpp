@@ -19,5 +19,5 @@ void Credit::update()
 void Credit::draw()
 {
     this->game->window.blit(this->game->images.credit_image,Vector2());
-    this->game->window.blit(this->back_button.image,bb_pos);
+    this->game->window.blit((*this->back_button.image),bb_pos);
 }

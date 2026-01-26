@@ -174,12 +174,12 @@ void GamePlay::draw()
 
     this->game->window.blit(this->next_shape_surf, next_shape_display_rect.getTopLeft());
 
-    this->game->window.blit(this->change_shape.image, next_shape_display_area.getTopLeft());
+    this->game->window.blit((*this->change_shape.image), next_shape_display_area.getTopLeft());
     if (!(blipcount / 10 & 1) and blipcount >= 0)
         this->grid.draw();
 
     if (count_down.playing)
-        this->game->window.blit(this->count_down.image, count_down_display_rect.getTopLeft());
+        this->game->window.blit((*this->count_down.image), count_down_display_rect.getTopLeft());
 
     if (blipcount == -1)
     {
@@ -189,7 +189,7 @@ void GamePlay::draw()
         this->game->pop_scene(out, next, in);
     }
 
-    this->game->window.blit(this->pause_button.image, pause_button.rect.getTopLeft());
+    this->game->window.blit((*this->pause_button.image), pause_button.rect.getTopLeft());
     this->game->window.blit(this->score_surf, this->score_rect.getTopLeft());
 }
 

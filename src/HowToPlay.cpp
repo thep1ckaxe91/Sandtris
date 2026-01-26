@@ -29,5 +29,5 @@ void HowToPlay::update()
 void HowToPlay::draw()
 {
     this->game->window.blit(this->game->images.instruction_image, Vector2(0, height_pos));
-    this->game->window.blit(this->back_button.image, bb_pos);
+    this->game->window.blit((*this->back_button.image), bb_pos);
 }
