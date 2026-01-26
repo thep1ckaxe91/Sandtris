@@ -4,16 +4,7 @@
 #include "TetrisEvent.hpp"
 
 #include "flags.hpp"
-#ifdef MULTITHREADING
-std::mutex grid_mutex;
-Sand **grid_mem_address;
-void grid_mem_init()
-{
-    grid_mem_address = (Sand **)calloc(GRID_HEIGHT + 2, sizeof(Sand *));
-    for (int i = 0; i < GRID_HEIGHT + 2; i++)
-        grid_mem_address[i] = (Sand *)calloc(GRID_WIDTH + 2, sizeof(Sand));
-}
-#endif
+
 Grid::Grid(Game &game)
 {
     this->game = &game;
@@ -23,8 +14,6 @@ Grid::Grid(Game &game)
     this->next = Tetriminoes::randomTetrimino();
     this->ghost = Surface(32, 32);
     this->ghost_color = Color("white");
-#ifdef MULTITHREADING
-    this->grid = grid_mem_address;
 
     for (int i = 0; i < GRID_HEIGHT + 2; i++)
         grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(STATIC_SAND);
@@ -33,33 +22,28 @@ Grid::Grid(Game &game)
     for (int i = 1; i <= GRID_HEIGHT; i++)
         for (int j = 1; j <= GRID_WIDTH; j++)
             grid[i][j] = Sand();
-#else
-    for (int i = 0; i < GRID_HEIGHT + 2; i++)
-        grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(STATIC_SAND);
-    for (int i = 0; i < GRID_WIDTH + 2; i++)
-        grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(STATIC_SAND);
-    for (int i = 1; i <= GRID_HEIGHT; i++)
-        for (int j = 1; j <= GRID_WIDTH; j++)
-            grid[i][j] = Sand();
-#endif
+
+    sand_texture = SDL_CreateTexture(
+        sdlgame::display::renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
+        GRID_WIDTH,
+        GRID_HEIGHT);
+
+    if (!sand_texture)
+    {
+        SDL_Log("Cant create or sand texture null for:\n%s\n", SDL_GetError());
+        exit(1);
+    }
+    if (SDL_SetTextureBlendMode(this->sand_texture, SDL_BLENDMODE_NONE))
+    {
+        SDL_Log("Failed to set texture blend mode due to: %s", SDL_GetError());
+    } // allow tex to just copy (faster)
 }
 Grid::Grid() = default;
 Grid &Grid::operator=(const Grid &other)
 {
-#ifdef MULTITHREADING
-    this->grid = other.grid;
 
-    this->game = other.game;
-    for (int i = 0; i < GRID_HEIGHT + 2; i++)
-        grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(STATIC_SAND);
-    for (int i = 0; i < GRID_WIDTH + 2; i++)
-        grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(STATIC_SAND);
-    for (int i = 1; i <= GRID_HEIGHT; i++)
-        for (int j = 1; j <= GRID_WIDTH; j++)
-            grid[i][j] = other.grid[i][j];
-    controller = other.controller;
-    next = other.next;
-#else
     this->ghost = other.ghost;
     this->ghost_color = other.ghost_color;
     this->game = other.game;
@@ -76,8 +60,30 @@ Grid &Grid::operator=(const Grid &other)
             grid[i][j] = other.grid[i][j];
     controller = other.controller;
     next = other.next;
-#endif
+    // just create new one, since we will redraw it anyway
+    sand_texture = SDL_CreateTexture(
+        sdlgame::display::renderer,
+        SDL_PIXELFORMAT_ARGB8888,
+        SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
+        GRID_WIDTH,
+        GRID_HEIGHT);
+
+    if (!sand_texture) // didnt go here
+    {
+        SDL_Log("Cant create or sand texture null for:\n%s\n", SDL_GetError());
+        exit(1);
+    }
+    if (SDL_SetTextureBlendMode(this->sand_texture, SDL_BLENDMODE_NONE)) // didnt go here either
+    {
+        SDL_Log("Failed to set texture blend mode due to: %s", SDL_GetError());
+    } // allow tex to just copy (faster)
     return *this;
+}
+
+Grid::~Grid()
+{
+    if (sand_texture)
+        SDL_DestroyTexture(this->sand_texture);
 }
 
 void Grid::handle_event(Event &event)
@@ -231,43 +237,40 @@ void Grid::collision_check(vector<pair<Uint8, Uint8>> &updated)
     /*
      */
 
-    bool called = 0;
     for (int i = 1; i <= GRID_HEIGHT + 1; i++)
     {
-        if (!called)
-            for (int j = 1; j <= GRID_WIDTH; j++)
+        for (int j = 1; j <= GRID_WIDTH; j++)
+        {
+            if (grid[i][j].mask)
             {
-                if (!called)
-                    if (grid[i][j].mask)
+                for (int shift = 0; shift < 16; shift++)
+                {
+                    if (controller.tetrimino.mask >> shift & 1)
                     {
-                        for (int shift = 0; shift < 16; shift++)
+                        Rect tmp = Rect(controller.topleft + Vector2((3 - shift % 4) * 8, (3 - shift / 4) * 8), 8, 8);
+                        if (tmp.collidepoint(j + GRID_X, i + GRID_Y - 1))
                         {
-                            if (controller.tetrimino.mask >> shift & 1)
+                            Vector2 check_point(j + GRID_X, i + GRID_Y);
+                            while (tmp.collidepoint(check_point))
                             {
-                                Rect tmp = Rect(controller.topleft + Vector2((3 - shift % 4) * 8, (3 - shift / 4) * 8), 8, 8);
-                                if (tmp.collidepoint(j + GRID_X, i + GRID_Y - 1))
-                                {
-                                    Vector2 check_point(j + GRID_X, i + GRID_Y);
-                                    while (tmp.collidepoint(check_point))
-                                    {
-                                        controller.topleft.y -= 1;
-                                        tmp.move_ip(0, -1);
-                                        if (grid[int(check_point.y - GRID_Y - 1)][int(check_point.x - GRID_X)].mask)
-                                            check_point.y--;
-                                    }
-                                    called = 1;
-                                    this->merge(updated);
-                                    this->controller.reset(this->next);
-                                    this->next = Tetriminoes::randomTetrimino();
-                                    sdlgame::event::post(MERGING);
-                                    update_ghost_shape();
-                                    break;
-                                }
+                                controller.topleft.y -= 1;
+                                tmp.move_ip(0, -1);
+                                if (grid[int(check_point.y - GRID_Y - 1)][int(check_point.x - GRID_X)].mask)
+                                    check_point.y--;
                             }
+                            this->merge(updated);
+                            this->controller.reset(this->next);
+                            this->next = Tetriminoes::randomTetrimino();
+                            sdlgame::event::post(MERGING);
+                            update_ghost_shape();
+                            goto called;
                         }
                     }
+                }
             }
+        }
     }
+called:
     // exit(0);
 }
 
@@ -330,7 +333,7 @@ void Grid::update_ghost()
         if ((this->controller.tetrimino.mask >> shift & 1) and !checked[shift % 4])
         {
             checked[shift % 4] = 1;
-            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - GRID_X;
+            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - GRID_X; // these should be explicitly cast to double
             int right = this->controller.topleft.x + 8 * (3 - shift % 4) + 8 - GRID_X;
             for (int j = left; j < right; j++)
             {
@@ -358,7 +361,7 @@ void Grid::update()
     {
         vector<pair<Uint8, Uint8>> updated_sands;
         this->update_timer -= this->fixed_delta_time;
-#ifndef MULTITHREADING
+
         for (int i = GRID_HEIGHT; i >= 1; i--)
         {
             for (int j = 1; j <= GRID_WIDTH; j++)
@@ -372,33 +375,6 @@ void Grid::update()
                 }
             }
         }
-#else
-        for (int offset_y = 1; offset_y >= 0; offset_y--)
-        {
-            for (int offset_x = 0; offset_x < 2; offset_x++)
-            {
-                for (int i = 1; i >= 0; i--)
-                {
-                    for (int j = 0; j < 2; j++)
-                    {
-                        int top = i * GRID_HEIGHT / 2 + offset_y * GRID_HEIGHT / 4 + 1;
-                        int left = j * GRID_WIDTH / 2 + offset_x * GRID_WIDTH / 4 + 1;
-                        int w = GRID_WIDTH / 4;
-                        int h = GRID_HEIGHT / 4;
-                        this->update_thread[i][j] =
-                            thread(update_part, top, left, w, h, std::ref(updated_sands));
-                    }
-                }
-                for (int i = 1; i >= 0; i--)
-                {
-                    for (int j = 0; j < 2; j++)
-                    {
-                        this->update_thread[i][j].join();
-                    }
-                }
-            }
-        }
-#endif
         collision_check(updated_sands);
         if (!updated_sands.empty())
         {
@@ -425,119 +401,53 @@ void Grid::draw_ghost()
 }
 void Grid::draw()
 {
-#ifndef MULTITHREADING
+    // for (int i = 1; i <= GRID_HEIGHT; i++)
+    // {
+    //     for (int j = 1; j <= GRID_WIDTH; j++)
+    //     {
+    //         if (grid[i][j].mask)
+    //             sdlgame::draw::point(
+    //                 this->game->window,
+    //                 SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15),
+    //                 j + GRID_X - 1, i + GRID_Y - 1);
+    //     }
+    // }
+    void *raw_pixels;
+    int pitch;
+
+    if (SDL_LockTexture(sand_texture, nullptr, &raw_pixels, &pitch) != 0)
+    {
+        SDL_Log("Cant get memory address of sand texture:\n%s\n", SDL_GetError());
+        exit(1);
+    }
+
+    auto *pixels = reinterpret_cast<Uint32*>(raw_pixels);
+    int width_in_pixels = pitch / 4;
+
     for (int i = 1; i <= GRID_HEIGHT; i++)
     {
+
+        // -1 since grid is 1 indexed
+        int row_offset = (i - 1) * width_in_pixels;
+
         for (int j = 1; j <= GRID_WIDTH; j++)
         {
-            if (grid[i][j].mask)
-                sdlgame::draw::point(
-                    this->game->window,
-                    SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15),
-                    j + GRID_X - 1, i + GRID_Y - 1);
+            Color c = SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15);
+
+            Uint32 pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
+
+            pixels[row_offset + (j - 1)] = pixel_color * (grid[i][j].mask != 0);
+
+            
         }
     }
 
-    // for (int i = 1; i >= 0; i--)
-    // {
-    //     for (int j = 0; j < 2; j++)
-    //     {
-    //         int top = i * GRID_HEIGHT / 2 + 1;
-    //         int left = j * GRID_WIDTH / 2 + 1;
-    //         int w = GRID_WIDTH / 2;
-    //         int h = GRID_HEIGHT / 2;
-    //         grid_draw_thread[i][j] =
-    //             thread(draw_part, std::ref(this->grid), std::ref(this->game), top, left, w, h);
-    //     }
-    // }
-    // for (int i = 1; i >= 0; i--)
-    // {
-    //     for (int j = 0; j < 2; j++)
-    //     {
-    //         grid_draw_thread[i][j].join();
-    //     }
-    // }
+    SDL_UnlockTexture(sand_texture);
 
-#else
-    for (int i = 1; i <= GRID_HEIGHT; i++)
-    {
-        for (int j = 1; j <= GRID_WIDTH; j++)
-        {
-            if (grid[i][j].mask)
-                sdlgame::draw::point(
-                    this->game->window,
-                    SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15),
-                    j + GRID_X - 1, i + GRID_Y - 1);
-        }
-    }
-#endif
+    SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
+
+    SDL_RenderCopy(sdlgame::display::renderer, sand_texture, nullptr, &dst_rect);
+
     controller.draw();
     draw_ghost();
 }
-
-// std::thread grid_draw_thread[2][2];
-// void draw_part(const Sand **grid, Game *game, const int top, const int left, const int w, const int h)
-// {
-//     for (int i = top; i < top + h; i++)
-//     {
-//         for (int j = left; j < left + w; j++)
-//         {
-//             if (grid[i][j].mask)
-//                 sdlgame::draw::point(
-//                     game->window,
-//                     SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15),
-//                     j + GRID_X - 1, i + GRID_Y - 1);
-//         }
-//     }
-// }
-
-#ifdef MULTITHREADING
-pair<Uint8, Uint8> step(int i, int j, int times)
-{
-    while (times--)
-    {
-        if (!grid_mem_address[i + 1][j].mask)
-        {
-            swap(grid_mem_address[i][j], grid_mem_address[i + 1][j]);
-            // return step(i+1,j,times-1);
-            i++;
-        }
-        else if (!grid_mem_address[i + 1][j - 1].mask and !grid_mem_address[i][j - 1].mask)
-        {
-            swap(grid_mem_address[i][j], grid_mem_address[i][j - 1]);
-            // return step(i+1,j-1,times-1);
-            j--;
-        }
-        else if (!grid_mem_address[i + 1][j + 1].mask and !grid_mem_address[i][j + 1].mask)
-        {
-            swap(grid_mem_address[i][j], grid_mem_address[i][j + 1]);
-            // return step(i+1,j+1,times-1);
-            j++;
-        }
-    }
-    return {i, j};
-}
-
-void update_part(const int top, const int left, const int width, const int height, vector<pair<Uint8, Uint8>> &updated)
-{
-    for (int i = top + height - 1; i >= top; i--)
-    {
-        for (int j = left; j < left + width; j++)
-        {
-            if (game_ended)
-                return;
-            if (grid_mem_address[i][j].mask)
-            {
-                int step_times = sdlgame::random::randint(2, 5);
-                pair<Uint8, Uint8> pos = step(i, j, step_times);
-                if (i != pos.first or j != pos.second)
-                {
-                    std::lock_guard<std::mutex> lock(grid_mutex);
-                    updated.push_back(pos);
-                }
-            }
-        }
-    }
-}
-
-#endif

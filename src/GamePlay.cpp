@@ -183,7 +183,7 @@ void GamePlay::draw()
 
     if (blipcount == -1)
     {
-        InSwipeDown *in = new InSwipeDown();
+        InSwipeDown *in = new InSwipeDown(); // todo: this is so ugly bro
         OutSwipeDown *out = new OutSwipeDown();
         GameOver *next = new GameOver(*game, this->grid.get_score());
         this->game->pop_scene(out, next, in);
