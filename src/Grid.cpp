@@ -399,34 +399,16 @@ void Grid::draw_ghost()
 }
 void Grid::draw()
 {
-    // for (int i = 1; i <= GRID_HEIGHT; i++)
-    // {
-    //     for (int j = 1; j <= GRID_WIDTH; j++)
-    //     {
-    //         if (grid[i][j].mask)
-    //             sdlgame::draw::point(
-    //                 this->game->window,
-    //                 SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15),
-    //                 j + GRID_X - 1, i + GRID_Y - 1);
-    //     }
-    // }
     void *raw_pixels;
     int pitch;
 
-    SDL_SetRenderTarget(sdlgame::display::renderer, sand_texture);
-
-    SDL_SetRenderDrawColor(sdlgame::display::renderer, 0, 0, 0, 0);
-    SDL_RenderClear(sdlgame::display::renderer);
-
-    SDL_SetRenderTarget(sdlgame::display::renderer, NULL);
-
-    if (SDL_LockTexture(sand_texture, nullptr, &raw_pixels, &pitch) != 0)
+    if (SDL_LockTexture(sand_texture, nullptr, &raw_pixels, &pitch))
     {
         SDL_Log("Cant get memory address of sand texture:\n%s\n", SDL_GetError());
         exit(1);
     }
 
-    auto *pixels = reinterpret_cast<Uint32*>(raw_pixels);
+    auto *pixels = reinterpret_cast<Uint32 *>(raw_pixels);
     int width_in_pixels = pitch / 4;
 
     for (int i = 1; i <= GRID_HEIGHT; i++)
@@ -437,29 +419,31 @@ void Grid::draw()
 
         for (int j = 1; j <= GRID_WIDTH; j++)
         {
+            if (grid[i][j].mask == 0)
+            {
+                pixels[row_offset + (j - 1)] = 0xff000000;
+                continue;
+            }
             Color c = SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15);
 
             Uint32 pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
 
-            pixels[row_offset + (j - 1)] = pixel_color * (grid[i][j].mask != 0);
-
-            
+            pixels[row_offset + (j - 1)] = pixel_color;
         }
     }
 
     SDL_UnlockTexture(sand_texture);
 
     SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
-    
+
     SDL_SetRenderTarget(sdlgame::display::renderer, this->game->window.texture);
-    if(SDL_RenderCopy(sdlgame::display::renderer, sand_texture, nullptr, &dst_rect))
+    if (SDL_RenderCopy(sdlgame::display::renderer, sand_texture, nullptr, &dst_rect))
     {
         printf("Failed to render the sand texture", SDL_GetError());
         exit(1);
     }
-    SDL_SetRenderTarget(sdlgame::display::renderer, this->game->window_object.texture);
+    SDL_SetRenderTarget(sdlgame::display::renderer, NULL);
 
-    
     controller.draw();
     draw_ghost();
 }

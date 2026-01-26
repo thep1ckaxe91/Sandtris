@@ -1,14 +1,14 @@
 #ifndef SAND_HPP
 #define SAND_HPP
-#include <map>
+#include <array>
 #include "constant.hpp"
 using Color = sdlgame::color::Color;
-using namespace std;
+
 
 //Bit shift for color check, not for actual color
 
+extern std::array<Color, 9> SandShiftColor;
 
-extern map<SandShift,Color> SandShiftColor;
 struct Sand
 {
     SandShift mask;
