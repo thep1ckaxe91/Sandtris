@@ -390,7 +390,6 @@ void Grid::update()
         this->game->window_draw_offset.y--;
     controller.update();
     normalize_tetrimino();
-    update_ghost_shape();
     update_ghost();
 }
 void Grid::draw_ghost()

@@ -63,3 +63,18 @@ Which make the spike disappear completely. At this point, some how when remove `
 Current code is at: 9f71107279e2c116a669ba27cae06e2d2cd25c29
 
 ### Ghost draw optimization
+
+
+![alt text](./05-%20Remove%20unnecessary%20update%20ghost%20shape.png)
+
+Just same as before, there was a unnecessary `Grid::update_ghost_shape` call from update func which call every frame
+
+Simple as remove it, we now make the update function which before about equal to draw cost, now only 1/3 of it.
+
+All above which:
+- Reduce draw cost by 1/10
+- Reduce update cost by 1/3
+
+Was already **~30 times** faster main loop
+
+Current code is at: 
