@@ -34,8 +34,8 @@ void TetriminoController::update()
         (
             (keys[sdlgame::K_d] or keys[sdlgame::K_RIGHT])
             -(keys[sdlgame::K_a] or keys[sdlgame::K_LEFT])
-        ) * sideway_move_speed * this->game->clock.delta_time();
-    this->topleft.y += this->game->clock.delta_time() * (keys[sdlgame::K_s] or keys[sdlgame::K_DOWN] ? fast_fall_speed : fall_speed);
+        ) * sideway_move_speed * this->game->clock.delta_time().count();
+    this->topleft.y += this->game->clock.delta_time().count() * (keys[sdlgame::K_s] or keys[sdlgame::K_DOWN] ? fast_fall_speed : fall_speed);
 }
 void TetriminoController::rotate()
 {

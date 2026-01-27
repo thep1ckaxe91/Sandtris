@@ -8,7 +8,7 @@ enum Window_Constant
     RESOLUTION_WIDTH = 160,
     RESOLUTION_HEIGHT = 144
 };
-const int MAXFPS = 60;
+constexpr auto MAXFPS = 10000;
 enum grid_size
 {
     GRID_WIDTH = 80,

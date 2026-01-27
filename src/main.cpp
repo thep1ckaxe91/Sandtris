@@ -23,7 +23,7 @@ public:
                 | sdlgame::MAXIMIZED
                 | sdlgame::RESIZABLE);
         this->window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
-        sdlgame::display::get_window_size(); // why did i call this?
+        sdlgame::display::get_window_size(); // this is intended to assing win_surf it value it suppose to be
 
         // comment this so that i get a free fps view at the caption
         // auto res = load_window_info();
@@ -56,7 +56,7 @@ public:
             {
                 played = 1;
             }
-            out->update(clock.delta_time());
+            out->update(clock.delta_time().count());
             if (out->isDone)
             {
                 delete out;
@@ -92,7 +92,7 @@ public:
                 delete scene_list[scene_list.size() - 1];
                 scene_list.pop_back();
             }
-            in->update(clock.delta_time());
+            in->update(clock.delta_time().count());
             if (in->isDone)
             {
                 delete in;
@@ -101,9 +101,6 @@ public:
         }
         audio_manager.update();
         
-        
-
-        sdlgame::display::set_caption(std::to_string(std::round(clock.get_fps())).c_str());
     }
     void draw()
     {
@@ -186,14 +183,13 @@ public:
                 update();
                 draw();
                 sdlgame::display::flip();
-                // sdlgame::display::set_caption((to_string(clock.get_fps())).c_str());
+                sdlgame::display::set_caption((std::to_string(clock.get_fps())).c_str());
             }
         }
     }
 };
 int main(int argc, char **argv)
 {
-    // _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     sdlgame::init();
     sdlgame::mixer::init();
     sdlgame::mixer::set_num_channels(16);

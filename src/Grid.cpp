@@ -355,7 +355,7 @@ void Grid::update_ghost()
 }
 void Grid::update()
 {
-    this->update_timer += this->game->clock.delta_time();
+    this->update_timer += this->game->clock.delta_time().count();
     if (this->update_timer >= this->fixed_delta_time)
     {
         std::vector<std::pair<Uint8, Uint8>> updated_sands;

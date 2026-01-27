@@ -34,7 +34,7 @@ void Animation::update()
     if (this->playing)
     {
         this->frame_change = 0;
-        this->time_cnt += this->game->clock.delta_time();
+        this->time_cnt += this->game->clock.delta_time().count();
 
         if (this->time_cnt >= 1.0 / this->frame_rate)
         {

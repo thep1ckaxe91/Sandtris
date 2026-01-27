@@ -122,7 +122,7 @@ void GamePlay::update()
         {
             sdlgame::music::resume();
             this->grid.update();
-            double delta_y = -flow_speed * this->game->clock.delta_time();
+            double delta_y = -flow_speed * this->game->clock.delta_time().count();
             flow1.move_ip(0, delta_y);
             flow2.move_ip(0, delta_y);
             if (flow1.getBottom() - 1 <= next_color_display_rect.getTop())
@@ -148,8 +148,8 @@ void GamePlay::update()
             }
             count_down.update();
         }
-        this->bg_offset.x -= gameplay_bg_speed * this->game->clock.delta_time();
-        this->bg_offset.y -= gameplay_bg_speed * this->game->clock.delta_time();
+        this->bg_offset.x -= gameplay_bg_speed * this->game->clock.delta_time().count();
+        this->bg_offset.y -= gameplay_bg_speed * this->game->clock.delta_time().count();
         if (this->bg_offset.x <= -8)
             this->bg_offset = Vector2();
         this->pause_button.update();

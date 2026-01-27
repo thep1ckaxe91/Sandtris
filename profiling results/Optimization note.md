@@ -1,16 +1,16 @@
-## No optimization
+## Redundancy Optimization
+
+This part will focus on part where it can be optimize by remove redundance work, **Architecture Optimization** will be much harder, since most of them will result in large refactoring, so we'll leave it for later.
+
+### No optimization
 
 ![no opt image](01-%20No%20Optimization.png)
 
-Look at the flame graph, we can see libgallium is screaming with thousands of draw call
+Look at the flame graph, we can see libgallium is screaming with thousands of draw call for just 1 single pixels
 
 We can fix that by draw all to a streaming texture first, then to the main window texture later
 
 Current code is at: 834816a344eed54964034a92c5edceeb87bb585b
-
-## Redundancy Optimization
-
-This part will focus on part where it can be optimize by remove redundance work, **Architecture Optimization** will be much harder, so we'll leave it for later.
 
 ### Texture lock optimized
 
@@ -75,6 +75,8 @@ Just same as before, there was a unnecessary `Grid::update_ghost_shape` call fro
 
 Simple as remove it, we now make the update function which before about equal to draw cost, now only 1/3 of it.
 
+![alt text](./05-1%20Compare%20Draw%20to%20Update%20cost.png)
+
 All above which:
 - Reduce draw cost by 1/10
 - Reduce update cost by 1/3
@@ -83,3 +85,19 @@ Was already **~30 times** faster main loop
 
 Current code is at: 83a3b33230d53d6649279c526fd785b37fbf5cca
 
+## Architecture Optimization
+
+In this part, we will actually read the old implementation where it only focus on MVP, but not performance, so we will be hunting "hardware terror" part that need to be re-construct for better performance.
+
+### `std::list` in `time` namespace
+
+If we checkout `time` namespace implementation, we will find that it heavily depend on `elapsedTimes`, which is a `std::list`. This is a cache nightmare just to check FPS or get `delta_time`.
+
+We can instead use a ring buffer by `std::array` to store the delta time, improve cache hit also mean better performance. 
+
+Also, rely on SDL APIs mean we possibly can't move this to SDL3 if needed, so we will utilize chrono instead.
+
+After an afternoon of crunching **CppCon by Howard Hinnant** about `std::chrono`, i decided to refactor time namespace like this:
+- unified unit `duration<float64_t, seconds>` alias `duration_t`, which fits the needs for microsec precision
+- reconstruct elapsedTimes to be `std::array<duration_t, 10>` ring buffer.
+- and many others, visit the commit ID to see changes in `time.hpp` and `time.cpp`

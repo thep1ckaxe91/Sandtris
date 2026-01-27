@@ -24,8 +24,8 @@ void SplashScreen::update()
     if(this->splash.playing)
     {
         this->splash.update();
-        // cout << this->game->clock.delta_time() << endl;
-        this->time -= this->game->clock.delta_time();
+        // cout << this->game->clock.delta_time().count() << endl;
+        this->time -= this->game->clock.delta_time().count();
         // cout << this->time << endl;
         if(this->time <= 0){
             this->splash.playing=0;
