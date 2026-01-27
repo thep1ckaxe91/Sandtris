@@ -7,7 +7,7 @@ using Color = sdlgame::color::Color;
 using Sound = sdlgame::mixer::Sound;
 using Channel = sdlgame::mixer::Channel;
 using Font = sdlgame::font::Font;
-using namespace std;
+
 OutSwipeDown::OutSwipeDown(double time) : SceneTransition(time)
 {
     vel=cur_height=0;

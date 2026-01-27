@@ -2,8 +2,9 @@
 #include "engine.hpp"
 #include "tetriminoes.hpp"
 #include "TetrisEvent.hpp"
-
 #include "flags.hpp"
+#include <queue>
+#include <bitset>
 
 Grid::Grid(Game &game)
 {
@@ -145,17 +146,17 @@ int Grid::get_score() { return score1 + score2; }
  * @param updated_sands a list of position sand that got updated
  * @return an integer represent amount of point we get
  */
-int Grid::check_scoring(std::vector<pair<Uint8, Uint8>> &updated_sands)
+int Grid::check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands)
 {
-    queue<pair<Uint8, Uint8>> q;
+    std::queue<std::pair<Uint8, Uint8>> q;
     pos.clear();
-    bitset<GRID_WIDTH + 2> visited[GRID_HEIGHT + 2];
+    std::array<std::bitset<GRID_WIDTH + 2>, GRID_HEIGHT + 2> visited;
     for (auto &[i, j] : updated_sands)
     {
         if (visited[i][j] == 1)
             continue;
         visited[i][j] = 1;
-        vector<pair<Uint8, Uint8>> tmp;
+        std::vector<std::pair<Uint8, Uint8>> tmp;
         SandShift check_color = grid[i][j].mask;
         bool touchleft = 0, touchright = 0;
         q.push({i, j});
@@ -196,7 +197,7 @@ int Grid::check_scoring(std::vector<pair<Uint8, Uint8>> &updated_sands)
     return pos.size();
 }
 
-void Grid::merge(vector<pair<Uint8, Uint8>> &updated)
+void Grid::merge(std::vector<std::pair<Uint8, Uint8>> &updated)
 {
     // if merge at wrong place, game over
     // a bit offset for more comfort ux
@@ -231,7 +232,7 @@ void Grid::merge(vector<pair<Uint8, Uint8>> &updated)
         }
     }
 }
-void Grid::collision_check(vector<pair<Uint8, Uint8>> &updated)
+void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
 {
     // check collision if the tetrimino is collided with the grid
     /*
@@ -255,7 +256,7 @@ void Grid::collision_check(vector<pair<Uint8, Uint8>> &updated)
                             {
                                 controller.topleft.y -= 1;
                                 tmp.move_ip(0, -1);
-                                if (grid[int(check_point.y - GRID_Y - 1)][int(check_point.x - GRID_X)].mask)
+                                if (grid[int(check_point.y - (double)GRID_Y - 1)][int(check_point.x - (double)GRID_X)].mask)
                                     check_point.y--;
                             }
                             this->merge(updated);
@@ -272,26 +273,26 @@ void Grid::collision_check(vector<pair<Uint8, Uint8>> &updated)
     }
 }
 
-pair<Uint8, Uint8> Grid::step(int i, int j, int times)
+std::pair<Uint8, Uint8> Grid::step(int i, int j, int times)
 {
     while (times--)
     {
         if (!grid[i + 1][j].mask)
         {
-            swap(grid[i][j], grid[i + 1][j]);
+            std::swap(grid[i][j], grid[i + 1][j]);
             // return step(i+1,j,times-1);
             i++;
         }
         else if (!grid[i + 1][j - 1].mask and !grid[i][j - 1].mask)
         {
-            swap(grid[i][j], grid[i + 1][j - 1]);
+            std::swap(grid[i][j], grid[i + 1][j - 1]);
             // return step(i+1,j-1,times-1);
             j--;
             i++;
         }
         else if (!grid[i + 1][j + 1].mask and !grid[i][j + 1].mask)
         {
-            swap(grid[i][j], grid[i + 1][j + 1]);
+            std::swap(grid[i][j], grid[i + 1][j + 1]);
             // return step(i+1,j+1,times-1);
             j++;
             i++;
@@ -323,19 +324,19 @@ void Grid::update_ghost_shape()
 }
 void Grid::update_ghost()
 {
-    bitset<4> checked;    // if the ith collumn is check or not
-    int min_height = 144; // min distance
+    std::bitset<4> checked; // if the ith collumn is check or not
+    int min_height = 144;   // min distance
     // get the min distance from the tetrimino down to display the ghost
     for (int shift = 0; shift < 16; shift++)
     {
         if ((this->controller.tetrimino.mask >> shift & 1) and !checked[shift % 4])
         {
             checked[shift % 4] = 1;
-            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - GRID_X; // these should be explicitly cast to double
-            int right = this->controller.topleft.x + 8 * (3 - shift % 4) + 8 - GRID_X;
+            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - (double)GRID_X; // these should be explicitly cast to double
+            int right = this->controller.topleft.x + 8 * (3 - shift % 4) + 8 - (double)GRID_X;
             for (int j = left; j < right; j++)
             {
-                int i = this->controller.topleft.y + 8 * (3 - shift / 4) - GRID_Y;
+                int i = this->controller.topleft.y + 8 * (3 - shift / 4) - (double)GRID_Y;
                 int cnt = 0;
                 while (grid[i++][j + 1].mask == 0)
                 {
@@ -343,7 +344,7 @@ void Grid::update_ghost()
                     if (cnt >= min_height)
                         break;
                 }
-                min_height = min(min_height, cnt);
+                min_height = std::min(min_height, cnt);
             }
         }
     }
@@ -357,7 +358,7 @@ void Grid::update()
     this->update_timer += this->game->clock.delta_time();
     if (this->update_timer >= this->fixed_delta_time)
     {
-        vector<pair<Uint8, Uint8>> updated_sands;
+        std::vector<std::pair<Uint8, Uint8>> updated_sands;
         this->update_timer -= this->fixed_delta_time;
 
         for (int i = GRID_HEIGHT; i >= 1; i--)
@@ -367,7 +368,7 @@ void Grid::update()
                 if (grid[i][j].mask)
                 {
                     int step_times = sdlgame::random::randint(1, step_range);
-                    pair<Uint8, Uint8> pos = this->step(i, j, step_times);
+                    std::pair<Uint8, Uint8> pos = this->step(i, j, step_times);
                     if (i != pos.first or j != pos.second)
                         updated_sands.push_back(pos);
                 }

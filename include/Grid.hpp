@@ -6,7 +6,7 @@
 #include "tetriminoes.hpp"
 #include "TetriminoController.hpp"
 #include "Game.hpp"
-using namespace std;
+
 /**
  * Yes, the array start from 1, the rest is the border
  */
@@ -17,7 +17,7 @@ private:
     double update_timer = 0;
 
 public:
-    vector<pair<Uint8, Uint8>> pos;
+    std::vector<std::pair<Uint8, Uint8>> pos;
     int score1 = 0, score2 = 0;
     Sand grid[GRID_HEIGHT + 2][GRID_WIDTH + 2];
 
@@ -34,11 +34,11 @@ public:
     Grid();
     ~Grid();
     Grid &operator=(const Grid &other);
-    void collision_check(std::vector<pair<Uint8, Uint8>> &updated);
+    void collision_check(std::vector<std::pair<Uint8, Uint8>> &updated);
     void normalize_tetrimino();
-    void merge(vector<pair<Uint8, Uint8>> &updated_sands);
+    void merge(std::vector<std::pair<Uint8, Uint8>> &updated_sands);
     int get_score();
-    int check_scoring(vector<pair<Uint8, Uint8>> &updated_sands);
+    int check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands);
     void handle_event(Event &event);
     void update_ghost();
     void update_ghost_shape();
@@ -48,7 +48,7 @@ public:
 
     // these function should make the sand fall better somehow
 
-    pair<Uint8, Uint8> step(int i, int j, int times);
+    std::pair<Uint8, Uint8> step(int i, int j, int times);
 };
 
 #endif

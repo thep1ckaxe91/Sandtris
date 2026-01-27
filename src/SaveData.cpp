@@ -14,7 +14,11 @@
 
 #include "SaveData.hpp"
 #include "constant.hpp"
-#include <bits/stdc++.h>
+#include <filesystem>
+#include <fstream>
+namespace fs = std::filesystem;
+
+
 int bytes_to_int(const char *c)
 {
     union
@@ -64,12 +68,12 @@ int get_personal_best()
     return 0;
     /// This whole load is causing error while writing to files, of course, since its platform specific
 
-    // if (!filesystem::exists(base_path + "assets/save/config.sandtris"))
+    // if (!fs::exists(base_path + "assets/save/config.sandtris"))
     // {
     //     set_personal_best(0);
     //     return 0;
     // }
-    // ifstream file(base_path + "assets/save/config.sandtris", ios_base::binary);
+    // std::ifstream file(base_path + "assets/save/config.sandtris", std::ios_base::binary);
 
     // int offset[8];
     // file.read((char *)offset, sizeof(int) * 8);
@@ -81,7 +85,7 @@ int get_personal_best()
     // char dat[8];
     // for (int i = 0; i < 8; i++)
     // {
-    //     file.seekg(std::streamoff(sizeof(offset) + offset[i]), ios_base::seekdir(ios_base::beg));
+    //     file.seekg(std::streamoff(sizeof(offset) + offset[i]), std::ios_base::seekdir(std::ios_base::beg));
     //     file.read(dat + i, 1);
     // }
     // int pb1 = bytes_to_int(dat);
@@ -101,7 +105,7 @@ void set_personal_best(int score)
 {
     /// This whole load is causing error while writing to files, of course, since its platform specific
 
-    // ofstream file(base_path + "assets/save/config.sandtris", ios_base::binary);
+    // std::ofstream file(base_path + "assets/save/config.sandtris", std::ios_base::binary);
     // file.exceptions(std::ofstream::failbit | std::ofstream::badbit);
     // try{
     // // offset 0->3 is the first 4 byte of the score value,
@@ -149,7 +153,7 @@ void set_personal_best(int score)
 
     // delete[] dat;
     // delete[] data;
-    // } catch(const std::ios_base::failure& ex)
+    // } catch(const std::std::ios_base::failure& ex)
     // {
     //     std::cerr << "IO error: " << ex.what() << std::endl;
     //     exit(1);
@@ -158,12 +162,12 @@ void set_personal_best(int score)
 
 float get_sfx_volume()
 {
-    if (!filesystem::exists(base_path + "assets/save/sfx_volume.sandtris"))
+    if (!fs::exists(base_path + "assets/save/sfx_volume.sandtris"))
     {
         set_sfx_volume(1);
         return 1;
     }
-    ifstream file(base_path + "assets/save/sfx_volume.sandtris");
+    std::ifstream file{base_path + "assets/save/sfx_volume.sandtris"};
 
     float res;
     try
@@ -178,12 +182,12 @@ float get_sfx_volume()
 }
 float get_music_volume()
 {
-    if (!filesystem::exists(base_path + "assets/save/music_volume.sandtris"))
+    if (!fs::exists(base_path + "assets/save/music_volume.sandtris"))
     {
         set_music_volume(1);
         return 1;
     }
-    ifstream file(base_path + "assets/save/music_volume.sandtris");
+    std::ifstream file(base_path + "assets/save/music_volume.sandtris");
 
     float res;
     try
@@ -198,29 +202,29 @@ float get_music_volume()
 }
 void set_sfx_volume(float value)
 {
-    ofstream file(base_path + "assets/save/sfx_volume.sandtris");
+    std::ofstream file(base_path + "assets/save/sfx_volume.sandtris");
     file << (value < 0 ? 0 : (value > 1 ? 1 : value));
     file.close();
 }
 void set_music_volume(float value)
 {
-    ofstream file(base_path + "assets/save/music_volume.sandtris");
+    std::ofstream file(base_path + "assets/save/music_volume.sandtris");
     file << (value < 0 ? 0 : (value > 1 ? 1 : value));
     file.close();
 }
 
 bool have_grid_data()
 {
-    return filesystem::exists(base_path + "assets/save/grid.sandtris");
+    return fs::exists(base_path + "assets/save/grid.sandtris");
 }
 // delete the save file, if not exist or error is thrown, return false
 bool delete_grid_data()
 {
     try
     {
-        return std::filesystem::remove(base_path + "assets/save/grid.sandtris");
+        return fs::remove(base_path + "assets/save/grid.sandtris");
     }
-    catch (const std::filesystem::filesystem_error &e)
+    catch (const fs::filesystem_error &e)
     {
         std::cerr << "Error deleting file: " << e.what() << std::endl;
         return false;
@@ -256,7 +260,7 @@ bool save_grid_data(Grid &grid)
     return false;
     // if (have_grid_data())
     //     delete_grid_data();
-    // ofstream file(base_path + "assets/save/grid.sandtris", ios_base::binary);
+    // std::ofstream file(base_path + "assets/save/grid.sandtris", std::ios_base::binary);
     // int data_size = 16 + 5 + 4 + 2 * GRID_WIDTH * GRID_HEIGHT;
     // char *data = new char[data_size];
     // // prepare data
@@ -341,7 +345,7 @@ Grid load_grid_data(Game *game)
 {
     Grid grid(*game);
 
-    ifstream file(base_path + "assets/save/grid.sandtris", ios_base::binary);
+    std::ifstream file(base_path + "assets/save/grid.sandtris", std::ios_base::binary);
 
     char tmp[8];
     Uint8 tmp_byte;
@@ -403,13 +407,13 @@ Grid load_grid_data(Game *game)
  */
 bool save_window_info(int x,int y, int width, int height)
 {
-    ofstream file(base_path + "assets/save/resolution.sandtris");
+    std::ofstream file(base_path + "assets/save/resolution.sandtris");
     try{
         file << x << " " << y << " " << width << " " << height;
     }
     catch(const std::exception &e)
     {
-        cerr << "Cant save info" << endl;
+        std::cerr << "Cant save info" << std::endl;
         return 0;
     }
     if(file.bad() or file.fail())
@@ -424,18 +428,18 @@ bool save_window_info(int x,int y, int width, int height)
  * 
  * @return pair<pair<int,int>,pair<int,int>> 
  */
-pair<pair<int,int>,pair<int,int>> load_window_info()
+std::pair<std::pair<int,int>,std::pair<int,int>> load_window_info()
 {
-    pair<pair<int,int>,pair<int,int>> res;
+    std::pair<std::pair<int,int>,std::pair<int,int>> res;
 
     try{
-        ifstream file(base_path + "assets/save/resolution.sandtris");
+        std::ifstream file(base_path + "assets/save/resolution.sandtris");
         file >> res.first.first >> res.first.second >> res.second.first >> res.second.second;
         if(res.second.first == 0 or res.second.second == 0) return {{0,0},{0,0}};
     }
     catch(const std::exception &e)
     {
-        cerr << "Cant load info\n" << endl;
+        std::cerr << "Cant load info\n" << std::endl;
         return {{0,0},{0,0}};
     }
 

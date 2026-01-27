@@ -8,7 +8,7 @@ PersonalBest::PersonalBest(Game &game) : Scene(game)
 
     pb_font = Font(font_path,FONT_SIZE);
     score = get_personal_best();
-    pb_surf = pb_font.render(to_string(score),0,"white");
+    pb_surf = pb_font.render(std::to_string(score),0,"white");
     pb_rect = pb_surf.getRect();
     pb_rect.setCenter(pb_center);
 }

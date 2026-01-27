@@ -17,7 +17,7 @@ Pause::Pause(Game &game) : Scene(game)
 
 Pause::Pause() = default;
 
-void Pause::render_message(string new_message)
+void Pause::render_message(std::string new_message)
 {
     message_surf = message_font.render(new_message,0,"white");
     message_rect = message_surf.getRect();

@@ -1,6 +1,7 @@
 #ifndef SDLGAME_RANDOM_
 #define SDLGAME_RANDOM_
-#include <bits/stdc++.h>
+#include <random>
+
 namespace sdlgame {
     namespace random
     {

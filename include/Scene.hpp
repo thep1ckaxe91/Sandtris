@@ -1,7 +1,7 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 #include "Game.hpp"
-using namespace std;
+
 class Game;
 /**
  * class manage a scene, all update, draw, handle_event should be override

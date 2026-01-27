@@ -6,7 +6,7 @@
 #include "color.hpp"
 #include "stdio.h"
 #include "rect.hpp"
-#include <bits/stdc++.h>
+
 namespace sdlgame{
     namespace draw
     {

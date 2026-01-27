@@ -1,6 +1,6 @@
 #include "Slider.hpp"
 #include "constant.hpp"
-using namespace std;
+
 /**
  * @brief Construct a new Slider:: Slider object
  * 
@@ -24,7 +24,7 @@ Slider::Slider(Vector2 topleft, float value, float slide_length, float max_value
     this->nob.setCenter(topleft + Vector2(value/max_value*slide_length,0));
 }
 Slider::Slider() = default;
-void Slider::set_label(string text, Color color)
+void Slider::set_label(std::string text, Color color)
 {
     this->label_surf = this->label_font.render(text,0,color);
     this->label_rect = this->label_surf.getRect();

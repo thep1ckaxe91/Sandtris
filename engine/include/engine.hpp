@@ -16,7 +16,6 @@
 #pragma once
 #ifndef ENGINE_HPP
 #define ENGINE_HPP
-#include <bits/stdc++.h>
 #include "math.hpp"
 #include "rect.hpp"
 #include "surface.hpp"

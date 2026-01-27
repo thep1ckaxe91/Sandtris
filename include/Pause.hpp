@@ -10,7 +10,7 @@ class Pause : public Scene
 {
 public:
     MenuButton menu_button;
-    string message;
+    std::string message;
     Surface message_surf;
     Font message_font;
     Rect message_rect;
@@ -19,7 +19,7 @@ public:
     BackButton back_button;
     Pause(Game &game);
     Pause();
-    void render_message(string new_message);
+    void render_message(std::string new_message);
     void display_message();
     void update();
     void handle_event(Event &event);

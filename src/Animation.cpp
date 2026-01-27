@@ -16,7 +16,7 @@ Animation::Animation() = default;
  *
  * @param path the path to the folder the contain only images of the animation
  */
-void Animation::load(string path)
+void Animation::load(std::string path)
 {
     this->frames.clear();
     for (const auto &entry : fs::directory_iterator(path))

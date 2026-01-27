@@ -2,7 +2,8 @@
 #define SLIDER_HPP
 
 #include "engine.hpp"
-#include <bits/stdc++.h>
+
+
 /**
  * @brief Slider is expect to inherit.
  * Call set color and overwrite draw and on_change_value should be good enough

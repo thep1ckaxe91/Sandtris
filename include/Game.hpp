@@ -5,7 +5,7 @@
 #include "Scene.hpp"
 #include "SceneTransition.hpp"
 #include "AudioManager.hpp"
-using namespace std;
+
 class Scene;
 /**
  * This class have to be inherit and override

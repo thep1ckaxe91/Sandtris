@@ -73,7 +73,7 @@ void GamePlay::handle_event(sdlgame::event::Event &event)
     }
     if (event.type == SCORING)
     {
-        this->score_surf = score_font.render(to_string(this->grid.get_score()), 0, "white");
+        this->score_surf = score_font.render(std::to_string(this->grid.get_score()), 0, "white");
         this->score_rect = score_surf.getRect();
         score_rect.setCenter(score_display_center);
         if(get_personal_best() < this->grid.get_score() ) set_personal_best(this->grid.get_score());

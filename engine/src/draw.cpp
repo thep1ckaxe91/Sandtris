@@ -4,7 +4,7 @@
 #include "color.hpp"
 #include "stdio.h"
 #include "rect.hpp"
-#include <bits/stdc++.h>
+
 void sdlgame::draw::rect(sdlgame::surface::Surface &surface, sdlgame::color::Color color, sdlgame::rect::Rect rect, int width)
 {
     // std::cout << surface.texture << " color: "<<color.toString() << " rect: "<<rect.toString()<<std::endl;

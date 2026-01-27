@@ -12,7 +12,7 @@ using Color = sdlgame::color::Color;
 using Sound = sdlgame::mixer::Sound;
 using Channel = sdlgame::mixer::Channel;
 using Font = sdlgame::font::Font;
-using namespace std;
+
 
 
 /**

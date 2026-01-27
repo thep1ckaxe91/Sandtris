@@ -83,7 +83,7 @@ void FullscreenSlider::on_change_value()
     this->value = (this->value == 0 ? this->max_value : 0);
     if (this->value != this->max_value)
     {
-        pair<int, int> reso = load_window_info().second;
+        std::pair<int, int> reso = load_window_info().second;
         if (reso.first == 0)
         {
             sdlgame::display::maximize();

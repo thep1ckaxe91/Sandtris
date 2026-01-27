@@ -2,7 +2,7 @@
 #define TETRIMINO_HPP
 #include "Sand.hpp"
 #include "engine.hpp"
-using namespace std;
+
 typedef struct ShapeInfo {
     uint16_t mask[4];
     char type;
@@ -58,7 +58,7 @@ const ShapeInfo L_info={
     0x4460,
     'L'
 };
-const map<char,ShapeInfo> ShapeInfoList = {
+const std::map<char,ShapeInfo> ShapeInfoList = {
     {'I', I_info},
     {'O', O_info},
     {'T', T_info},

@@ -8,7 +8,7 @@
 
 #include "flags.hpp"
 #include "SaveData.hpp"
-using namespace std;
+
 // If global declare is bad, i make MY OWN global declare >:)
 class Sandtris : public Game
 {

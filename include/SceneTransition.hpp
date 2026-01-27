@@ -1,7 +1,7 @@
 #ifndef SCENE_TRANSITION_HPP
 #define SCENE_TRANSITION_HPP
 
-using namespace std;
+
 /**
  * the window surface is just a represent, not actually is the window
  * use carefully

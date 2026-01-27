@@ -58,6 +58,8 @@ But that's the thing, `redraw` only needed when rotate, but in `update` (which c
 
 ![Remove redraw call](./04-1%20Remove%20unnecessary%20redraw%20call.png)
 
-Which make the spike disappear completely.
+Which make the spike disappear completely. At this point, some how when remove `clock.tick`, it still only run at 150FPS.
 
-Current code is at:
+Current code is at: 9f71107279e2c116a669ba27cae06e2d2cd25c29
+
+### Ghost draw optimization

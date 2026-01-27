@@ -2,7 +2,7 @@
 #define OPTION_ELEMENT_HPP
 #include "Slider.hpp"
 #include "Game.hpp"
-using namespace std;
+
 
 class SFXVolumeSlider : public Slider
 {
@@ -49,7 +49,7 @@ public:
 //     Font label_font;
 //     Vector2 topleft;
 //     Slider *setter;
-//     OptionElement(Vector2 topleft, string name, float value, float max_value);
+//     OptionElement(Vector2 topleft, std::string name, float value, float max_value);
 //     OptionElement();
 //     void update();
 //     void handle_event(Event &event);
