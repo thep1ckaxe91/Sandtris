@@ -19,3 +19,5 @@ bin/
 Thumbs.db
 
 .PVS-Studio
+
+perf.data*

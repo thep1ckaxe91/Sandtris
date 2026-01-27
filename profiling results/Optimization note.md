@@ -1,4 +1,4 @@
-### No optimization
+## No optimization
 
 ![no opt image](01-%20No%20Optimization.png)
 
@@ -7,6 +7,10 @@ Look at the flame graph, we can see libgallium is screaming with thousands of dr
 We can fix that by draw all to a streaming texture first, then to the main window texture later
 
 Current code is at: 834816a344eed54964034a92c5edceeb87bb585b
+
+## Redundancy Optimization
+
+This part will focus on part where it can be optimize by remove redundance work, **Architecture Optimization** will be much harder, so we'll leave it for later.
 
 ### Texture lock optimized
 
@@ -77,4 +81,5 @@ All above which:
 
 Was already **~30 times** faster main loop
 
-Current code is at: 
+Current code is at: 83a3b33230d53d6649279c526fd785b37fbf5cca
+
