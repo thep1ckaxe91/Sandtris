@@ -110,5 +110,14 @@ Since **percentage lies**, we need a better way to check what function cost more
 
 Current code is at: 8755abc2edf607010d51c58caee0c61e61df51a2
 
-### `Timer` in `time` namespaces
+### Benchmarking
+
+![alt text](./07-%20Vsync%20and%20Benchmark.png)
+
+Turn out, the reason we got fixed at ~145 FPS is that i turned on vsync
+
+Even when i got a result of ~6000 FPS, i wonder what if i go back to the worst implementation and just turn off vsync?
+
+
+
 

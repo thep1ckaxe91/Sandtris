@@ -5,9 +5,20 @@
 #include "constant.hpp"
 #include "TetrisEvent.hpp"
 #include "Grid.hpp"
-
 #include "flags.hpp"
 #include "SaveData.hpp"
+#include <print>
+using Timer = sdlgame::time::Timer;
+using TimerManager = sdlgame::time::TimerManager;
+using Fstat = sdlgame::time::FunctionStats;
+
+static void print_bench_stat()
+{
+    for (auto &[name, stat] : TimerManager::instance().get_all())
+    {
+        std::print("{} stats:\nTotal: {}\nMax: {}\nMin: {}\nAvg: {}\n", name, stat.total_time.count(), stat.max_time.count(), stat.min_time.count(), stat.avg_time().count());
+    }
+}
 
 // If global declare is bad, i make MY OWN global declare >:)
 class Sandtris : public Game
@@ -19,9 +30,7 @@ public:
     {
         this->window_object = sdlgame::display::set_mode(
             RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
-            0
-                | sdlgame::MAXIMIZED
-                | sdlgame::RESIZABLE);
+            0 | sdlgame::MAXIMIZED | sdlgame::RESIZABLE);
         this->window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
         sdlgame::display::get_window_size(); // this is intended to assing win_surf it value it suppose to be
 
@@ -31,8 +40,8 @@ public:
         //     sdlgame::display::fullscreen_desktop();
         // else
         // {
-            // sdlgame::display::set_window_size(res.second.first, res.second.second);
-            // sdlgame::display::set_window_pos(res.first.first, res.first.second);
+        // sdlgame::display::set_window_size(res.second.first, res.second.second);
+        // sdlgame::display::set_window_pos(res.first.first, res.first.second);
         // }
         audio_manager = AudioManager();
         images = Images();
@@ -45,6 +54,7 @@ public:
     }
     void update()
     {
+        //Timer("update");
         if (!scene_list.empty())
             if (scene_list.back())
             {
@@ -100,10 +110,10 @@ public:
             }
         }
         audio_manager.update();
-        
     }
     void draw()
     {
+        //Timer("draw");
         window.fill(Color(0, 0, 0));
         if (!scene_list.empty())
             if (scene_list.back())
@@ -128,54 +138,58 @@ public:
         InFade *in = new InFade();
         StudioSC *next = new StudioSC(*this, studiosc, 8);
         this->add_scene(NULL, next, in);
-        while (true)
+        bool running = true;
+        while (running)
         {
             clock.tick(MAXFPS);
-            for (auto &event : sdlgame::event::get())
             {
-                if (event.type == sdlgame::QUIT or (event.type == sdlgame::WINDOWEVENT and event["event"] == sdlgame::WINDOWCLOSE))
+                //Timer("event");
+                for (auto &event : sdlgame::event::get())
                 {
-                    // game_ended = 1;
-                    sdlgame::quit();
-                    exit(0);
-                }
-                else if (event.type == sdlgame::WINDOWEVENT)
-                {
-                    if (event["event"] == sdlgame::WINDOWFOCUSGAINED or event["event"] == sdlgame::WINDOWSHOWN)
+                    if (event.type == sdlgame::QUIT or (event.type == sdlgame::WINDOWEVENT and event["event"] == sdlgame::WINDOWCLOSE))
                     {
-                        gameactive = 1;
-                        // cout << "focus gain" << endl;
+                        // print_bench_stat();
+                        running = false;
+                        sdlgame::quit();
                     }
-                    else if (event["event"] == sdlgame::WINDOWFOCUSLOST)
+                    else if (event.type == sdlgame::WINDOWEVENT)
                     {
-                        gameactive = 0;
-                    }
-                    else if (event["event"] == sdlgame::WINDOWRESIZED or event["event"] == sdlgame::WINDOWSIZECHANGED)
-                    {
-                        Vector2 res = sdlgame::display::get_window_size();
-                        if (sdlgame::display::is_fullscreen())
+                        if (event["event"] == sdlgame::WINDOWFOCUSGAINED or event["event"] == sdlgame::WINDOWSHOWN)
                         {
-                            auto pos = sdlgame::display::get_window_pos();
-                            save_window_info(pos.first, pos.second, 0, 0);
+                            gameactive = 1;
+                            // cout << "focus gain" << endl;
                         }
-                        else
+                        else if (event["event"] == sdlgame::WINDOWFOCUSLOST)
                         {
+                            gameactive = 0;
+                        }
+                        else if (event["event"] == sdlgame::WINDOWRESIZED or event["event"] == sdlgame::WINDOWSIZECHANGED)
+                        {
+                            Vector2 res = sdlgame::display::get_window_size();
+                            if (sdlgame::display::is_fullscreen())
+                            {
+                                auto pos = sdlgame::display::get_window_pos();
+                                save_window_info(pos.first, pos.second, 0, 0);
+                            }
+                            else
+                            {
+                                auto pos = sdlgame::display::get_window_pos();
+                                save_window_info(pos.first, pos.second, int(res.x), int(res.y));
+                            }
+                        }
+                        else if (event["event"] == sdlgame::WINDOWMOVED)
+                        {
+                            Vector2 res = sdlgame::display::get_window_size();
                             auto pos = sdlgame::display::get_window_pos();
                             save_window_info(pos.first, pos.second, int(res.x), int(res.y));
                         }
                     }
-                    else if (event["event"] == sdlgame::WINDOWMOVED)
+                    if (gameactive)
                     {
-                        Vector2 res = sdlgame::display::get_window_size();
-                        auto pos = sdlgame::display::get_window_pos();
-                        save_window_info(pos.first, pos.second, int(res.x), int(res.y));
+                        if (!scene_list.empty())
+                            scene_list.back()->handle_event(event);
+                        audio_manager.handle_event(event);
                     }
-                }
-                if (gameactive)
-                {
-                    if (!scene_list.empty())
-                        scene_list.back()->handle_event(event);
-                    audio_manager.handle_event(event);
                 }
             }
             if (gameactive)
@@ -195,8 +209,10 @@ int main(int argc, char **argv)
     sdlgame::mixer::set_num_channels(16);
     Sandtris game;
     game.run();
+
+    // Fstat draw_stat = TimerManager::instance().get_stat("draw");
+    // Fstat update_stat = TimerManager::instance().get_stat("update");
+    // Fstat event_stat = TimerManager::instance().get_stat("event");
+
     return 0;
 }
-/**
- *
- */

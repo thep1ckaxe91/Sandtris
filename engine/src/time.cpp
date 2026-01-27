@@ -1,6 +1,9 @@
 #include "time.hpp"
 #include <thread>
 #include <numeric>
+#include <iostream>
+#include <iomanip>
+
 namespace sdlgame::time
 {
 
@@ -98,4 +101,52 @@ namespace sdlgame::time
 
         return static_cast<double>(elapsed_times.size()) / total_seconds;
     }
+
+    duration_t FunctionStats::avg_time() const
+    {
+        return total_time / call_count;
+    }
+
+    TimerManager::TimerManager() = default;
+
+    TimerManager &TimerManager::instance()
+    {
+        static TimerManager instance;
+        return instance;
+    }
+
+    FunctionStats &TimerManager::get_stat(const std::string &name)
+    {
+        if(functions_stats.contains(name))
+        {
+            return functions_stats.at(name);
+        }
+        throw std::runtime_error("Name doesnt exist");
+    }
+
+    void TimerManager::report(const std::string &name, duration_t dur)
+    {
+        auto &stat = functions_stats[name];
+
+        stat.call_count++;
+        stat.max_time = std::max(stat.max_time, dur);
+        stat.min_time = std::min(stat.min_time, dur);
+        stat.total_time += dur;
+    }
+
+    std::unordered_map<std::string, FunctionStats> &TimerManager::get_all()
+    {
+        return functions_stats;
+    }
+
+    Timer::Timer(const std::string &name) : name(name), start(sim_clock_t::now()) {}
+    Timer::Timer(const char *name) : name(name), start(sim_clock_t::now()) {}
+    Timer::Timer(std::string &&name) : name(name), start(sim_clock_t::now()) {}
+
+    Timer::~Timer()
+    {
+        auto end = sim_clock_t::now();
+        TimerManager::instance().report(name, end - start);
+    }
+
 }
