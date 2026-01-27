@@ -95,9 +95,20 @@ If we checkout `time` namespace implementation, we will find that it heavily dep
 
 We can instead use a ring buffer by `std::array` to store the delta time, improve cache hit also mean better performance. 
 
-Also, rely on SDL APIs mean we possibly can't move this to SDL3 if needed, so we will utilize chrono instead.
+Also, rely on SDL APIs mean we possibly can't move this to SDL3 if needed, so we will utilize `std::chrono` instead.
 
 After an afternoon of crunching **CppCon by Howard Hinnant** about `std::chrono`, i decided to refactor time namespace like this:
 - unified unit `duration<float64_t, seconds>` alias `duration_t`, which fits the needs for microsec precision
 - reconstruct elapsedTimes to be `std::array<duration_t, 10>` ring buffer.
 - and many others, visit the commit ID to see changes in `time.hpp` and `time.cpp`
+
+![alt text](./06-%20Refactoring%20time%20namespace.png)
+
+What surprise me, is that a simple act of change to `std::chrono` make update cost much less compare to draw, or, maybe draw got more expensive?
+
+Since **percentage lies**, we need a better way to check what function cost more, not just look at which bars is longer.
+
+Current code is at: 8755abc2edf607010d51c58caee0c61e61df51a2
+
+### `Timer` in `time` namespaces
+
