@@ -8,7 +8,21 @@
 
 #include "flags.hpp"
 #include "SaveData.hpp"
+
+using Timer = sdlgame::time::Timer;
+using TM = sdlgame::time::TimerManager;
+
 using namespace std;
+
+void print_stat()
+{
+    for (auto &[name, stat] : TM::instance().get_all())
+    {
+        std::print(
+            "{} func cost total/min/avg/max: {}/{}/{}/{}\n", name, stat.total_time.count(), stat.min_time.count(), stat.avg_time().count(), stat.max_time.count());
+    }
+}
+
 // If global declare is bad, i make MY OWN global declare >:)
 class Sandtris : public Game
 {
@@ -46,6 +60,7 @@ public:
     }
     void update()
     {
+        Timer t("update");
         if (!scene_list.empty())
             if (scene_list.back())
             {
@@ -104,6 +119,7 @@ public:
     }
     void draw()
     {
+        Timer t("draw");
         window.fill(Color(0, 0, 0));
         if (!scene_list.empty())
             if (scene_list.back())
@@ -130,12 +146,13 @@ public:
         this->add_scene(NULL, next, in);
         while (true)
         {
-            clock.tick(MAXFPS);
+            clock.tick(1e9);
             for (auto &event : sdlgame::event::get())
             {
                 if (event.type == sdlgame::QUIT or (event.type == sdlgame::WINDOWEVENT and event["event"] == sdlgame::WINDOWCLOSE))
                 {
                     // game_ended = 1;
+                    print_stat();
                     sdlgame::quit();
                     exit(0);
                 }
@@ -183,7 +200,7 @@ public:
                 update();
                 draw();
                 sdlgame::display::flip();
-                // sdlgame::display::set_caption((to_string(clock.get_fps())).c_str());
+                sdlgame::display::set_caption((to_string(clock.get_fps())).c_str());
             }
         }
     }

@@ -17,10 +17,17 @@ Animation::Animation()=default;
 void Animation::load(string path)
 {
     this->frames.clear();
+    std::vector<filesystem::directory_entry> entries;
     for(const auto& entry : filesystem::directory_iterator(path))
+    {
+        entries.push_back(entry);
+    }
+    std::ranges::sort(entries);
+    for(const auto &entry : entries)
     {
         frames.push_back(sdlgame::image::load(entry.path().string()));
     }
+
     if(this->default_img.texture == 0)
     {
         this->image = this->default_img = frames[0];
