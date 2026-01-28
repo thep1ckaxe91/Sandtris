@@ -47,7 +47,7 @@ const int dy[] =
         0,
         // 1,1,-1,-1
 };
-enum SandShift
+enum class SandShift : uint8_t
 {
     EMPTY_SAND = 0x0,   // 0000 0000
     RED_SAND = 0x1,     // 0000 0001

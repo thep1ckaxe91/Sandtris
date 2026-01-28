@@ -9,12 +9,12 @@ using Color = sdlgame::color::Color;
 
 extern std::array<Color, 9> SandShiftColor;
 
-struct Sand
+struct Sand // 2 byte expected
 {
-    SandShift mask;
+    SandShift mask; // with enum class, this now become 1 byte
     Uint8 color_offset_rgb;
     // Uint8 inertia;
-    Sand(SandShift mask = EMPTY_SAND);
+    Sand(SandShift mask = SandShift::EMPTY_SAND);
 };
 
 #endif

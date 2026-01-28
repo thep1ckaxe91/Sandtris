@@ -128,12 +128,12 @@ void GamePlay::update()
             if (flow1.getBottom() - 1 <= next_color_display_rect.getTop())
             {
                 flow1.setTop(flow2.getBottom());
-                color_flow1 = SandShiftColor.at(next_display_color);
+                color_flow1 = SandShiftColor.at(static_cast<uint8_t>(next_display_color));
             }
             if (flow2.getBottom() - 1 <= next_color_display_rect.getTop())
             {
                 flow2.setTop(flow1.getBottom());
-                color_flow2 = SandShiftColor.at(next_display_color);
+                color_flow2 = SandShiftColor.at(static_cast<uint8_t>(next_display_color));
             }
             change_shape.update();
         }

@@ -206,6 +206,9 @@ int main(int argc, char **argv)
     sdlgame::init();
     sdlgame::mixer::init();
     sdlgame::mixer::set_num_channels(16);
+    
+    std::cout << sizeof(Sand) << " is size of sand";
+
     Sandtris game;
     game.run();
 

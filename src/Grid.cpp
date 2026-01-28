@@ -17,9 +17,9 @@ Grid::Grid(Game &game)
     this->ghost_color = Color("white");
 
     for (int i = 0; i < GRID_HEIGHT + 2; i++)
-        grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(STATIC_SAND);
+        grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(SandShift::STATIC_SAND);
     for (int i = 0; i < GRID_WIDTH + 2; i++)
-        grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(STATIC_SAND);
+        grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(SandShift::STATIC_SAND);
     for (int i = 1; i <= GRID_HEIGHT; i++)
         for (int j = 1; j <= GRID_WIDTH; j++)
             grid[i][j] = Sand();
@@ -53,9 +53,9 @@ Grid &Grid::operator=(const Grid &other)
     update_ghost_shape();
     this->ghost_topleft.y = -1000;
     for (int i = 0; i < GRID_HEIGHT + 2; i++)
-        grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(STATIC_SAND);
+        grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(SandShift::STATIC_SAND);
     for (int i = 0; i < GRID_WIDTH + 2; i++)
-        grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(STATIC_SAND);
+        grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(SandShift::STATIC_SAND);
     for (int i = 1; i <= GRID_HEIGHT; i++)
         for (int j = 1; j <= GRID_WIDTH; j++)
             grid[i][j] = other.grid[i][j];
@@ -242,7 +242,7 @@ void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
     {
         for (int j = 1; j <= GRID_WIDTH; j++)
         {
-            if (grid[i][j].mask)
+            if (grid[i][j].mask != SandShift::EMPTY_SAND)
             {
                 for (int shift = 0; shift < 16; shift++)
                 {
@@ -256,7 +256,7 @@ void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
                             {
                                 controller.topleft.y -= 1;
                                 tmp.move_ip(0, -1);
-                                if (grid[int(check_point.y - (double)GRID_Y - 1)][int(check_point.x - (double)GRID_X)].mask)
+                                if (grid[int(check_point.y - (double)GRID_Y - 1)][int(check_point.x - (double)GRID_X)].mask != SandShift::EMPTY_SAND)
                                     check_point.y--;
                             }
                             this->merge(updated);
@@ -277,20 +277,20 @@ std::pair<Uint8, Uint8> Grid::step(int i, int j, int times)
 {
     while (times--)
     {
-        if (!grid[i + 1][j].mask)
+        if (grid[i + 1][j].mask == SandShift::EMPTY_SAND)
         {
             std::swap(grid[i][j], grid[i + 1][j]);
             // return step(i+1,j,times-1);
             i++;
         }
-        else if (!grid[i + 1][j - 1].mask and !grid[i][j - 1].mask)
+        else if (grid[i + 1][j - 1].mask == SandShift::EMPTY_SAND and grid[i][j - 1].mask == SandShift::EMPTY_SAND)
         {
             std::swap(grid[i][j], grid[i + 1][j - 1]);
             // return step(i+1,j-1,times-1);
             j--;
             i++;
         }
-        else if (!grid[i + 1][j + 1].mask and !grid[i][j + 1].mask)
+        else if (grid[i + 1][j + 1].mask == SandShift::EMPTY_SAND and grid[i][j + 1].mask == SandShift::EMPTY_SAND)
         {
             std::swap(grid[i][j], grid[i + 1][j + 1]);
             // return step(i+1,j+1,times-1);
@@ -338,7 +338,7 @@ void Grid::update_ghost()
             {
                 int i = this->controller.topleft.y + 8 * (3 - shift / 4) - (double)GRID_Y;
                 int cnt = 0;
-                while (grid[i++][j + 1].mask == 0)
+                while (grid[i++][j + 1].mask == SandShift::EMPTY_SAND)
                 {
                     cnt++;
                     if (cnt >= min_height)
@@ -365,7 +365,7 @@ void Grid::update()
         {
             for (int j = 1; j <= GRID_WIDTH; j++)
             {
-                if (grid[i][j].mask)
+                if (grid[i][j].mask != SandShift::EMPTY_SAND)
                 {
                     int step_times = sdlgame::random::randint(1, step_range);
                     std::pair<Uint8, Uint8> pos = this->step(i, j, step_times);
@@ -419,12 +419,12 @@ void Grid::draw()
 
         for (int j = 1; j <= GRID_WIDTH; j++)
         {
-            if (grid[i][j].mask == 0)
+            if (grid[i][j].mask == SandShift::EMPTY_SAND)
             {
                 pixels[row_offset + (j - 1)] = 0xff000000;
                 continue;
             }
-            Color c = SandShiftColor.at(grid[i][j].mask).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15);
+            Color c = SandShiftColor.at(static_cast<uint8_t>(grid[i][j].mask)).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15);
 
             Uint32 pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
 
