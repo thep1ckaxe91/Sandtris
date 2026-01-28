@@ -107,6 +107,8 @@ namespace sdlgame::time
         return total_time / call_count;
     }
 
+    FunctionStats::FunctionStats() : total_time(0), min_time(1e308), max_time(0), call_count(0) {}
+
     TimerManager::TimerManager() = default;
 
     TimerManager &TimerManager::instance()
@@ -117,7 +119,7 @@ namespace sdlgame::time
 
     FunctionStats &TimerManager::get_stat(const std::string &name)
     {
-        if(functions_stats.contains(name))
+        if (functions_stats.contains(name))
         {
             return functions_stats.at(name);
         }

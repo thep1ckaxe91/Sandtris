@@ -10,7 +10,6 @@
 #include <print>
 using Timer = sdlgame::time::Timer;
 using TimerManager = sdlgame::time::TimerManager;
-using Fstat = sdlgame::time::FunctionStats;
 
 static void print_bench_stat()
 {
@@ -54,7 +53,7 @@ public:
     }
     void update()
     {
-        //Timer("update");
+        Timer t("update");
         if (!scene_list.empty())
             if (scene_list.back())
             {
@@ -113,7 +112,7 @@ public:
     }
     void draw()
     {
-        //Timer("draw");
+        Timer t("draw");
         window.fill(Color(0, 0, 0));
         if (!scene_list.empty())
             if (scene_list.back())
@@ -141,14 +140,14 @@ public:
         bool running = true;
         while (running)
         {
-            clock.tick(MAXFPS);
+            clock.tick(1e9);
             {
-                //Timer("event");
+                Timer t("event");
                 for (auto &event : sdlgame::event::get())
                 {
                     if (event.type == sdlgame::QUIT or (event.type == sdlgame::WINDOWEVENT and event["event"] == sdlgame::WINDOWCLOSE))
                     {
-                        // print_bench_stat();
+                        print_bench_stat();
                         running = false;
                         sdlgame::quit();
                     }
@@ -210,9 +209,6 @@ int main(int argc, char **argv)
     Sandtris game;
     game.run();
 
-    // Fstat draw_stat = TimerManager::instance().get_stat("draw");
-    // Fstat update_stat = TimerManager::instance().get_stat("update");
-    // Fstat event_stat = TimerManager::instance().get_stat("event");
 
     return 0;
 }

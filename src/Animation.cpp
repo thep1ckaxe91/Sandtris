@@ -19,10 +19,17 @@ Animation::Animation() = default;
 void Animation::load(std::string path)
 {
     this->frames.clear();
+    std::vector<fs::directory_entry> entries;
     for (const auto &entry : fs::directory_iterator(path))
     {
-        frames.push_back(sdlgame::image::load(entry.path().string()));
+        entries.push_back(entry);
     }
+
+    std::ranges::sort(entries); // sort by name for consistency
+
+    for (const auto &entry : entries)
+        frames.push_back(sdlgame::image::load(entry.path().string()));
+        
     if (this->default_img.texture == 0)
     {
         this->default_img = frames[0];

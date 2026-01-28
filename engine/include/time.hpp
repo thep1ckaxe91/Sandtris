@@ -89,6 +89,7 @@ namespace sdlgame::time
         size_t call_count;
 
         duration_t avg_time() const;
+        FunctionStats();
     };
 
     /**
