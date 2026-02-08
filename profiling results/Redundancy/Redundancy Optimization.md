@@ -28,7 +28,7 @@ Current code is at: 648c55803b4015028f394ece587be643ae17f128
 
 ### `Grid::draw` calculation optimized
 
-![grid draw cal](03-%20Grid::draw%20calculation%20Optimized.png)
+![grid draw cal](./03-%20Grid::draw%20calculation%20Optimized.png)
 
 The total cost of draw function is now so low, that update cost is doubled the cost of the draw itself
 
