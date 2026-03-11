@@ -12,6 +12,8 @@
  * my wallet from emptying itself :)
  */
 
+ // FIXME: THIS WHOLE AHH FILE NEED REFACTOR
+
 #include "SaveData.hpp"
 #include "constant.hpp"
 #include <filesystem>

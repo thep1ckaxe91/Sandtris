@@ -34,7 +34,6 @@
 #include "color.hpp"
 #include "image.hpp"
 #include "constants.hpp"
-#define null NULL
 using Event = sdlgame::event::Event;
 using Rect = sdlgame::rect::Rect;
 using Vector2 = sdlgame::math::Vector2;

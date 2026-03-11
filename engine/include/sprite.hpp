@@ -73,7 +73,7 @@ namespace sdlgame
         {
         public:
             Sprite *sprite;
-            GroupSingle(Sprite *sprite = NULL);
+            GroupSingle(Sprite *sprite = nullptr);
             void add(Sprite *sprite);
             void remove();
             void update();

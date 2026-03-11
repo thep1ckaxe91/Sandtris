@@ -20,4 +20,6 @@ Thumbs.db
 
 .PVS-Studio
 
+.cache
+
 perf.data*

@@ -1,5 +1,4 @@
 #include "Animation.hpp"
-#include <filesystem>
 namespace fs = std::filesystem;
 
 Animation::Animation(Game &game, int frame_rate, bool loop)
@@ -16,7 +15,7 @@ Animation::Animation() = default;
  *
  * @param path the path to the folder the contain only images of the animation
  */
-void Animation::load(std::string path)
+void Animation::load(const fs::path& path)
 {
     this->frames.clear();
     std::vector<fs::directory_entry> entries;
@@ -24,13 +23,16 @@ void Animation::load(std::string path)
     {
         entries.push_back(entry);
     }
-
+    
     std::ranges::sort(entries); // sort by name for consistency
 
     for (const auto &entry : entries)
-        frames.push_back(sdlgame::image::load(entry.path().string()));
-        
-    if (this->default_img.texture == 0)
+        frames.emplace_back(sdlgame::image::load(entry.path().string()));
+    // TODO!: This bug need refactor, frames got reallocate every time the vector grows
+    // which invalidate 
+    
+
+    if (!this->default_img.texture)
     {
         this->default_img = frames[0];
         this->image = &frames[0];
@@ -46,7 +48,7 @@ void Animation::update()
         if (this->time_cnt >= 1.0 / this->frame_rate)
         {
             this->time_cnt -= 1.0 / this->frame_rate;
-            if (frame_id >= (int)frames.size())
+            if (frame_id >= frames.size())
             {
                 frame_id = 0;
                 if (!(this->playing = this->loop))

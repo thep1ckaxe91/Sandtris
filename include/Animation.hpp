@@ -1,5 +1,7 @@
 #include "engine.hpp"
 #include "Game.hpp"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 class Animation : public sdlgame::sprite::Sprite
 {
@@ -8,12 +10,12 @@ protected:
     double time_cnt = 0;
 public:
     std::vector<Surface> frames;
-    int frame_id;
-    bool frame_change=0;
+    size_t frame_id;
+    Game *game;
     int frame_rate;
+    bool frame_change=0;
     bool loop;
     bool playing;
-    Game *game;
     /**
      * @brief init an animation object
      * @param path path to the folder that only have file for the 
@@ -26,7 +28,7 @@ public:
      * 
      * @param path the path to the folder the contain only images of the animation
      */
-    void load(std::string path);
+    void load(const fs::path& path);
     void play();
     void update()override;
     void pause();
