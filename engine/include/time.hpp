@@ -3,14 +3,13 @@
 #define SDLGAME_TIME_
 #include <chrono>
 #include <array>
-#include <stdfloat>
 #include <unordered_map>
 #include "SDL2/SDL.h"
 
 using namespace std::literals;
 struct SimClock
 {
-    using rep = std::float64_t;   // sub precision
+    using rep = double;   // sub precision
     using period = std::ratio<1>; // 1:1 with sec
     using duration = std::chrono::duration<rep, period>;
     using time_point = std::chrono::time_point<SimClock>;

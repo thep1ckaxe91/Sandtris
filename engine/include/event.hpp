@@ -4,7 +4,7 @@
 #include "SDL2/SDL_events.h"
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 namespace sdlgame{
     namespace event
     {
@@ -14,7 +14,7 @@ namespace sdlgame{
         class Event
         {
         private:
-            std::map<std::string, int64_t> dict;
+            std::unordered_map<std::string, int64_t> dict;
 
         public:
             Uint32 type;

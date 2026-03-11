@@ -2,7 +2,7 @@
 #define TETRIMINO_HPP
 #include "Sand.hpp"
 #include "engine.hpp"
-
+// TODO: there maybe a better design for this?
 typedef struct ShapeInfo {
     uint16_t mask[4];
     char type;
@@ -87,7 +87,7 @@ struct Tetrimino
      * =0x4c40
     */
     Uint16 mask;
-    char type;
+    uint8_t type;
     Uint8 current_rotation = 0;
     /**
      * @param shape the character stand for the shape

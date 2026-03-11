@@ -1,51 +1,53 @@
-# Gemini Code Assistant Context
+# Sandtris: Performance-Focused Falling Sand Simulation
 
-This document provides context for the Gemini code assistant to understand the Sandtris project.
+Sandtris is a 2D falling sand simulation game built with C++23. It's a refactor of an earlier project, specifically optimized for high performance and scalability to handle a massive number of sand particles.
 
 ## Project Overview
 
-Sandtris is a 2D falling sand simulation game written in C++. It appears to be a Tetris-like game with sand physics. The project is a refactor of an older version, with a focus on performance, scalability, and modern C++ practices.
-
-The game uses the following technologies:
-- **Language:** C++20
-- **Build System:** CMake
-- **Libraries:**
-    - SDL2
-    - SDL2_image
-    - SDL2_mixer
-    - SDL2_ttf
-
-The project is structured into a core engine and the main game logic. The engine provides functionalities for display, drawing, audio, and input, while the game logic implements the game's scenes and gameplay mechanics.
+- **Core Technologies:** C++23, SDL2, CMake, Conan.
+- **Engine Architecture:** A custom-built `GameEngine` (located in `engine/`) provides a hardware abstraction layer for graphics, audio, input, and time management.
+- **Game Logic:** Implemented using a scene-based architecture where the `Game` class manages scene transitions and the main loop.
+- **Performance:** Extensive profiling and optimization work has been done, including redundant work removal and architectural refactoring (e.g., `time` namespace with `std::chrono` and ring buffers).
 
 ## Building and Running
 
-The project can be built and run using the provided `run_build.sh` script. This script performs the following steps:
-1.  Configures the project with CMake, creating a `build` directory.
-2.  Compiles the project using the available number of processor cores.
-3.  Runs the game executable `Sandtris`.
+The project uses **Conan** for dependency management and **CMake** for building.
 
-To build and run the game, execute the following command in the project's root directory:
-```bash
-./run_build.sh
-```
+### Prerequisites
+- C++23 compatible compiler (e.g., GCC 13+, Clang 16+)
+- CMake 3.24+
+- Conan 2.x
 
-## Project Structure
+### Build Steps (Inferred)
+1.  **Install Dependencies:**
+    ```bash
+    conan install . --output-folder=build --build=missing
+    ```
+2.  **Configure CMake:**
+    ```bash
+    cmake --preset conan-release
+    ```
+3.  **Build the Project:**
+    ```bash
+    cmake --build --preset conan-release
+    ```
+4.  **Run the Game:**
+    The executable `Sandtris` will be located in the build output directory (e.g., `build/Release/Sandtris`).
 
-The project is organized into the following main directories:
-- `assets/`: Contains game assets such as images, animations, fonts, and audio.
-- `engine/`: The core game engine, providing a hardware abstraction layer and common functionalities.
-    - `include/`: Header files for the engine.
-    - `src/`: Source files for the engine.
-- `include/`: Header files for the game logic.
-- `src/`: Source files for the game logic, including the main entry point (`main.cpp`) and various game scenes.
-- `build/`: The build directory, where the compiled executable and assets are placed.
+*Note: Assets in the `assets/` directory are automatically copied to the build directory as a post-build step.*
 
 ## Development Conventions
 
-- The project uses C++20 and modern C++ idioms, including RAII and smart pointers.
-- Header files are located in the `include` and `engine/include` directories.
-- Source files are located in the `src` and `engine/src` directories.
-- The codebase is organized into scenes, with each scene representing a different part of the game (e.g., main menu, gameplay, game over).
-- The `Game` class in `src/main.cpp` manages the main game loop and scene transitions.
-- The project uses a custom engine that wraps SDL functionalities.
-- All game assets are stored in the `assets` directory and copied to the build directory after compilation.
+### Architectural Patterns
+- **Scene Management:** The game operates through discrete scenes (e.g., `MainMenu`, `GamePlay`, `GameOver`). Use `Game::add_scene`, `Game::pop_scene`, and `Game::clear_scene` for transitions.
+- **Memory Management:** While the engine uses RAII, some game-level pointers (like `SceneTransition`) require manual cleanup or careful management as noted in `Game.hpp`.
+- **Performance-First Design:** All major changes should be evaluated for performance impact. Check `profiling results/` for historical context and methodologies. The `Sand` struct is optimized to be extremely small (e.g., 2 bytes) to minimize memory overhead.
+
+### Coding Style
+- **C++ Standards:** Adhere to C++23 standards and modern idioms.
+- **Engine Wrappers:** Use the `sdlgame` namespace provided by the engine for SDL-related operations instead of calling SDL directly when possible.
+- **Profiling:** Utilize the `Timer` and `TimerManager` classes from the `sdlgame::time` namespace for benchmarking critical paths.
+
+### Asset Handling
+- Images, animations, audio, and fonts should be placed in their respective subdirectories within `assets/`.
+- New assets added to `assets/` will be copied to the build directory upon the next successful build.

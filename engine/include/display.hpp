@@ -3,15 +3,16 @@
 #define SDLGAME_DISPLAY_
 #include "SDL2/SDL_video.h"
 #include "SDL2/SDL_render.h"
-#include <stdio.h>
 #include "surface.hpp"
 #include "math.hpp"
+#include "memory.hpp"
+
 namespace sdlgame
 {
     namespace display
     {
-        extern SDL_Window *window;
-        extern SDL_Renderer *renderer;
+        extern sdlgame::memory::SDLUniquePtr<SDL_Window> window;
+        extern sdlgame::memory::SDLUniquePtr<SDL_Renderer> renderer;
         extern sdlgame::surface::Surface win_surf;
         extern sdlgame::math::Vector2 resolution;
         extern bool isInit;

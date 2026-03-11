@@ -1,5 +1,6 @@
 // #define _CRTDBG_MAP_ALLOC
 #include "engine.hpp"
+#include "memory.hpp"
 #include "splash_screens.hpp"
 #include "scene_transitions.hpp"
 #include "constant.hpp"
@@ -7,6 +8,7 @@
 #include "Grid.hpp"
 #include "flags.hpp"
 #include "SaveData.hpp"
+#include <SDL2/SDL_render.h>
 #include <print>
 using Timer = sdlgame::time::Timer;
 using TimerManager = sdlgame::time::TimerManager;
@@ -31,7 +33,7 @@ public:
             RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
             0 | sdlgame::MAXIMIZED | sdlgame::RESIZABLE);
         this->window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
-        sdlgame::display::get_window_size(); // this is intended to assing win_surf it value it suppose to be
+        sdlgame::display::get_window_size(); // this is intended to assign win_surf a value it suppose to be
 
         // comment this so that i get a free fps view at the caption
         // auto res = load_window_info();
@@ -136,7 +138,7 @@ public:
         studiosc.play();
         InFade *in = new InFade();
         StudioSC *next = new StudioSC(*this, studiosc, 8);
-        this->add_scene(NULL, next, in);
+        this->add_scene(nullptr, next, in);
         bool running = true;
         while (running)
         {
@@ -206,9 +208,6 @@ int main(int argc, char **argv)
     sdlgame::init();
     sdlgame::mixer::init();
     sdlgame::mixer::set_num_channels(16);
-    
-    std::cout << sizeof(Sand) << " is size of sand";
-
     Sandtris game;
     game.run();
 

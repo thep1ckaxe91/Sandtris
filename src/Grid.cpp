@@ -25,7 +25,7 @@ Grid::Grid(Game &game)
             grid[i][j] = Sand();
 
     sand_texture = SDL_CreateTexture(
-        sdlgame::display::renderer,
+        sdlgame::display::renderer.get(),
         SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
         GRID_WIDTH,
@@ -63,7 +63,7 @@ Grid &Grid::operator=(const Grid &other)
     next = other.next;
     // just create new one, since we will redraw it anyway
     sand_texture = SDL_CreateTexture(
-        sdlgame::display::renderer,
+        sdlgame::display::renderer.get(),
         SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
         GRID_WIDTH,
@@ -169,7 +169,7 @@ int Grid::check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands)
                 touchleft = 1;
             else if (u.second == GRID_WIDTH)
                 touchright = 1;
-            for (int k = 0; k < (int)(sizeof(dx) / sizeof(int)); k++)
+            for (size_t k = 0; k < (sizeof(dx) / sizeof(int)); k++)
             {
                 int x = dx[k] + u.first;
                 int y = dy[k] + u.second;
@@ -213,7 +213,7 @@ void Grid::merge(std::vector<std::pair<Uint8, Uint8>> &updated)
     {
         if (controller.tetrimino.mask >> shift & 1)
         {
-            Vector2 topleft = (controller.topleft + Vector2(3 - shift % 4, 3 - shift / 4) * 8) - Vector2(GRID_X, GRID_Y);
+            Vector2 topleft = (controller.topleft + Vector2(3 - shift % 4, 3 - shift / 4) * 8) - Vector2(static_cast<double>(GRID_X), static_cast<double>(GRID_Y));
             topleft.x = int(topleft.x);
             topleft.y = int(topleft.y);
             topleft.x += 1;
@@ -249,14 +249,14 @@ void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
                     if (controller.tetrimino.mask >> shift & 1)
                     {
                         Rect tmp = Rect(controller.topleft + Vector2((3 - shift % 4) * 8, (3 - shift / 4) * 8), 8, 8);
-                        if (tmp.collidepoint(j + GRID_X, i + GRID_Y - 1))
+                        if (tmp.collidepoint(j + static_cast<double>(GRID_X), i + static_cast<double>(GRID_Y) - 1))
                         {
-                            Vector2 check_point(j + GRID_X, i + GRID_Y);
+                            Vector2 check_point(j + static_cast<double>(GRID_X), i + static_cast<double>(GRID_Y));
                             while (tmp.collidepoint(check_point))
                             {
                                 controller.topleft.y -= 1;
                                 tmp.move_ip(0, -1);
-                                if (grid[int(check_point.y - (double)GRID_Y - 1)][int(check_point.x - (double)GRID_X)].mask != SandShift::EMPTY_SAND)
+                                if (grid[int(check_point.y - static_cast<double>(GRID_Y) - 1)][int(check_point.x - static_cast<double>(GRID_X))].mask != SandShift::EMPTY_SAND)
                                     check_point.y--;
                             }
                             this->merge(updated);
@@ -332,11 +332,11 @@ void Grid::update_ghost()
         if ((this->controller.tetrimino.mask >> shift & 1) and !checked[shift % 4])
         {
             checked[shift % 4] = 1;
-            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - (double)GRID_X; // these should be explicitly cast to double
-            int right = this->controller.topleft.x + 8 * (3 - shift % 4) + 8 - (double)GRID_X;
+            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - static_cast<double>(GRID_X); // these should be explicitly cast to double
+            int right = this->controller.topleft.x + 8 * (3 - shift % 4) + 8 - static_cast<double>(GRID_X);
             for (int j = left; j < right; j++)
             {
-                int i = this->controller.topleft.y + 8 * (3 - shift / 4) - (double)GRID_Y;
+                int i = this->controller.topleft.y + 8 * (3 - shift / 4) - static_cast<double>(GRID_Y);
                 int cnt = 0;
                 while (grid[i++][j + 1].mask == SandShift::EMPTY_SAND)
                 {
@@ -436,13 +436,13 @@ void Grid::draw()
 
     SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
 
-    SDL_SetRenderTarget(sdlgame::display::renderer, this->game->window.texture);
-    if (SDL_RenderCopy(sdlgame::display::renderer, sand_texture, nullptr, &dst_rect))
+    SDL_SetRenderTarget(sdlgame::display::renderer.get(), this->game->window.texture.get());
+    if (SDL_RenderCopy(sdlgame::display::renderer.get(), sand_texture, nullptr, &dst_rect))
     {
-        printf("Failed to render the sand texture", SDL_GetError());
+        printf("Failed to render the sand texture:\n%s", SDL_GetError());
         exit(1);
     }
-    SDL_SetRenderTarget(sdlgame::display::renderer, NULL);
+    SDL_SetRenderTarget(sdlgame::display::renderer.get(), nullptr);
 
     controller.draw();
     draw_ghost();

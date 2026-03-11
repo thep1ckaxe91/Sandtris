@@ -16,9 +16,8 @@ void sdlgame::init()
 }
 void sdlgame::quit()
 {
-    // SDL_DestroyWindowSurface(sdlgame::display::window);
-    SDL_DestroyRenderer(sdlgame::display::renderer);
-    SDL_DestroyWindow(sdlgame::display::window);
+    sdlgame::display::renderer.reset();
+    sdlgame::display::window.reset();
     IMG_Quit();
     Mix_Quit();
     TTF_Quit();

@@ -26,8 +26,8 @@ namespace sdlgame::math
     }
     Vector2::Vector2(const SDL_Point &p)
     {
-        x = (double)p.x;
-        y = (double)p.y;
+        x = static_cast<double>(p.x);
+        y = static_cast<double>(p.y);
     }
     Vector2::Vector2(const Vector2 &oth)
     {
@@ -200,7 +200,7 @@ namespace sdlgame::math
     }
     SDL_FPoint Vector2::to_SDL_FPoint() const
     {
-        SDL_FPoint res = {(float)this->x, (float)this->y};
+        SDL_FPoint res = {static_cast<float>(x), static_cast<float>(y)};
         return res;
     }
 }
