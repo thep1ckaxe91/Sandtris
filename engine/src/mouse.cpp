@@ -32,7 +32,7 @@ sdlgame::math::Vector2 get_pos() {
 }
 std::vector<bool> get_pressed() {
   int numButtons = 32;
-  Uint32 buttonState = SDL_GetMouseState(nullptr, nullptr);
+  uint32_t buttonState = SDL_GetMouseState(nullptr, nullptr);
 
   std::vector<bool> buttons(numButtons);
   for (int i = 0; i < numButtons; ++i) {

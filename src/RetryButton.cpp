@@ -1,27 +1,22 @@
 #include "RetryButton.hpp"
-#include "scene_transitions.hpp"
 #include "GamePlay.hpp"
 #include "SaveData.hpp"
-RetryButton::RetryButton(Game &game)
-{
-    this->game = &game;
-    this->set_images(this->game->images.retry_button_idle,this->game->images.retry_button_hover, this->game->images.retry_button_click);
-    this->rect = (*this->image).getRect();
+#include "scene_transitions.hpp"
+#include <memory>
+RetryButton::RetryButton(Game &game) {
+  game = &game;
+  set_images(game->images.retry_button_idle,
+                   game->images.retry_button_hover,
+                   game->images.retry_button_click);
+  rect = (*image).getRect();
 }
-RetryButton::RetryButton()=default;
-void RetryButton::handle_event(Event &event)
-{
-    Button::handle_event(event);
+RetryButton::RetryButton() = default;
+void RetryButton::handle_event(Event &event) { Button::handle_event(event); }
+void RetryButton::on_click() {
+  auto out = std::make_unique<OutSwipeDown>();
+  auto in = std::make_unique<InSwipeDown>();
+  auto next = std::make_unique<GamePlay>(*game);
+  delete_grid_data();
+  game->clear_scene(std::move(out), std::move(next), std::move(in));
 }
-void RetryButton::on_click()
-{
-    OutSwipeDown *out = new OutSwipeDown();
-    InSwipeDown *in = new InSwipeDown();
-    GamePlay *next = new GamePlay(*game);
-    delete_grid_data();
-    this->game->clear_scene(out,next,in);
-}
-void RetryButton::update()
-{
-    Button::update();
-}
+void RetryButton::update() { Button::update(); }

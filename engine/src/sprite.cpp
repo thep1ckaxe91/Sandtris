@@ -7,7 +7,7 @@
 namespace sdlgame::sprite {
 Group::Group(std::vector<Sprite *> sprites) {
   for (auto sprite : sprites)
-    this->add(sprite);
+    add(sprite);
 }
 Group &Group::operator=(Group oth) {
   sprite_list = oth.sprite_list;
@@ -16,14 +16,12 @@ Group &Group::operator=(Group oth) {
 
 Sprite::Sprite(std::vector<Group *> groups) {
   for (Group *group : groups)
-    this->add(group);
+    add(group);
 }
 /**
  * return a set of group that conrtain this sprite
  */
-std::set<Group *> &Sprite::groups() {
-  return group_list;
-}
+std::set<Group *> &Sprite::groups() { return group_list; }
 void Sprite::add(std::vector<Group *> groups) {
   for (auto &group : groups) {
     group->sprite_list.insert(this);
@@ -60,9 +58,7 @@ void Sprite::kill() {
 }
 bool Sprite::alive() { return group_list.size() > 0; }
 
-std::set<Sprite *> &Group::sprites() {
-  return sprite_list;
-}
+std::set<Sprite *> &Group::sprites() { return sprite_list; }
 void Group::add(Sprite *sprite) {
   sprite_list.insert(sprite);
   sprite->group_list.insert(this);
@@ -112,21 +108,15 @@ void Group::draw(sdlgame::surface::Surface &surface) {
   }
 }
 
-GroupSingle::GroupSingle(Sprite *sprite) {
-  this->sprite = sprite;
-}
-void GroupSingle::add(Sprite *sprite) {
-  this->sprite = sprite;
-}
+GroupSingle::GroupSingle(Sprite *sprite) { sprite = sprite; }
+void GroupSingle::add(Sprite *sprite) { sprite = sprite; }
 void GroupSingle::remove() { sprite = nullptr; }
 void GroupSingle::update() { sprite->update(); }
 void GroupSingle::draw(sdlgame::surface::Surface &surface) {
   surface.blit(*sprite->image, sprite->rect.getTopLeft());
 }
 
-std::vector<Sprite *>
-spritecollide(Sprite *sprite, Group *group,
-              bool dokill) {
+std::vector<Sprite *> spritecollide(Sprite *sprite, Group *group, bool dokill) {
   std::vector<Sprite *> res;
   for (auto &img : group->sprite_list) {
     if (img->rect.colliderect(sprite->rect)) {
@@ -141,8 +131,7 @@ spritecollide(Sprite *sprite, Group *group,
  * @return if 2 sprite is collide or not, but using 2 sprite, both must have
  * rect attr defined
  */
-bool collide_rect(Sprite *left,
-                                   Sprite *right) {
+bool collide_rect(Sprite *left, Sprite *right) {
   return left->rect.colliderect(right->rect);
 }
 /**
@@ -153,9 +142,8 @@ bool collide_rect(Sprite *left,
  * circle is created that is big enough to completely enclose the sprites rect
  * as given by the "rect" attribute.
  */
-bool collide_circle(Sprite *left,
-                                     Sprite *right,
-                                     double left_radius, double right_radius) {
+bool collide_circle(Sprite *left, Sprite *right, double left_radius,
+                    double right_radius) {
   left_radius = (left_radius == 0
                      ? (left->rect.getTopLeft() - left->rect.getBottomRight())
                                .magnitude() /

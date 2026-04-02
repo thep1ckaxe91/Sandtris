@@ -1,26 +1,20 @@
 #include "StartButton.hpp"
 #include "GamePlay.hpp"
-#include "scene_transitions.hpp"
 #include "engine.hpp"
-StartButton::StartButton(Game &game) : Button()
-{
-    this->game = &game;
-    this->set_images(this->game->images.start_button_idle,this->game->images.start_button_hover,this->game->images.start_button_click);
-    this->rect = (*this->image).getRect();
+#include "scene_transitions.hpp"
+StartButton::StartButton(Game &game) : Button() {
+  game = &game;
+  set_images(game->images.start_button_idle,
+                   game->images.start_button_hover,
+                   game->images.start_button_click);
+  rect = (*image).getRect();
 }
 StartButton::StartButton() = default;
-void StartButton::handle_event(Event &event)
-{
-    Button::handle_event(event);
+void StartButton::handle_event(Event &event) { Button::handle_event(event); }
+void StartButton::on_click() {
+  auto out = std::make_unique<OutSwipeDown>();
+  auto in = std::make_unique<InSwipeDown>();
+  std::unique_ptr<Scene> next = std::make_unique<GamePlay>(*game);
+  game->pop_scene(std::move(out), std::move(next), std::move(in));
 }
-void StartButton::on_click()
-{
-    OutSwipeDown *out = new OutSwipeDown();
-    InSwipeDown *in = new InSwipeDown();
-    GamePlay *next = new GamePlay(*this->game);
-    this->game->pop_scene(out,next,in);
-}
-void StartButton::update()
-{
-    Button::update();
-}
+void StartButton::update() { Button::update(); }

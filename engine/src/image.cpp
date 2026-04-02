@@ -1,8 +1,11 @@
 #include "image.hpp"
+#include "SDL_image.h"
 #include "display.hpp"
 #include "surface.hpp"
+#include <filesystem>
 #include <stdio.h>
-#include <string>
+
+namespace fs = std::filesystem;
 
 namespace sdlgame::image {
 void init() {
@@ -18,7 +21,7 @@ void init() {
   }
 }
 // sdlgame::surface::Surface img_transfer_surf;
-[[nodiscard]] sdlgame::surface::Surface load(const std::string path) {
+[[nodiscard]] sdlgame::surface::Surface load(const fs::path path) {
   SDL_Texture *tex =
       IMG_LoadTexture(sdlgame::display::renderer.get(), path.c_str());
   if (tex == nullptr) {

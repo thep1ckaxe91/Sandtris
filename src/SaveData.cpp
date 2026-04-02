@@ -350,8 +350,8 @@ Grid load_grid_data(Game *game)
     std::ifstream file(base_path + "assets/save/grid.sandtris", std::ios_base::binary);
 
     char tmp[8];
-    Uint8 tmp_byte;
-    Uint8 tmp_byte2;
+    uint8_t tmp_byte;
+    uint8_t tmp_byte2;
     file.read(tmp, 8);
     grid.controller.topleft.x = bytes_to_double(tmp);
     file.read(tmp, 8);

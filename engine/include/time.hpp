@@ -4,7 +4,6 @@
 #include <chrono>
 #include <array>
 #include <unordered_map>
-#include "SDL2/SDL.h"
 
 using namespace std::literals;
 struct SimClock

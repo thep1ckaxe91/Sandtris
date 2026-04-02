@@ -1,6 +1,5 @@
 #include "Sand.hpp"
 #include "constant.hpp"
-#include <map>
 
 // Bit shift for color check, not for actual color, does not include static_sand
 std::array<Color, 9> SandShiftColor = {
@@ -15,7 +14,7 @@ std::array<Color, 9> SandShiftColor = {
     GREEN_SAND_COLOR};
 Sand::Sand(SandShift mask)
 {
-    this->mask = mask;
-    this->color_offset_rgb = sdlgame::random::randint(0, 255);
-    // this->inertia = 1;
+    mask = mask;
+    color_offset_rgb = sdlgame::random::randint(0, 255);
+    // inertia = 1;
 }

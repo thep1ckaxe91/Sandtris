@@ -8,13 +8,13 @@
 
 Grid::Grid(Game &game)
 {
-    this->game = &game;
+    game = &game;
     controller = TetriminoController(game, Tetriminoes::randomTetrimino());
     update_ghost_shape();
-    this->ghost_topleft.y = -1000;
-    this->next = Tetriminoes::randomTetrimino();
-    this->ghost = Surface(32, 32);
-    this->ghost_color = Color("white");
+    ghost_topleft.y = -1000;
+    next = Tetriminoes::randomTetrimino();
+    ghost = Surface(32, 32);
+    ghost_color = Color("white");
 
     for (int i = 0; i < GRID_HEIGHT + 2; i++)
         grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(SandShift::STATIC_SAND);
@@ -36,7 +36,7 @@ Grid::Grid(Game &game)
         SDL_Log("Cant create or sand texture null for:\n%s\n", SDL_GetError());
         exit(1);
     }
-    if (SDL_SetTextureBlendMode(this->sand_texture, SDL_BLENDMODE_NONE))
+    if (SDL_SetTextureBlendMode(sand_texture, SDL_BLENDMODE_NONE))
     {
         SDL_Log("Failed to set texture blend mode due to: %s", SDL_GetError());
     } // allow tex to just copy (faster)
@@ -45,13 +45,13 @@ Grid::Grid() = default;
 Grid &Grid::operator=(const Grid &other)
 {
 
-    this->ghost = other.ghost;
-    this->ghost_color = other.ghost_color;
-    this->game = other.game;
-    this->score1 = other.score1;
-    this->score2 = other.score2;
+    ghost = other.ghost;
+    ghost_color = other.ghost_color;
+    game = other.game;
+    score1 = other.score1;
+    score2 = other.score2;
     update_ghost_shape();
-    this->ghost_topleft.y = -1000;
+    ghost_topleft.y = -1000;
     for (int i = 0; i < GRID_HEIGHT + 2; i++)
         grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(SandShift::STATIC_SAND);
     for (int i = 0; i < GRID_WIDTH + 2; i++)
@@ -74,7 +74,7 @@ Grid &Grid::operator=(const Grid &other)
         SDL_Log("Cant create or sand texture null for:\n%s\n", SDL_GetError());
         exit(1);
     }
-    if (SDL_SetTextureBlendMode(this->sand_texture, SDL_BLENDMODE_NONE)) // didnt go here either
+    if (SDL_SetTextureBlendMode(sand_texture, SDL_BLENDMODE_NONE)) // didnt go here either
     {
         SDL_Log("Failed to set texture blend mode due to: %s", SDL_GetError());
     } // allow tex to just copy (faster)
@@ -84,7 +84,7 @@ Grid &Grid::operator=(const Grid &other)
 Grid::~Grid()
 {
     if (sand_texture)
-        SDL_DestroyTexture(this->sand_texture);
+        SDL_DestroyTexture(sand_texture);
 }
 
 void Grid::handle_event(Event &event)
@@ -146,9 +146,9 @@ int Grid::get_score() { return score1 + score2; }
  * @param updated_sands a list of position sand that got updated
  * @return an integer represent amount of point we get
  */
-int Grid::check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands)
+int Grid::check_scoring(std::vector<std::pair<uint8_t, uint8_t>> &updated_sands)
 {
-    std::queue<std::pair<Uint8, Uint8>> q;
+    std::queue<std::pair<uint8_t, uint8_t>> q;
     pos.clear();
     std::array<std::bitset<GRID_WIDTH + 2>, GRID_HEIGHT + 2> visited;
     for (auto &[i, j] : updated_sands)
@@ -156,7 +156,7 @@ int Grid::check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands)
         if (visited[i][j] == 1)
             continue;
         visited[i][j] = 1;
-        std::vector<std::pair<Uint8, Uint8>> tmp;
+        std::vector<std::pair<uint8_t, uint8_t>> tmp;
         SandShift check_color = grid[i][j].mask;
         bool touchleft = 0, touchright = 0;
         q.push({i, j});
@@ -197,15 +197,15 @@ int Grid::check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands)
     return pos.size();
 }
 
-void Grid::merge(std::vector<std::pair<Uint8, Uint8>> &updated)
+void Grid::merge(std::vector<std::pair<uint8_t, uint8_t>> &updated)
 {
     // if merge at wrong place, game over
     // a bit offset for more comfort ux
-    this->game->window_draw_offset.y = 2;
+    game->window_draw_offset.y = 2;
     if (controller.topleft.y + 7 < 0)
     {
         sdlgame::event::post(GAMEOVER);
-        this->game->window_draw_offset.y = 0;
+        game->window_draw_offset.y = 0;
         return;
     }
     // merge
@@ -232,7 +232,7 @@ void Grid::merge(std::vector<std::pair<Uint8, Uint8>> &updated)
         }
     }
 }
-void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
+void Grid::collision_check(std::vector<std::pair<uint8_t, uint8_t>> &updated)
 {
     // check collision if the tetrimino is collided with the grid
     /*
@@ -259,9 +259,9 @@ void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
                                 if (grid[int(check_point.y - static_cast<double>(GRID_Y) - 1)][int(check_point.x - static_cast<double>(GRID_X))].mask != SandShift::EMPTY_SAND)
                                     check_point.y--;
                             }
-                            this->merge(updated);
-                            this->controller.reset(this->next);
-                            this->next = Tetriminoes::randomTetrimino();
+                            merge(updated);
+                            controller.reset(next);
+                            next = Tetriminoes::randomTetrimino();
                             sdlgame::event::post(MERGING);
                             update_ghost_shape();
                             return;
@@ -273,7 +273,7 @@ void Grid::collision_check(std::vector<std::pair<Uint8, Uint8>> &updated)
     }
 }
 
-std::pair<Uint8, Uint8> Grid::step(int i, int j, int times)
+std::pair<uint8_t, uint8_t> Grid::step(int i, int j, int times)
 {
     while (times--)
     {
@@ -315,7 +315,7 @@ void Grid::update_ghost_shape()
     {
         for (int j = 0; j < 4; j++)
         {
-            if (this->controller.tetrimino.mask >> get_from_pos(i, j) & 1)
+            if (controller.tetrimino.mask >> get_from_pos(i, j) & 1)
             {
                 sdlgame::draw::rect(ghost, ghost_color, Rect(j * 8, i * 8, 8, 8), 1);
             }
@@ -329,14 +329,14 @@ void Grid::update_ghost()
     // get the min distance from the tetrimino down to display the ghost
     for (int shift = 0; shift < 16; shift++)
     {
-        if ((this->controller.tetrimino.mask >> shift & 1) and !checked[shift % 4])
+        if ((controller.tetrimino.mask >> shift & 1) and !checked[shift % 4])
         {
             checked[shift % 4] = 1;
-            int left = this->controller.topleft.x + 8 * (3 - shift % 4) - static_cast<double>(GRID_X); // these should be explicitly cast to double
-            int right = this->controller.topleft.x + 8 * (3 - shift % 4) + 8 - static_cast<double>(GRID_X);
+            int left = controller.topleft.x + 8 * (3 - shift % 4) - static_cast<double>(GRID_X); // these should be explicitly cast to double
+            int right = controller.topleft.x + 8 * (3 - shift % 4) + 8 - static_cast<double>(GRID_X);
             for (int j = left; j < right; j++)
             {
-                int i = this->controller.topleft.y + 8 * (3 - shift / 4) - static_cast<double>(GRID_Y);
+                int i = controller.topleft.y + 8 * (3 - shift / 4) - static_cast<double>(GRID_Y);
                 int cnt = 0;
                 while (grid[i++][j + 1].mask == SandShift::EMPTY_SAND)
                 {
@@ -349,17 +349,17 @@ void Grid::update_ghost()
         }
     }
     // update the topleft of the ghost
-    ghost_topleft = this->controller.topleft + Vector2(0, min_height - 8);
+    ghost_topleft = controller.topleft + Vector2(0, min_height - 8);
     ghost_topleft.x = int(ghost_topleft.x);
     ghost_topleft.y = int(ghost_topleft.y) - 1;
 }
 void Grid::update()
 {
-    this->update_timer += this->game->clock.delta_time().count();
-    if (this->update_timer >= this->fixed_delta_time)
+    update_timer += game->clock.delta_time().count();
+    if (update_timer >= fixed_delta_time)
     {
-        std::vector<std::pair<Uint8, Uint8>> updated_sands;
-        this->update_timer -= this->fixed_delta_time;
+        std::vector<std::pair<uint8_t, uint8_t>> updated_sands;
+        update_timer -= fixed_delta_time;
 
         for (int i = GRID_HEIGHT; i >= 1; i--)
         {
@@ -368,7 +368,7 @@ void Grid::update()
                 if (grid[i][j].mask != SandShift::EMPTY_SAND)
                 {
                     int step_times = sdlgame::random::randint(1, step_range);
-                    std::pair<Uint8, Uint8> pos = this->step(i, j, step_times);
+                    std::pair<uint8_t, uint8_t> pos = step(i, j, step_times);
                     if (i != pos.first or j != pos.second)
                         updated_sands.push_back(pos);
                 }
@@ -386,8 +386,8 @@ void Grid::update()
             }
         }
     }
-    if (this->game->window_draw_offset.y != 0)
-        this->game->window_draw_offset.y--;
+    if (game->window_draw_offset.y != 0)
+        game->window_draw_offset.y--;
     controller.update();
     normalize_tetrimino();
     update_ghost();
@@ -395,7 +395,7 @@ void Grid::update()
 void Grid::draw_ghost()
 {
     // sdlgame::draw::rect(ghost,"red",Rect(0,0,32,32),1);
-    this->game->window.blit(ghost, ghost_topleft);
+    game->window.blit(ghost, ghost_topleft);
 }
 void Grid::draw()
 {
@@ -408,7 +408,7 @@ void Grid::draw()
         exit(1);
     }
 
-    auto *pixels = reinterpret_cast<Uint32 *>(raw_pixels);
+    auto *pixels = reinterpret_cast<uint32_t *>(raw_pixels);
     int width_in_pixels = pitch / 4;
 
     for (int i = 1; i <= GRID_HEIGHT; i++)
@@ -426,7 +426,7 @@ void Grid::draw()
             }
             Color c = SandShiftColor.at(static_cast<uint8_t>(grid[i][j].mask)).add_value(grid[i][j].color_offset_rgb >> 4 & 15, grid[i][j].color_offset_rgb >> 2 & 15, grid[i][j].color_offset_rgb & 15);
 
-            Uint32 pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
+            uint32_t pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
 
             pixels[row_offset + (j - 1)] = pixel_color;
         }
@@ -436,10 +436,10 @@ void Grid::draw()
 
     SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
 
-    SDL_SetRenderTarget(sdlgame::display::renderer.get(), this->game->window.texture.get());
+    SDL_SetRenderTarget(sdlgame::display::renderer.get(), game->window.texture.get());
     if (SDL_RenderCopy(sdlgame::display::renderer.get(), sand_texture, nullptr, &dst_rect))
     {
-        printf("Failed to render the sand texture:\n%s", SDL_GetError());
+        printf("Failed to render the sand texture:\n%s\n", SDL_GetError());
         exit(1);
     }
     SDL_SetRenderTarget(sdlgame::display::renderer.get(), nullptr);

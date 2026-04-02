@@ -6,8 +6,8 @@ AudioManager::AudioManager()
     sfx.load();
     sfx_volume = ::get_sfx_volume();
     music_volume = ::get_music_volume();
-    this->set_sfx_volume(sfx_volume);
-    this->set_music_volume(music_volume);
+    set_sfx_volume(sfx_volume);
+    set_music_volume(music_volume);
 }
 void AudioManager::handle_event(Event &event)
 {
@@ -52,7 +52,7 @@ void AudioManager::update()
 }
 void AudioManager::set_sfx_volume(float value)
 {
-    this->sfx_volume = value;
+    sfx_volume = value;
     sfx.button_click.set_volume(value);
     sfx.button_hover.set_volume(value);
     sfx.count_down.set_volume(value);
@@ -68,7 +68,7 @@ void AudioManager::set_sfx_volume(float value)
 }
 void AudioManager::set_music_volume(float value)
 {
-    this->music_volume = value;
+    music_volume = value;
     sdlgame::music::set_volume(value);
     ::set_music_volume(value);
 }

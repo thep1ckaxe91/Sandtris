@@ -146,19 +146,19 @@ Rect Rect::move(double offset_x, double offset_y) const {
  */
 
 void Rect::move_ip(double offset_x, double offset_y) {
-  *this = this->move(offset_x, offset_y);
+  *this = move(offset_x, offset_y);
 }
 /**
  * @return a new rectangle that have been moved by given OFFSET x and y
  */
 Rect Rect::move(sdlgame::math::Vector2 offset) const {
-  return this->move(offset.x, offset.y);
+  return move(offset.x, offset.y);
 }
 /**
  *  instead of a new one, this just move the rect that called this function
  */
 void Rect::move_ip(sdlgame::math::Vector2 offset) {
-  *this = this->move(offset.x, offset.y);
+  *this = move(offset.x, offset.y);
 }
 
 /**
@@ -178,7 +178,7 @@ Rect Rect::inflate(double offset_w, double offset_h) const {
   return res;
 }
 Rect Rect::inflate(sdlgame::math::Vector2 offset) const {
-  return this->inflate(offset.x, offset.y);
+  return inflate(offset.x, offset.y);
 }
 /**
  *  resize current rectangle with given offset, the topleft of the rectangle is
@@ -186,10 +186,10 @@ Rect Rect::inflate(sdlgame::math::Vector2 offset) const {
  */
 
 void Rect::inflate_ip(double offset_w, double offset_h) {
-  *this = this->inflate(offset_w, offset_h);
+  *this = inflate(offset_w, offset_h);
 }
 void Rect::inflate_ip(const sdlgame::math::Vector2 &offset) {
-  *this = this->inflate(offset.x, offset.y);
+  *this = inflate(offset.x, offset.y);
 }
 
 /**
@@ -267,13 +267,13 @@ bool Rect::contains(const Rect oth) const {
 
 Rect Rect::overlap(const Rect &oth) {
   return (
-      this->colliderect(oth)
+      colliderect(oth)
           ? Rect(std::max(x, oth.getLeft()), std::max(y, oth.getTop()),
                  std::min(right, oth.getRight()) - std::max(x, oth.getLeft()),
                  std::min(bottom, oth.getBottom()) - std::max(y, oth.getTop()))
           : Rect());
 }
-void Rect::overlap_ip(const Rect &oth) { *this = this->overlap(oth); }
+void Rect::overlap_ip(const Rect &oth) { *this = overlap(oth); }
 /**
  * TEST: approved
  */
@@ -311,98 +311,98 @@ bool Rect::colliderect(const Rect oth) const {
  */
 bool Rect::collidelist(std::vector<Rect> &rect_list) const {
   for (Rect &rect : rect_list)
-    if (this->colliderect(rect))
+    if (colliderect(rect))
       return true;
   return false;
 }
 
 // Under is mostly get and set func
 
-void Rect::setWidth(double _w) { this->inflate_ip(_w - w, 0); }
+void Rect::setWidth(double _w) { inflate_ip(_w - w, 0); }
 
-void Rect::setHeight(double _h) { this->inflate_ip(0, _h - h); }
+void Rect::setHeight(double _h) { inflate_ip(0, _h - h); }
 
-void Rect::setSize(double _w, double _h) { this->inflate_ip(_w - w, _h - h); }
+void Rect::setSize(double _w, double _h) { inflate_ip(_w - w, _h - h); }
 void Rect::setSize(const sdlgame::math::Vector2 &_size) {
-  this->inflate_ip(_size - sdlgame::math::Vector2(w, h));
+  inflate_ip(_size - sdlgame::math::Vector2(w, h));
 }
 
 void Rect::setTop(double _y) {
   // std::cout << "Moved the rect by " << _y - y << " in y axis\n";
-  this->move_ip(0, _y - y);
+  move_ip(0, _y - y);
 }
 
 void Rect::setLeft(double _x) {
   // std::cout << "Moved the rect by " << _x - x << " in x axis\n";
-  this->move_ip(_x - x, 0);
+  move_ip(_x - x, 0);
 }
 
 void Rect::setRight(double _x) {
   // std::cout << "Moved the rect by " << _x - x << " in x axis\n";
-  this->move_ip(_x - right, 0);
+  move_ip(_x - right, 0);
 }
 
 void Rect::setBottom(double _y) {
   // std::cout << "Moved the rect by " << _y - y << " in y axis\n";
-  this->move_ip(0, _y - bottom);
+  move_ip(0, _y - bottom);
 }
 
-void Rect::setTopLeft(double _x, double _y) { this->move_ip(_x - x, _y - y); }
+void Rect::setTopLeft(double _x, double _y) { move_ip(_x - x, _y - y); }
 void Rect::setBottomLeft(double _x, double _y) {
-  this->move_ip(_x - x, _y - bottom);
+  move_ip(_x - x, _y - bottom);
 }
 void Rect::setTopRight(double _x, double _y) {
-  this->move_ip(_x - right, _y - y);
+  move_ip(_x - right, _y - y);
 }
 void Rect::setBottomRight(double _x, double _y) {
-  this->move_ip(_x - right, _y - bottom);
+  move_ip(_x - right, _y - bottom);
 }
 
 void Rect::setTopLeft(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos - this->getTopLeft());
+  move_ip(pos - getTopLeft());
 }
 void Rect::setBottomLeft(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos - this->getBottomLeft());
+  move_ip(pos - getBottomLeft());
 }
 void Rect::setTopRight(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos - this->getTopRight());
+  move_ip(pos - getTopRight());
 }
 void Rect::setBottomRight(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos - this->getBottomRight());
+  move_ip(pos - getBottomRight());
 }
 void Rect::setCenter(double _x, double _y) {
-  this->move_ip(_x - centerx, _y - centery);
+  move_ip(_x - centerx, _y - centery);
 }
 void Rect::setCenter(sdlgame::math::Vector2 pos) {
-  this->move_ip(pos.x - centerx, pos.y - centery);
+  move_ip(pos.x - centerx, pos.y - centery);
 }
 
 void Rect::setMidTop(double _x, double _y) {
-  this->move_ip(_x - centerx, _y - y);
+  move_ip(_x - centerx, _y - y);
 }
 void Rect::setMidTop(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos.x - centerx, pos.y - y);
+  move_ip(pos.x - centerx, pos.y - y);
 }
 
 void Rect::setMidBottom(double _x, double _y) {
-  this->move_ip(_x - centerx, _y - bottom);
+  move_ip(_x - centerx, _y - bottom);
 }
 void Rect::setMidBottom(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos.x - centerx, pos.y - bottom);
+  move_ip(pos.x - centerx, pos.y - bottom);
 }
 
 void Rect::setMidLeft(double _x, double _y) {
-  this->move_ip(_x - x, _y - centery);
+  move_ip(_x - x, _y - centery);
 }
 void Rect::setMidLeft(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos.x - x, pos.y - centery);
+  move_ip(pos.x - x, pos.y - centery);
 }
 
 void Rect::setMidRight(double _x, double _y) {
-  this->move_ip(_x - right, _y - centery);
+  move_ip(_x - right, _y - centery);
 }
 void Rect::setMidRight(const sdlgame::math::Vector2 &pos) {
-  this->move_ip(pos.x - right, pos.y - centery);
+  move_ip(pos.x - right, pos.y - centery);
 }
 double Rect::getWidth() const { return w; }
 double Rect::getHeight() const { return h; }

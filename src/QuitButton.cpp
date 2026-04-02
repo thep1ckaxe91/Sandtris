@@ -3,9 +3,9 @@
 #include "Game.hpp"
 QuitButton::QuitButton(Game &game) : Button()
 {
-    this->game = &game;
-    this->set_images(this->game->images.quit_button_idle,this->game->images.quit_button_hover,this->game->images.quit_button_click);
-    this->rect = (*this->image).getRect();
+    game = &game;
+    set_images(game->images.quit_button_idle,game->images.quit_button_hover,game->images.quit_button_click);
+    rect = (*image).getRect();
 }
 QuitButton::QuitButton(){}
 void QuitButton::handle_event(Event &event)

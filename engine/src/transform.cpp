@@ -1,11 +1,12 @@
 #include "transform.hpp"
 #include "display.hpp"
+#include <algorithm>
 
 namespace sdlgame::transform {
 
-sdlgame::surface::Surface flip(sdlgame::surface::Surface surface, bool flip_x,
-                               bool flip_y) {
-  sdlgame::surface::Surface res = surface;
+surface::Surface flip(const surface::Surface &surface, bool flip_x,
+                      bool flip_y) {
+  surface::Surface res = surface;
   if (SDL_SetRenderTarget(sdlgame::display::renderer.get(),
                           res.texture.get())) {
     printf("Failed to set target: %s\n", SDL_GetError());
@@ -21,9 +22,8 @@ sdlgame::surface::Surface flip(sdlgame::surface::Surface surface, bool flip_x,
   }
   return res;
 }
-sdlgame::surface::Surface scale(sdlgame::surface::Surface surface,
-                                sdlgame::math::Vector2 size) {
-  sdlgame::surface::Surface res = sdlgame::surface::Surface(size.x, size.y);
+surface::Surface scale(const surface::Surface &surface, math::Vector2 size) {
+  surface::Surface res = surface::Surface(size.x, size.y);
   if (SDL_SetRenderTarget(sdlgame::display::renderer.get(),
                           res.texture.get())) {
     printf("Failed to set target: %s\n", SDL_GetError());
@@ -36,8 +36,7 @@ sdlgame::surface::Surface scale(sdlgame::surface::Surface surface,
   return res;
 }
 
-sdlgame::surface::Surface scale_by(sdlgame::surface::Surface surface,
-                                   double factor) {
+surface::Surface scale_by(const surface::Surface &surface, double factor) {
   return scale(surface, surface.get_size() * factor);
 }
 
@@ -46,27 +45,33 @@ sdlgame::surface::Surface scale_by(sdlgame::surface::Surface surface,
  * center angle unit is degrees
  * TODO: calculate the new size for the res surface
  */
-sdlgame::surface::Surface rotate(sdlgame::surface::Surface surface,
-                                 double angle_deg,
-                                 sdlgame::math::Vector2 center) {
-  sdlgame::math::Vector2 newtopleft =
+surface::Surface rotate(const surface::Surface &surface, double angle_deg,
+                        math::Vector2 center) {
+  math::Vector2 newtopleft =
       (surface.getRect().getTopLeft() - center).rotate(angle_deg);
-  sdlgame::math::Vector2 newbotleft =
+  math::Vector2 newbotleft =
       (surface.getRect().getBottomLeft() - center).rotate(angle_deg);
-  sdlgame::math::Vector2 newtopright =
+  math::Vector2 newtopright =
       (surface.getRect().getTopRight() - center).rotate(angle_deg);
-  sdlgame::math::Vector2 newbotright =
+  math::Vector2 newbotright =
       (surface.getRect().getBottomRight() - center).rotate(angle_deg);
 
-  sdlgame::surface::Surface res = sdlgame::surface::Surface(
-      std::max({newtopleft.x, newbotleft.x, newbotright.x, newtopright.x}) -
-          std::min({newtopleft.x, newbotleft.x, newbotright.x, newtopright.x}),
-      std::max({newtopleft.y, newbotleft.y, newbotright.y, newtopright.y}) -
-          std::min({newtopleft.y, newbotleft.y, newbotright.y, newtopright.y}));
+  surface::Surface res =
+      surface::Surface(std::ranges::max({newtopleft.x, newbotleft.x,
+                                         newbotright.x, newtopright.x}) -
+                           std::ranges::min({newtopleft.x, newbotleft.x,
+                                             newbotright.x, newtopright.x}),
+                       std::ranges::max({newtopleft.y, newbotleft.y,
+                                         newbotright.y, newtopright.y}) -
+                           std::ranges::min({newtopleft.y, newbotleft.y,
+                                             newbotright.y, newtopright.y}));
+
   if (SDL_SetRenderTarget(sdlgame::display::renderer.get(),
                           res.texture.get())) {
     printf("Failed to set target: %s\n", SDL_GetError());
   }
+
+
   SDL_FPoint tmp = {float(center.x), float(center.y)};
   SDL_RenderCopyExF(sdlgame::display::renderer.get(), surface.texture.get(),
                     nullptr, nullptr, angle_deg, &tmp, SDL_FLIP_NONE);

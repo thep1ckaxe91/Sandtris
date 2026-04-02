@@ -1,8 +1,6 @@
 #include "time.hpp"
 #include <thread>
 #include <numeric>
-#include <iostream>
-#include <iomanip>
 
 namespace sdlgame::time
 {

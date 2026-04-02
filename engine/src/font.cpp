@@ -3,11 +3,10 @@
 #include "display.hpp"
 #include "stdio.h"
 #include "surface.hpp"
+#include <SDL2/SDL_ttf.h>
 #include <string>
 
 namespace sdlgame::font {
-std::map<TTF_Font *, int>
-    __font_pool; // TODO: this memory management very need fixing
 void init() {
   if (TTF_Init()) {
     printf("Failed to init font\n%s\n", TTF_GetError());
@@ -18,18 +17,18 @@ void init() {
   }
 }
 Font::Font() {
-  this->font = nullptr;
+  font = nullptr;
   height = 0;
 }
-Font::Font(std::string path, int size) {
-  this->height = size;
-  this->font = TTF_OpenFont(path.c_str(), size);
+Font::Font(fs::path path, int size) {
+  height = size;
+  auto font = TTF_OpenFont(path.c_str(), size);
   if (!font) {
     printf("Cant load font\n%s\n", TTF_GetError());
     exit(0);
   }
-  __font_pool[this->font] = 1;
 }
+
 /**
  * @return a surface that only contain the text
  * @param antialias = 0 no antialiasing fastest
@@ -41,58 +40,34 @@ Font::Font(std::string path, int size) {
  * then will only endline when use endline character
  *
  */
-sdlgame::surface::Surface
-Font::render(const std::string text, int antialias,
-                            sdlgame::color::Color color, uint32_t wrap_length,
-                            sdlgame::color::Color background) {
+sdlgame::surface::Surface Font::render(const std::string text,
+                                       AntiAlias antialias,
+                                       sdlgame::color::Color color,
+                                       uint32_t wrap_length,
+                                       sdlgame::color::Color background) {
   SDL_Surface *surface;
-  if (!antialias) {
-    surface = TTF_RenderUTF8_Solid_Wrapped(font, text.c_str(),
-                                           color.to_SDL_Color(), wrap_length);
-  } else if (antialias == 1) {
+  switch (antialias) {
+  case AntiAlias::SOLID:
+    surface = TTF_RenderUTF8_Solid_Wrapped(font, text.c_str(), color.to_SDL_Color(), wrap_length);
+    break;
+  case AntiAlias::SHADED:
     surface = TTF_RenderUTF8_Shaded_Wrapped(
-        font, text.c_str(), color.to_SDL_Color(),
-        sdlgame::color::Color(0, 0, 0, 0).to_SDL_Color(), wrap_length);
-  } else {
+        font, text.c_str(), color.to_SDL_Color(), SDL_Color{0,0,0,0}, wrap_length);
+    break;
+  case AntiAlias::BLENDED:
     surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(),
                                              color.to_SDL_Color(), wrap_length);
+    break;
   }
-  if (surface == nullptr) {
+  if (surface == nullptr) [[unlikely]] {
     printf("Error render font\n%s\n", TTF_GetError());
-    exit(0);
+    exit(1);
   }
-  res = sdlgame::surface::Surface(surface->w, surface->h);
+  surface::Surface res = surface::Surface(surface);
   res.fill(background);
-  SDL_Texture *tmp =
-      SDL_CreateTextureFromSurface(sdlgame::display::renderer.get(), surface);
-  if (tmp == nullptr) {
-    printf("Error convert surf to texture\n%s\n", SDL_GetError());
-    exit(0);
-  }
-  SDL_SetRenderTarget(sdlgame::display::renderer.get(), res.texture.get());
-  if (SDL_RenderCopy(sdlgame::display::renderer.get(), tmp, nullptr, nullptr)) {
-    printf("Error create a rendered font\n%s\n", SDL_GetError());
-    exit(0);
-  }
-  SDL_SetRenderTarget(sdlgame::display::renderer.get(), nullptr);
-  SDL_DestroyTexture(tmp);
   SDL_FreeSurface(surface);
   return res;
 }
 int Font::get_height() const { return height; }
-Font &
-Font::operator=(const Font &other) {
-  this->height = other.get_height();
-  this->font = other.font;
-  __font_pool[this->font]++;
-  return *this;
-}
-Font::~Font() {
-  __font_pool[this->font]--;
-  if (__font_pool.at(this->font) <= 0) {
-    __font_pool.erase(this->font);
-    TTF_CloseFont(this->font);
-  }
-  this->font = 0;
-}
+
 } // namespace sdlgame::font
