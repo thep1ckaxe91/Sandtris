@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include <SDL_filesystem.h>
 
 void sdlgame::init()
 {
@@ -23,7 +24,7 @@ void sdlgame::quit()
     TTF_Quit();
     SDL_Quit();
 }
-std::string sdlgame::get_base_path()
+fs::path sdlgame::get_base_path()
 {
-    return std::string(SDL_GetBasePath());
+    return SDL_GetBasePath();
 }

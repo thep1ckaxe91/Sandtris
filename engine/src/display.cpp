@@ -21,7 +21,7 @@ sdlgame::math::Vector2 resolution;
  * @return a surface that represent the window, what action affect this window
  * will affect what display on screen
  */
-sdlgame::surface::Surface &set_mode(int width, int height, Uint32 flags) {
+sdlgame::surface::Surface &set_mode(int width, int height, uint32_t flags) {
   if (width == 0 || height == 0) {
     SDL_DisplayMode DM;
     SDL_GetDesktopDisplayMode(0, &DM);

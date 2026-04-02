@@ -1,19 +1,22 @@
 #include "event.hpp"
+#include "constants.hpp"
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 namespace sdlgame::event {
 
-std::vector<Event> current_events;
+static constexpr size_t EVENT_POLL_LIMIT = 50;
 
-Event tmp;
+static Event tmp;
 Event::Event() = default;
 Event::Event(SDL_Event e) {
-  tmp_e = e;
+  sdl_event = e;
   type = e.type;
   // TODO: leave these here in case need, now type only is good enough
-  // but need refactor for future scale if needed (at that point just move to SDL3)
+  // but need refactor for future scale if needed (at that point just move to
+  // SDL3)
 
   if (e.type == SDL_WINDOWEVENT) {
     timestamp = e.window.timestamp;
@@ -49,19 +52,30 @@ int64_t Event::operator[](std::string key) {
   }
 }
 std::vector<Event> &get() {
+
+  static std::vector<Event> current_events{EVENT_POLL_LIMIT};
   current_events.clear();
+
+  if (current_events.capacity() < EVENT_POLL_LIMIT) // unlikely?
+    current_events.reserve(EVENT_POLL_LIMIT);
+
   SDL_Event e;
-  // while (SDL_PollEvent(&e))
-  for (int i = 1; i <= 30; i++) {
+  // while (SDL_PollEvent(&e)) // tried this, but seem like there're problem with event polling limit
+  for (int i = 0; i < EVENT_POLL_LIMIT; i++) {
     if (!SDL_PollEvent(&e))
       break;
     current_events.push_back(Event(e));
   }
   return current_events;
 }
-// please only use this for user event
-void post(Uint32 event_type) {
-  tmp.tmp_e.type = event_type;
-  SDL_PushEvent(&tmp.tmp_e);
+
+void post(uint32_t event_type) {
+
+  if (event_type <= USEREVENT) {
+    std::cerr << "WARNING: Posting non-user event type\n";
+  }
+  tmp.sdl_event.type = event_type;
+
+  SDL_PushEvent(&tmp.sdl_event);
 }
 } // namespace sdlgame::event

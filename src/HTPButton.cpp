@@ -1,25 +1,20 @@
 #include "HTPButton.hpp"
 #include "HowToPlay.hpp"
 #include "scene_transitions.hpp"
-HTPButton::HTPButton(Game &game)
-{
-    this->game = &game;
-    set_images(this->game->images.htp_button_idle, this->game->images.htp_button_hover,this->game->images.htp_button_click);
-    this->rect = (*this->image).getRect();
+#include <memory>
+HTPButton::HTPButton(Game &game) {
+  game = &game;
+  set_images(game->images.htp_button_idle,
+             game->images.htp_button_hover,
+             game->images.htp_button_click);
+  rect = (*image).getRect();
 }
 HTPButton::HTPButton() = default;
-void HTPButton::update()
-{
-    Button::update();
-}
-void HTPButton::handle_event(Event &event)
-{
-    Button::handle_event(event);
-}
-void HTPButton::on_click()
-{
-    InFade *in = new InFade(1);
-    OutFade *out = new OutFade(1);
-    HowToPlay *next = new HowToPlay(*this->game);
-    this->game->add_scene(out,next,in);
+void HTPButton::update() { Button::update(); }
+void HTPButton::handle_event(Event &event) { Button::handle_event(event); }
+void HTPButton::on_click() {
+  auto in = std::make_unique<InFade>(1);
+  auto out = std::make_unique<OutFade>(1);
+  auto next = std::make_unique<HowToPlay>(*game);
+  game->add_scene(std::move(out), std::move(next), std::move(in));
 }

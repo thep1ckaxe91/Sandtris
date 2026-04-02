@@ -1,9 +1,8 @@
 #include "mixer.hpp"
 #include "stdio.h"
-#include "string"
+#include <SDL2/SDL_mixer.h>
 
 namespace sdlgame::mixer {
-std::map<Mix_Chunk *, int> __chunk_pool;
 void set_num_channels(int count) { Mix_AllocateChannels(count); }
 /**
  * @param freq freqency of the audio
@@ -16,7 +15,7 @@ void set_num_channels(int count) { Mix_AllocateChannels(count); }
  * Init the mixer module, it not guarantee that all flag can be sucessfully init
  * since it depend on what in the os
  */
-void init(int freq, Uint16 size, int channels, int buffer) {
+void init(int freq, uint16_t size, int channels, int buffer) {
   size = (size == 16 ? AUDIO_S16SYS : AUDIO_F32SYS);
   if ((Mix_Init(MIX_INIT_MP3) & MIX_INIT_MP3) != MIX_INIT_MP3) {
     printf("Failed to init mp3 type\nErr:%s\n", Mix_GetError());
@@ -41,35 +40,33 @@ int convert_volume_value(float value) {
 }
 
 Channel::Channel(int id) {
-  this->id = id;
-  this->volume = 1;
+  id = id;
+  volume = 1;
 }
 void Channel::play(Sound sound, int loops, int maxtime_ms, int fade_ms) {
-  if (Mix_FadeInChannelTimed(this->id, sound.chunk, loops, fade_ms,
-                             maxtime_ms) == -1) {
-    printf("Cant play sound\nErr:%s\n", Mix_GetError());
+  if (Mix_FadeInChannelTimed(id, sound.chunk.get(), loops, fade_ms,
+                             maxtime_ms) == -1) [[unlikely]] {
+    printf("No channel available\nErr:%s\n", Mix_GetError());
     exit(0);
   }
 }
 void Channel::set_volume(float value) {
-  Mix_Volume(this->id, convert_volume_value(value));
+  Mix_Volume(id, convert_volume_value(value));
 }
-int Channel::get_volume() { return Mix_Volume(this->id, -1); }
+int Channel::get_volume() { return Mix_Volume(id, -1); }
 
 Sound::Sound() {}
-Sound::Sound(std::string path) {
-  chunk = Mix_LoadWAV(path.c_str());
-  if (chunk == nullptr) {
+Sound::Sound(fs::path path) {
+  auto new_chunk = Mix_LoadWAV(path.c_str());
+  if (!new_chunk) [[unlikely]] {
     printf("Cant load track\nErr:%s\n", Mix_GetError());
     exit(0);
   }
-  __chunk_pool[this->chunk] = 1;
+  chunk.reset(new_chunk, Mix_FreeChunk);
 }
 Sound &Sound::operator=(const Sound &oth) {
-  this->chunk = oth.chunk;
-  this->channel = oth.channel;
-  this->volume = oth.volume;
-  __chunk_pool[this->chunk]++;
+  chunk = oth.chunk;
+  volume = oth.volume;
   return *this;
 }
 /**
@@ -79,33 +76,25 @@ Sound &Sound::operator=(const Sound &oth) {
  * @param fade_ms fade in time in miliseconds
  */
 Channel Sound::play(int loops, int maxtime_ms, int fade_ms) {
-  this->channel = Mix_FadeInChannelTimed(-1, chunk, loops, fade_ms, maxtime_ms);
-  if (this->channel == -1) {
-    printf("cant play sound correctly\nErr:%s\n", Mix_GetError());
+  channel = Mix_FadeInChannelTimed(-1, chunk.get(), loops, fade_ms, maxtime_ms);
+  if (channel == -1) [[unlikely]] {
+    printf("No channel available\nErr:%s\n", Mix_GetError());
     // exit(0);
   }
-  return Channel(this->channel);
+  return Channel(channel);
 }
-void Sound::load(std::string path) {
-  if (chunk != nullptr)
-    Mix_FreeChunk(chunk);
-  chunk = Mix_LoadWAV(path.c_str());
-  if (chunk == nullptr) {
+void Sound::load(const fs::path &path) {
+  auto new_chunk = Mix_LoadWAV(path.c_str());
+  if (!new_chunk) [[unlikely]] {
     printf("Cant load track\nErr:%s\n", Mix_GetError());
     exit(0);
   }
+
+  chunk.reset(new_chunk, Mix_FreeChunk);
 }
-void Sound::fadeout(int ms) { Mix_FadeOutChannel(this->channel, ms); }
+void Sound::fadeout(int ms) { Mix_FadeOutChannel(channel, ms); }
 void Sound::set_volume(float value) {
-  Mix_VolumeChunk(chunk, convert_volume_value(value));
+  Mix_VolumeChunk(chunk.get(), convert_volume_value(value));
 }
-int Sound::get_volume() const { return Mix_VolumeChunk(chunk, -1); }
-Sound::~Sound() {
-  __chunk_pool[this->chunk]--;
-  if (__chunk_pool.at(this->chunk) <= 0) {
-    if (chunk != nullptr)
-      Mix_FreeChunk(chunk);
-  }
-  this->chunk = 0;
-}
+int Sound::get_volume() const { return Mix_VolumeChunk(chunk.get(), -1); }
 } // namespace sdlgame::mixer

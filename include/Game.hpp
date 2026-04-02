@@ -1,10 +1,11 @@
 #ifndef GAME_HPP
 #define GAME_HPP
-#include "engine.hpp"
+#include "AudioManager.hpp"
 #include "Images.hpp"
 #include "Scene.hpp"
 #include "SceneTransition.hpp"
-#include "AudioManager.hpp"
+#include "constant.hpp"
+#include "engine.hpp"
 
 class Scene;
 /**
@@ -14,38 +15,43 @@ class Scene;
 
  * in and out transition memory management is your responsibility
 */
-class Game
-{
+class Game {
 protected:
-    bool gameactive;
-    SceneTransition *in;
-    SceneTransition *out;
-    Scene *next;
-    SceneCommand command;
+  std::unique_ptr<SceneTransition> in;
+  std::unique_ptr<SceneTransition> out;
+  std::unique_ptr<Scene> next;
+  SceneCommand command;
+  bool gameactive;
+
 public:
-    std::vector<Scene *> scene_list;
-    Images images;
-    AudioManager audio_manager;
-    sdlgame::surface::Surface window; // window is an actual texture getting drawn on
-    sdlgame::surface::Surface window_object; // a nullptr texture surface, represent the actual window
-    sdlgame::time::Clock clock;
-    Vector2 window_draw_offset;
-    Game();
-    virtual void draw() = 0;
-    virtual void update() = 0;
-    virtual void run() = 0;
-    Scene *current_scene();
-    bool out_transitioning();
-    bool in_transitioning();
-    // template <class T1, class T2, class T3>
-    // void add_scene(T1 *out, T2 *next, T3 *in);
-    void add_scene(SceneTransition *out, Scene *scene, SceneTransition *in);
-    // completely goback
-    void remove_scene(SceneTransition* out, SceneTransition* in);
-    void clear_scene(SceneTransition *out, Scene *scene, SceneTransition *in);
-    // remove a scene and add another
-    // template <class T1, class T2, class T3>
-    // void pop_scene(T1* out, T2* next, T3* in);
-    void pop_scene(SceneTransition* out, Scene* next, SceneTransition* in);
+  std::vector<std::unique_ptr<Scene>> scene_list;
+  Images images;
+  AudioManager audio_manager;
+  sdlgame::surface::Surface
+      window; // window is an actual texture getting drawn on
+  sdlgame::surface::Surface
+      window_object; // a nullptr texture surface, represent the actual window
+  sdlgame::time::Clock clock;
+  Vector2 window_draw_offset;
+  Game();
+  virtual void draw() = 0;
+  virtual void update() = 0;
+  virtual void run() = 0;
+  Scene *current_scene();
+  bool out_transitioning();
+  bool in_transitioning();
+  void add_scene(std::unique_ptr<SceneTransition> out,
+                 std::unique_ptr<Scene> scene,
+                 std::unique_ptr<SceneTransition> in);
+  // completely goback
+  void remove_scene(std::unique_ptr<SceneTransition> out,
+                    std::unique_ptr<SceneTransition> in);
+  void clear_scene(std::unique_ptr<SceneTransition> out,
+                   std::unique_ptr<Scene> scene,
+                   std::unique_ptr<SceneTransition> in);
+  void pop_scene(std::unique_ptr<SceneTransition> out,
+                 std::unique_ptr<Scene> scene,
+                 std::unique_ptr<SceneTransition> in);
+  virtual ~Game();
 };
 #endif

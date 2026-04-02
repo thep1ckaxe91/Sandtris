@@ -9,15 +9,15 @@ ShapeInfo::ShapeInfo(uint16_t m0, uint16_t m1, uint16_t m2, uint16_t m3, char sh
 }
 Tetrimino::Tetrimino(char shape, SandShift color)
 {
-    this->type = shape;
-    this->color = color;
-    this->mask =  ShapeInfoList.at(this->type).mask[0];
+    type = shape;
+    color = color;
+    mask =  ShapeInfoList.at(type).mask[0];
 }
 Tetrimino::Tetrimino()=default;
 
 void Tetrimino::rotate()
 {
-    this->current_rotation++;
-    this->current_rotation%=4;
-    this->mask = ShapeInfoList.at(this->type).mask[this->current_rotation];
+    current_rotation++;
+    current_rotation%=4;
+    mask = ShapeInfoList.at(type).mask[current_rotation];
 }

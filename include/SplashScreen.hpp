@@ -2,7 +2,7 @@
 #define SPLASH_SCREEN_HPP
 #include "Animation.hpp"
 #include "Scene.hpp"
-#include "scene_transitions.hpp"
+
 class SplashScreen : public Scene
 {
 private:

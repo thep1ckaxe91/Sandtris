@@ -1,25 +1,20 @@
 #include "MenuButton.hpp"
-#include "scene_transitions.hpp"
 #include "MainMenu.hpp"
-MenuButton::MenuButton(Game &game)
-{
-    this->game = &game;
-    this->set_images(this->game->images.menu_button_idle,this->game->images.menu_button_hover, this->game->images.menu_button_click);
-    this->rect = (*this->image).getRect();
+#include "scene_transitions.hpp"
+#include <memory>
+MenuButton::MenuButton(Game &game) {
+  game = &game;
+  set_images(game->images.menu_button_idle,
+                   game->images.menu_button_hover,
+                   game->images.menu_button_click);
+  rect = (*image).getRect();
 }
-MenuButton::MenuButton()=default;
-void MenuButton::handle_event(Event &event)
-{
-    Button::handle_event(event);
+MenuButton::MenuButton() = default;
+void MenuButton::handle_event(Event &event) { Button::handle_event(event); }
+void MenuButton::on_click() {
+  auto out = std::make_unique<OutSwipeDown>();
+  auto in = std::make_unique<InSwipeDown>();
+  auto next = std::make_unique<MainMenu>(*game);
+  game->clear_scene(std::move(out), std::move(next), std::move(in));
 }
-void MenuButton::on_click()
-{
-    OutSwipeDown *out = new OutSwipeDown();
-    InSwipeDown *in = new InSwipeDown();
-    MainMenu *next = new MainMenu(*game);
-    this->game->clear_scene(out,next,in);
-}
-void MenuButton::update()
-{
-    Button::update();
-}
+void MenuButton::update() { Button::update(); }

@@ -1,25 +1,20 @@
 #include "BackButton.hpp"
 #include "Game.hpp"
 #include "scene_transitions.hpp"
+#include <memory>
 
-BackButton::BackButton(Game &game)
-{
-    this->game = &game;
-    this->set_images(this->game->images.back_button_idle,this->game->images.back_button_hover,this->game->images.back_button_click);
-    this->rect = (*this->image).getRect();
+BackButton::BackButton(Game &game) {
+  game = &game;
+  set_images(game->images.back_button_idle,
+                   game->images.back_button_hover,
+                   game->images.back_button_click);
+  rect = (*image).getRect();
 }
-BackButton::BackButton(){}
-void BackButton::handle_event(Event &event)
-{
-    Button::handle_event(event);
+BackButton::BackButton() {}
+void BackButton::handle_event(Event &event) { Button::handle_event(event); }
+void BackButton::on_click() {
+  auto out = std::make_unique<OutFade>(0.5);
+  auto in = std::make_unique<InFade>(0.5);
+  game->remove_scene(std::move(out), std::move(in));
 }
-void BackButton::on_click()
-{
-    OutFade *out = new OutFade(0.5);
-    InFade *in = new InFade(0.5);
-    this->game->remove_scene(out,in);
-}
-void BackButton::update()
-{
-    Button::update();
-}
+void BackButton::update() { Button::update(); }

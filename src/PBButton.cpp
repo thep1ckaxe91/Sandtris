@@ -1,28 +1,23 @@
 #include "PBButton.hpp"
 #include "PersonalBest.hpp"
 #include "scene_transitions.hpp"
-PBButton::PBButton(Game &game)
-{
-    this->game = &game;
-    this->set_images(this->game->images.pb_button_idle,this->game->images.pb_button_hover,this->game->images.pb_button_click);
-    this->rect = (*this->image).getRect();
+#include <memory>
+PBButton::PBButton(Game &game) {
+  game = &game;
+  set_images(game->images.pb_button_idle,
+                   game->images.pb_button_hover,
+                   game->images.pb_button_click);
+  rect = (*image).getRect();
 }
 PBButton::PBButton() = default;
-void PBButton::on_click()
-{
-    InFade *in = new InFade(1);
-    OutFade *out = new OutFade(1);
-    PersonalBest *next = new PersonalBest(*game);
+void PBButton::on_click() {
+  auto in = std::make_unique<InFade>(1);
+  auto out = std::make_unique<OutFade>(1);
+  auto next = std::make_unique<PersonalBest>(*game);
 
-    this->game->add_scene(out,next,in);
+  game->add_scene(std::move(out), std::move(next), std::move(in));
 }
 
-void PBButton::update()
-{
-    Button::update();
-}
+void PBButton::update() { Button::update(); }
 
-void PBButton::handle_event(Event &event)
-{
-    Button::handle_event(event);
-}
+void PBButton::handle_event(Event &event) { Button::handle_event(event); }

@@ -14,16 +14,16 @@ GameOver::GameOver(Game &game, int new_score) : Scene(game)
 
     score_font = Font(font_path, FONT_SIZE);
 
-    this->new_score = new_score;
-    this->pb = get_personal_best();
+    new_score = new_score;
+    pb = get_personal_best();
 
-    if (this->new_score > this->pb)
+    if (new_score > pb)
     {
         set_personal_best(new_score);
         pb_surf = score_font.render("NEW PB !", 0, "white");
     }
     else
-        pb_surf = score_font.render(std::to_string(this->pb), 0, "white");
+        pb_surf = score_font.render(std::to_string(pb), 0, "white");
 
     new_score_surf = score_font.render(std::to_string(new_score), 0, "white");
     new_score_rect = new_score_surf.getRect();
@@ -46,10 +46,10 @@ void GameOver::update()
 
 void GameOver::draw()
 {
-    this->game->window.blit(this->game->images.gameover_screen, Vector2());
-    this->game->window.blit((*this->menu.image), menu.rect.getTopLeft());
-    this->game->window.blit((*this->retry.image), retry.rect.getTopLeft());
+    game->window.blit(game->images.gameover_screen, Vector2());
+    game->window.blit((*menu.image), menu.rect.getTopLeft());
+    game->window.blit((*retry.image), retry.rect.getTopLeft());
 
-    this->game->window.blit(this->new_score_surf, new_score_rect.getTopLeft());
-    this->game->window.blit(this->pb_surf, pb_rect.getTopLeft());
+    game->window.blit(new_score_surf, new_score_rect.getTopLeft());
+    game->window.blit(pb_surf, pb_rect.getTopLeft());
 }
