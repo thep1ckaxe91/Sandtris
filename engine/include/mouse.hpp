@@ -1,18 +1,14 @@
 #ifndef SDLGAME_MOUSE_
 #define SDLGAME_MOUSE_
-#include <vector>
+#include <span>
 #include "math.hpp"
 namespace sdlgame{
     namespace mouse
     {
-
-        extern sdlgame::math::Vector2 last_mouse_pos;
-        extern bool isVisible;
-
-        sdlgame::math::Vector2 get_pos();
-        std::vector<bool> get_pressed();
-        sdlgame::math::Vector2 get_rel();
-        void set_visible(int enable);
+        math::Vector2 get_pos();
+        std::span<const bool, 5> get_pressed();
+        math::Vector2 get_rel();
+        void set_visible(bool enable);
         bool get_visible();
     }
 }

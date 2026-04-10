@@ -7,7 +7,7 @@ StartButton::StartButton(Game &game) : Button() {
   set_images(game->images.start_button_idle,
                    game->images.start_button_hover,
                    game->images.start_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 StartButton::StartButton() = default;
 void StartButton::handle_event(Event &event) { Button::handle_event(event); }

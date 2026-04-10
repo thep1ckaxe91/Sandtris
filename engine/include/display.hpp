@@ -3,15 +3,10 @@
 #include "SDL2/SDL_render.h"
 #include "SDL2/SDL_video.h"
 #include "math.hpp"
-#include "memory.hpp"
 #include "surface.hpp"
 
 namespace sdlgame::display {
-extern sdlgame::memory::SDLUniquePtr<SDL_Window> window;
-extern sdlgame::memory::SDLUniquePtr<SDL_Renderer> renderer;
-extern sdlgame::surface::Surface win_surf;
-extern sdlgame::math::Vector2 resolution;
-extern bool isInit;
+
 
 /**
  * Setup a window surface for use
@@ -37,7 +32,7 @@ void fullscreen_desktop();
 bool is_fullscreen();
 sdlgame::surface::Surface &get_surf();
 // get the actual size in pixel of the window
-sdlgame::math::Vector2 get_window_size();
+math::Vector2 get_window_size();
 // set client window area, not resolution
 void set_window_size(int w, int h);
 void set_window_pos(int x, int y);

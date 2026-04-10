@@ -20,7 +20,6 @@ static void print_bench_stat() {
   }
 }
 
-// If global declare is bad, i make MY OWN global declare >:)
 class Sandtris : public Game {
 public:
   bool gameactive = 1;
@@ -30,8 +29,10 @@ public:
         sdlgame::display::set_mode(RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
                                    0 | sdlgame::MAXIMIZED | sdlgame::RESIZABLE);
     window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
-    sdlgame::display::get_window_size(); // this is intended to assign win_surf
-                                         // a value it suppose to be
+    sdlgame::display::get_window_size(); // TODO: this is intended to assign
+                                         // proxy_surf a value it suppose to be,
+                                         // but there should be a way to make
+                                         // this unnecessary
 
     // comment this so that i get a free fps view at the caption
     // auto res = load_window_info();
@@ -49,9 +50,6 @@ public:
     sdlgame::display::set_icon(
         (base_path + "assets/image/icon/icon.png").c_str());
 
-    // cout<<images.start_button_idle.texture<<"
-    // "<<images.start_button_hover.texture<<"
-    // "<<images.start_button_click.texture<<endl; exit(0);
   }
   void update() {
     Timer t("update");
@@ -108,7 +106,8 @@ public:
     studiosc.load(base_path + "assets/animations/splash/studio/");
     studiosc.play();
     auto in = std::make_unique<InFade>();
-    std::unique_ptr<Scene> next = std::make_unique<StudioSC>(*this, studiosc, 8);
+    std::unique_ptr<Scene> next =
+        std::make_unique<StudioSC>(*this, studiosc, 8);
     add_scene(nullptr, std::move(next), std::move(in));
     bool running = true;
     while (running) {

@@ -10,7 +10,6 @@ namespace fs = std::filesystem;
 namespace sdlgame {
     namespace music
     {
-        extern memory::SDLUniquePtr<Mix_Music> music;
         void load(const fs::path& path);
         void play(int loop = 0, int fadein_ms=0);
         void pause();
@@ -19,7 +18,7 @@ namespace sdlgame {
         bool is_playing();
         double duration();
         void set_volume(float value);
-        void get_volume();
+        float get_volume();
         int convert_volume_value(float value);
     }
 }

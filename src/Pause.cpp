@@ -3,7 +3,7 @@ Pause::Pause(Game &game) : Scene(game)
 {
     message_font = Font(font_path,FONT_SIZE);
     message_surf = message_font.render("Progress will be save",0,"white");
-    message_rect = message_surf.getRect();
+    message_rect = message_surf.get_rect();
     message_rect.setCenter(RESOLUTION_WIDTH/2,RESOLUTION_HEIGHT-message_rect.getHeight()/2 - 2);
     menu_button = MenuButton(game);
     menu_button.rect.setCenter(55,64);
@@ -20,7 +20,7 @@ Pause::Pause() = default;
 void Pause::render_message(std::string new_message)
 {
     message_surf = message_font.render(new_message,0,"white");
-    message_rect = message_surf.getRect();
+    message_rect = message_surf.get_rect();
     message_rect.setCenter(RESOLUTION_WIDTH/2,RESOLUTION_HEIGHT-message_rect.getHeight()/2 - 2);
 }
 void Pause::display_message()

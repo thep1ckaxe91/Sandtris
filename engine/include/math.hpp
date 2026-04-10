@@ -27,7 +27,6 @@ public:
   double x, y;
   Vector2() = default;
   Vector2(const SDL_Point &p);
-  Vector2(Vector2 &&) = default;
   Vector2(double, double);
   Vector2(const Vector2 &) = default;
   Vector2 &operator=(const Vector2 &) = default;

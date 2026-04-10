@@ -1,8 +1,8 @@
 #include "random.hpp"
 #include <random>
 namespace sdlgame::random {
-std::random_device rd;
-std::mt19937 engine = std::mt19937(rd());
+static std::random_device rd;
+static std::mt19937 engine = std::mt19937(rd());
 
 int randint(int l, int r) {
   if (l > r)
@@ -14,5 +14,8 @@ int randint(int l, int r) {
 /**
  * return a random value between 0 and 1
  */
-float randf() { return randint(0, 1000000) / 1000000.0; }
+float randf() {
+  std::uniform_real_distribution<> tmp(0, 1);
+  return tmp(engine);
+}
 } // namespace sdlgame::random

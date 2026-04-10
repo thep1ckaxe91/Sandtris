@@ -8,7 +8,7 @@ BackButton::BackButton(Game &game) {
   set_images(game->images.back_button_idle,
                    game->images.back_button_hover,
                    game->images.back_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 BackButton::BackButton() {}
 void BackButton::handle_event(Event &event) { Button::handle_event(event); }

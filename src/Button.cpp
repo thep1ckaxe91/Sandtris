@@ -14,7 +14,7 @@ void Button::set_images(Surface &idle, Surface &hover, Surface &click)
     hover = &hover;
     click = &click;
     image = idle;
-    rect = (*image).getRect();
+    rect = (*image).get_rect();
 }
 
 void Button::handle_event(Event &event)
@@ -31,7 +31,7 @@ void Button::handle_event(Event &event)
 }
 void Button::update()
 {
-    sdlgame::math::Vector2 mouse_pos = sdlgame::mouse::get_pos();
+    math::Vector2 mouse_pos = sdlgame::mouse::get_pos();
     if (rect.collidepoint(mouse_pos))
         hovering = 1;
     else

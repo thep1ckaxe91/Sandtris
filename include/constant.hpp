@@ -70,7 +70,7 @@ const Color GREEN_SAND_COLOR = Color("forest green");
 const Color YELLOW_SAND_COLOR = Color("gold");
 const Color BLUE_SAND_COLOR = Color("dodger blue");
 
-const sdlgame::math::Vector2 spawn_pos = sdlgame::math::Vector2(40, -32);
+const math::Vector2 spawn_pos = math::Vector2(40, -32);
 const Rect next_shape_display_area = Rect(116, 25, 32, 31);
 const Rect next_shape_display_rect = Rect(120, 28, 24, 24);
 const Rect left_barrier = Rect(8, -32, 8, int(RESOLUTION_HEIGHT + 32));

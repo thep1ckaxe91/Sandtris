@@ -1,5 +1,7 @@
 #include "engine.hpp"
-#include <SDL_filesystem.h>
+#include "key.hpp"
+#include <SDL_image.h>
+
 
 void sdlgame::init()
 {
@@ -14,11 +16,10 @@ void sdlgame::init()
     }
     sdlgame::image::init();
     sdlgame::font::init();
+    sdlgame::key::init();
 }
 void sdlgame::quit()
 {
-    sdlgame::display::renderer.reset();
-    sdlgame::display::window.reset();
     IMG_Quit();
     Mix_Quit();
     TTF_Quit();

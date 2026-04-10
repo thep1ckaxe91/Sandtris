@@ -1,56 +1,37 @@
 #include "mouse.hpp"
-#include "SDL2/SDL_mouse.h"
 #include "display.hpp"
 #include "math.hpp"
-#include <vector>
+#include <SDL2/SDL.h>
 
 namespace sdlgame::mouse {
-sdlgame::math::Vector2 last_mouse_pos;
-bool isVisible;
-sdlgame::math::Vector2 get_pos() {
-  int x, y;
-  SDL_GetMouseState(&x, &y);
-  double reso_ratio =
-      sdlgame::display::resolution.x / sdlgame::display::resolution.y;
-  double win_ratio =
-      sdlgame::display::win_surf.size.x / sdlgame::display::win_surf.size.y;
-  sdlgame::math::Vector2 offset(
-      (win_ratio > reso_ratio) *
-          (sdlgame::display::win_surf.size.x -
-           sdlgame::display::win_surf.size.y * reso_ratio) /
-          2,
-      (win_ratio < reso_ratio) *
-          (sdlgame::display::win_surf.size.y -
-           sdlgame::display::win_surf.size.x / reso_ratio) /
-          2);
-  // how much did the window grow
-  double scale = (win_ratio > reso_ratio ? sdlgame::display::win_surf.size.y /
-                                               sdlgame::display::resolution.y
-                                         : sdlgame::display::win_surf.size.x /
-                                               sdlgame::display::resolution.x);
-  return (sdlgame::math::Vector2(x, y) - offset) * (1 / scale);
-}
-std::vector<bool> get_pressed() {
-  int numButtons = 32;
-  uint32_t buttonState = SDL_GetMouseState(nullptr, nullptr);
 
-  std::vector<bool> buttons(numButtons);
-  for (int i = 0; i < numButtons; ++i) {
-    buttons[i] = buttonState & (1 << i);
-  }
-  return buttons;
+math::Vector2 get_pos() {
+  int win_x, win_y;
+  SDL_GetMouseState(&win_x, &win_y);
+  float logicalX, logicalY;
+
+  SDL_RenderWindowToLogical(display::get_renderer(), win_x, win_y, &logicalX,
+                            &logicalY);
+
+  return {logicalX, logicalY};
 }
-sdlgame::math::Vector2 get_rel() {
-  if (last_mouse_pos == sdlgame::math::Vector2(-1, -1))
-    return sdlgame::math::Vector2(0, 0);
+std::span<const bool, 5> get_pressed() {
+  static std::array<bool, 5> inputState;
+  uint32_t buttonState = SDL_GetMouseState(nullptr, nullptr);
+  inputState[0] = (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0;
+  inputState[1] = (buttonState & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0;
+  inputState[2] = (buttonState & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0;
+  inputState[3] = (buttonState & SDL_BUTTON(SDL_BUTTON_X1)) != 0;
+  inputState[4] = (buttonState & SDL_BUTTON(SDL_BUTTON_X2)) != 0;
+  return inputState;
+}
+math::Vector2 get_rel() {
   int x, y;
-  SDL_GetMouseState(&x, &y);
-  sdlgame::math::Vector2 res = sdlgame::math::Vector2(x, y) - last_mouse_pos;
-  last_mouse_pos = sdlgame::math::Vector2(x, y);
-  return res;
+  SDL_GetRelativeMouseState(&x, &y);
+  return {static_cast<double>(x), static_cast<double>(y)};
 }
-void set_visible(int enable) {
-  isVisible = SDL_ShowCursor(enable);
+void set_visible(bool enable) {
+  SDL_ShowCursor(enable ? SDL_ENABLE : SDL_DISABLE);
 }
-bool get_visible() { return isVisible; }
+bool get_visible() { return SDL_ShowCursor(SDL_QUERY) == SDL_ENABLE; }
 } // namespace sdlgame::mouse

@@ -12,7 +12,7 @@ GamePlay::GamePlay(Game &game) : Scene(game) {
   score_font =
       Font(base_path + "assets/fonts/sandtris pixel.ttf", FONT_SIZE);
   score_surf = score_font.render("0", 0, "white");
-  score_rect = score_surf.getRect();
+  score_rect = score_surf.get_rect();
   score_rect.setCenter(score_display_center);
 
   next_display_color = grid.next.color;
@@ -72,7 +72,7 @@ void GamePlay::handle_event(sdlgame::event::Event &event) {
   if (event.type == SCORING) {
     score_surf =
         score_font.render(std::to_string(grid.get_score()), 0, "white");
-    score_rect = score_surf.getRect();
+    score_rect = score_surf.get_rect();
     score_rect.setCenter(score_display_center);
     if (get_personal_best() < grid.get_score())
       set_personal_best(grid.get_score());

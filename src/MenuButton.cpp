@@ -7,7 +7,7 @@ MenuButton::MenuButton(Game &game) {
   set_images(game->images.menu_button_idle,
                    game->images.menu_button_hover,
                    game->images.menu_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 MenuButton::MenuButton() = default;
 void MenuButton::handle_event(Event &event) { Button::handle_event(event); }

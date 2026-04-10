@@ -8,7 +8,7 @@ RetryButton::RetryButton(Game &game) {
   set_images(game->images.retry_button_idle,
                    game->images.retry_button_hover,
                    game->images.retry_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 RetryButton::RetryButton() = default;
 void RetryButton::handle_event(Event &event) { Button::handle_event(event); }

@@ -54,7 +54,7 @@ void MainMenu::update()
 }
 void MainMenu::draw()
 {
-    game->window.blit(game->images.mainmenu_background, sdlgame::math::Vector2());
+    game->window.blit(game->images.mainmenu_background, math::Vector2());
     game->window.blit(*start_button.image, start_button.rect.getTopLeft());
     game->window.blit(*credit_button.image, credit_button.rect.getTopLeft());
     game->window.blit(*quit_button.image, quit_button.rect.getTopLeft());
