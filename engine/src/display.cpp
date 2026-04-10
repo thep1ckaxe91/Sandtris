@@ -2,16 +2,18 @@
 #include "SDL2/SDL_hints.h"
 #include "SDL2/SDL_image.h"
 #include "math.hpp"
+#include "memory.hpp"
 #include "surface.hpp"
-#include <stdio.h>
-
+#include <iostream>
 namespace sdlgame::display {
+namespace {
 sdlgame::memory::SDLUniquePtr<SDL_Window> window = nullptr;
 sdlgame::memory::SDLUniquePtr<SDL_Renderer> renderer = nullptr;
 
-sdlgame::surface::Surface win_surf;
+sdlgame::surface::Surface proxy_surf;
 bool isInit;
-sdlgame::math::Vector2 resolution;
+math::Vector2 resolution;
+} // namespace
 
 /**
  * Setup a window surface for use
@@ -28,35 +30,34 @@ sdlgame::surface::Surface &set_mode(int width, int height, uint32_t flags) {
     width = DM.w;
     height = DM.h;
   }
-  resolution = sdlgame::math::Vector2(width, height);
-  if (!SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, "direct3d11",
-                               SDL_HINT_NORMAL)) {
-    printf("Set renderer driver hint failed\n");
-  }
-  window.reset(SDL_CreateWindow("SDLgame Custom Engine", SDL_WINDOWPOS_CENTERED,
+
+  resolution = math::Vector2(width, height);
+
+  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+
+  window.reset(SDL_CreateWindow("SDLgame", SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED, width, height, flags));
-  if (window == nullptr) {
-    printf("Failed to create a window object\nErr: %s\n", SDL_GetError());
-    exit(0);
+
+  if (!window) {
+    std::cerr << "Fatal: Window creation failed: " << SDL_GetError() << "\n";
+    exit(1);
   }
+
   renderer.reset(SDL_CreateRenderer(
-      window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE));
-  if (renderer == nullptr) {
-    printf("Failed to create a renderer\nErr: %s\n", SDL_GetError());
-    exit(0);
+      window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
+
+  if (!renderer) {
+    std::cerr << "Fatal: Renderer creation failed: " << SDL_GetError() << "\n";
+    exit(1);
   }
-  SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,
-              "nearest"); // TODO: this could very well be a graphic option
-  SDL_SetHint(SDL_HINT_RENDER_VSYNC,
-              "0"); // TODO: same, can be a settings option
 
   SDL_RenderSetLogicalSize(renderer.get(), width, height);
-  // printf("Initialize window and renderer: %p %p\n",window,renderer);
-  win_surf.texture.reset(); // THIS IS INTENDED!
-  win_surf.size.x = width;
-  win_surf.size.y = height;
-  return win_surf;
+
+  // Fulfill the Pygame syntax requirement
+  proxy_surf.size = math::Vector2(width, height);
+  return proxy_surf;
 }
+
 bool set_render_scale_quality(bool linear) {
   if (linear)
     return SDL_SetHintWithPriority(SDL_HINT_RENDER_SCALE_QUALITY, "linear",
@@ -92,31 +93,31 @@ std::pair<int, int> get_window_pos() {
   SDL_GetWindowPosition(window.get(), &x, &y);
   return {x, y};
 }
-sdlgame::math::Vector2 get_window_size() {
+math::Vector2 get_window_size() {
   int w, h;
   SDL_GetWindowSize(window.get(), &w, &h);
   // SDL_GetWindowSurface(window.get());
-  return win_surf.size = sdlgame::math::Vector2(w, h);
+  return proxy_surf.size = math::Vector2(w, h);
 }
 
 void fullscreen_desktop() {
   SDL_SetWindowFullscreen(window.get(), SDL_WINDOW_FULLSCREEN_DESKTOP);
 }
-sdlgame::surface::Surface &get_surf() { return win_surf; }
+sdlgame::surface::Surface &get_surf() { return proxy_surf; }
 
 double get_width() {
-  if (win_surf.getWidth() == 0) {
+  if (proxy_surf.get_width() == 0) {
     printf("Display not yet set mode\n");
     exit(0);
   }
-  return win_surf.getWidth();
+  return proxy_surf.get_width();
 }
 double get_height() {
-  if (win_surf.getHeight() == 0) {
+  if (proxy_surf.get_height() == 0) {
     printf("Display not yet set mode\n");
     exit(0);
   }
-  return win_surf.getHeight();
+  return proxy_surf.get_height();
 }
 /**
  *  if set to true, the mouse will be confine to the window

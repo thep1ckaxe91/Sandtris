@@ -22,7 +22,7 @@ Slider::Slider(Vector2 topleft, float value, float slide_length,
 Slider::Slider() = default;
 void Slider::set_label(std::string text, Color color) {
   label_surf = label_font.render(text, 0, color);
-  label_rect = label_surf.getRect();
+  label_rect = label_surf.get_rect();
   label_rect.setMidRight(topleft);
 }
 void Slider::update() {

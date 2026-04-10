@@ -5,11 +5,11 @@
 GameOver::GameOver(Game &game, int new_score) : Scene(game)
 {
     menu = MenuButton(game);
-    menu.rect = (*menu.image).getRect();
+    menu.rect = (*menu.image).get_rect();
     menu.rect.setTopLeft(menu_button_pos);
 
     retry = RetryButton(game);
-    retry.rect = (*retry.image).getRect();
+    retry.rect = (*retry.image).get_rect();
     retry.rect.setTopLeft(retry_button_pos);
 
     score_font = Font(font_path, FONT_SIZE);
@@ -26,9 +26,9 @@ GameOver::GameOver(Game &game, int new_score) : Scene(game)
         pb_surf = score_font.render(std::to_string(pb), 0, "white");
 
     new_score_surf = score_font.render(std::to_string(new_score), 0, "white");
-    new_score_rect = new_score_surf.getRect();
+    new_score_rect = new_score_surf.get_rect();
     new_score_rect.setMidBottom(midbottom_newscore);
-    pb_rect = pb_surf.getRect();
+    pb_rect = pb_surf.get_rect();
     pb_rect.setMidBottom(midbottom_pb);
 }
 

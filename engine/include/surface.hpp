@@ -9,6 +9,9 @@
                            // future when the stage come
                            // This could be fix with template?
 
+// template<SDL_TextureAccess SurfType> ??
+// TMP book might be helpful, check it out first before refactor this for
+// template implementation
 namespace sdlgame::surface {
 /**
  * @brief since the problem mostly related to the heavy draw and surface manage
@@ -17,10 +20,13 @@ namespace sdlgame::surface {
  * set_mode is called
  */
 class Surface {
-public:
-  sdlgame::math::Vector2 size;
+private:
   sdlgame::memory::SDLUniquePtr<SDL_Texture> texture;
-  Surface();
+
+public:
+  math::Vector2 size;
+
+  Surface() = default;
   Surface(Surface &&) noexcept;
   Surface(int width, int height);
   Surface(const Surface &oth);
@@ -31,20 +37,21 @@ public:
   /**
    * Return a copy of the surface rect
    */
-  sdlgame::rect::Rect getRect() const;
+  rect::Rect get_rect() const;
+  SDL_Texture *getTexture() const;
   /**
    * Blit a surface onto this surface with position and size, leave size be
    * -1,-1 will be its original size the surface or image will stretch or shrink
    * acoording to the size
    */
-  void blit(const Surface &source, sdlgame::math::Vector2 pos,
-            sdlgame::math::Vector2 size = sdlgame::math::Vector2(-1, -1),
-            sdlgame::rect::Rect area = sdlgame::rect::Rect());
+  void blit(const Surface &source, math::Vector2 pos,
+            math::Vector2 size = math::Vector2(-1, -1),
+            rect::Rect area = rect::Rect());
   void fill(sdlgame::color::Color color);
-  sdlgame::math::Vector2 get_size() const;
-  double getWidth() const;
-  double getHeight() const;
-  ~Surface();
+  math::Vector2 get_size() const;
+  double get_width() const;
+  double get_height() const;
+  ~Surface() = default;
 };
 } // namespace sdlgame::surface
 

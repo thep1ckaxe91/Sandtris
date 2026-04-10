@@ -23,7 +23,7 @@ void init() {
 // sdlgame::surface::Surface img_transfer_surf;
 [[nodiscard]] sdlgame::surface::Surface load(const fs::path path) {
   SDL_Texture *tex =
-      IMG_LoadTexture(sdlgame::display::renderer.get(), path.c_str());
+      IMG_LoadTexture(sdlgame::display::get_renderer(), path.c_str());
   if (tex == nullptr) {
     printf("Cant load image\n%s\n", IMG_GetError());
     exit(0);

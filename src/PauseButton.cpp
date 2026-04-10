@@ -6,7 +6,7 @@ PauseButton::PauseButton(Game &game) {
   set_images(game->images.pause_button_idle,
                    game->images.pause_button_hover,
                    game->images.pause_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 PauseButton::PauseButton() = default;
 void PauseButton::update() { Button::update(); }

@@ -16,3 +16,18 @@ target_link_libraries(GameEngine PRIVATE
     SDL2_ttf::SDL2_ttf
     SDL2_mixer::SDL2_mixer
 )
+# this was generated in an attempt for compiler optimization for SIMD
+target_compile_options(GameEngine PRIVATE
+    $<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>>:
+        -O3
+        -ftree-vectorize 
+        -march=native 
+    >
+    
+    # Optional: Apply basic optimizations during Debug to keep the engine playable, 
+    # but keep debug symbols fully intact. 
+    $<$<CONFIG:Debug>:
+        -O0 
+        -g3
+    >
+)

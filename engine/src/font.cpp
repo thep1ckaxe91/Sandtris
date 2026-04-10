@@ -1,6 +1,5 @@
 #include "font.hpp"
 #include "color.hpp"
-#include "display.hpp"
 #include "stdio.h"
 #include "surface.hpp"
 #include <SDL2/SDL_ttf.h>
@@ -8,25 +7,22 @@
 
 namespace sdlgame::font {
 void init() {
-  if (TTF_Init()) {
+  if (TTF_Init()) [[unlikely]] {
     printf("Failed to init font\n%s\n", TTF_GetError());
-    exit(0);
-  } else {
-    printf("Font successfully initialized\n");
-    return;
+    exit(1);
   }
-}
-Font::Font() {
-  font = nullptr;
-  height = 0;
+  printf("Font successfully initialized\n");
+  return;
 }
 Font::Font(fs::path path, int size) {
   height = size;
-  auto font = TTF_OpenFont(path.c_str(), size);
-  if (!font) {
+  auto new_font = TTF_OpenFont(path.c_str(), size);
+  if (!new_font) {
     printf("Cant load font\n%s\n", TTF_GetError());
-    exit(0);
+    exit(1);
   }
+
+  font.reset(new_font, TTF_CloseFont);
 }
 
 /**
@@ -40,7 +36,7 @@ Font::Font(fs::path path, int size) {
  * then will only endline when use endline character
  *
  */
-sdlgame::surface::Surface Font::render(const std::string text,
+sdlgame::surface::Surface Font::render(const std::string &text,
                                        AntiAlias antialias,
                                        sdlgame::color::Color color,
                                        uint32_t wrap_length,
@@ -48,14 +44,16 @@ sdlgame::surface::Surface Font::render(const std::string text,
   SDL_Surface *surface;
   switch (antialias) {
   case AntiAlias::SOLID:
-    surface = TTF_RenderUTF8_Solid_Wrapped(font, text.c_str(), color.to_SDL_Color(), wrap_length);
+    surface = TTF_RenderUTF8_Solid_Wrapped(font.get(), text.c_str(),
+                                           color.to_SDL_Color(), wrap_length);
     break;
   case AntiAlias::SHADED:
-    surface = TTF_RenderUTF8_Shaded_Wrapped(
-        font, text.c_str(), color.to_SDL_Color(), SDL_Color{0,0,0,0}, wrap_length);
+    surface = TTF_RenderUTF8_Shaded_Wrapped(font.get(), text.c_str(),
+                                            color.to_SDL_Color(),
+                                            SDL_Color{0, 0, 0, 0}, wrap_length);
     break;
   case AntiAlias::BLENDED:
-    surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(),
+    surface = TTF_RenderUTF8_Blended_Wrapped(font.get(), text.c_str(),
                                              color.to_SDL_Color(), wrap_length);
     break;
   }

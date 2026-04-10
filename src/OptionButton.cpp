@@ -7,7 +7,7 @@ OptionButton::OptionButton(Game &game) {
   set_images(game->images.option_button_idle,
              game->images.option_button_hover,
              game->images.option_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 OptionButton::OptionButton() = default;
 void OptionButton::update() { Button::update(); }

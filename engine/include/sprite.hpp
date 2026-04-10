@@ -1,6 +1,5 @@
 #ifndef SDLGAME_SPRITE_
 #define SDLGAME_SPRITE_
-#include "math.hpp"
 #include "rect.hpp"
 #include "surface.hpp"
 #include <memory>
@@ -58,7 +57,7 @@ public:
 };
 
 class Sprite {
-  sdlgame::rect::Rect rect;
+  rect::Rect rect;
   std::unique_ptr<surface::Surface> image;
   
 public:

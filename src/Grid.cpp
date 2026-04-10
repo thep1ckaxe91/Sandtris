@@ -25,7 +25,7 @@ Grid::Grid(Game &game)
             grid[i][j] = Sand();
 
     sand_texture = SDL_CreateTexture(
-        sdlgame::display::renderer.get(),
+        sdlgame::display::get_renderer(),
         SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
         GRID_WIDTH,
@@ -63,7 +63,7 @@ Grid &Grid::operator=(const Grid &other)
     next = other.next;
     // just create new one, since we will redraw it anyway
     sand_texture = SDL_CreateTexture(
-        sdlgame::display::renderer.get(),
+        sdlgame::display::get_renderer(),
         SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
         GRID_WIDTH,
@@ -436,13 +436,13 @@ void Grid::draw()
 
     SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
 
-    SDL_SetRenderTarget(sdlgame::display::renderer.get(), game->window.texture.get());
-    if (SDL_RenderCopy(sdlgame::display::renderer.get(), sand_texture, nullptr, &dst_rect))
+    SDL_SetRenderTarget(sdlgame::display::get_renderer(), game->window.getTexture());
+    if (SDL_RenderCopy(sdlgame::display::get_renderer(), sand_texture, nullptr, &dst_rect))
     {
         printf("Failed to render the sand texture:\n%s\n", SDL_GetError());
         exit(1);
     }
-    SDL_SetRenderTarget(sdlgame::display::renderer.get(), nullptr);
+    SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr);
 
     controller.draw();
     draw_ghost();

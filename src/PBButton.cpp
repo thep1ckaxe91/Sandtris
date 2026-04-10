@@ -7,7 +7,7 @@ PBButton::PBButton(Game &game) {
   set_images(game->images.pb_button_idle,
                    game->images.pb_button_hover,
                    game->images.pb_button_click);
-  rect = (*image).getRect();
+  rect = (*image).get_rect();
 }
 PBButton::PBButton() = default;
 void PBButton::on_click() {
