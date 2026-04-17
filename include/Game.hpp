@@ -7,7 +7,6 @@
 #include "constant.hpp"
 #include "engine.hpp"
 
-class Scene;
 /**
  * This class have to be inherit and override
 
