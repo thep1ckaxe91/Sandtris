@@ -3,98 +3,85 @@
 #include "rect.hpp"
 #include "surface.hpp"
 #include <memory>
-#include <optional>
-#include <set>
-#include <unordered_map>
+#include <span>
 #include <vector>
 
-// 
+// TODO: there are serveral ideas that might be helful in the future, includes:
+// + add with Container iterator begin and end with template
+// + more proper inheritance design
 
-namespace sdlgame {
-/**
- * Should be test heavyly around pointer
- * just use stack-alloc like normal
- * treat the pointer as a address holder only,
- * not an pointer to a heap allocated object
- *
- * 
- */
- // TODO: what is that even mean lol, anyway we need to refactor this with weak sprite/group implementation
- // otherwise we cant dodge tight dependency leak
-namespace sprite {
-/**
- *
- * The base class for visible game objects.
- * Derived classes will want to override the Sprite.update() and assign a
- * Sprite.image and Sprite.rect attributes. The initializer can accept any
- * number of Group instances to be added to
- *
- */
+namespace sdlgame::sprite {
+
 class Sprite;
 
-class AbstractGroup {
-    std::unordered_map<Sprite, std::optional<rect::Rect>> sprites_dict; 
-    std::vector<rect::Rect> lost_sprites;
+class Group : public std::enable_shared_from_this<Group> {
 
+protected:
+  std::vector<std::shared_ptr<Sprite>> m_sprites;
 
-
-};
-
-class Group : public AbstractGroup {
 public:
-  std::set<Sprite *> sprite_list;
-  Group(std::vector<Sprite *> sprites = std::vector<Sprite *>());
-  Group &operator=(Group oth);
-  std::set<std::shared_ptr<Sprite>> &sprites();
-  void add(Sprite *sprite);
-  void add(std::vector<Sprite *> &sprites);
-  void remove(std::vector<Sprite *> &sprites);
-  void remove(Sprite *sprite);
-  bool has(std::vector<Sprite *> &sprites);
-  bool has(Sprite *sprite);
-  void update();
-  void draw(sdlgame::surface::Surface &surface);
+  Group() = default;
+  virtual ~Group() = default;
+
+  std::span<const std::shared_ptr<Sprite>> sprites() const;
+  virtual void add(const std::shared_ptr<Sprite> &sprite);
+  virtual void remove(const std::shared_ptr<Sprite> &sprite);
+  bool has(const std::shared_ptr<Sprite> &sprite) const;
+  virtual void update();
+  virtual void draw(surface::Surface &surface);
+
+  auto begin() const;
+  auto end() const;
 };
 
-class Sprite {
-  rect::Rect rect;
-  std::unique_ptr<surface::Surface> image;
-  
+class Sprite : public std::enable_shared_from_this<Sprite> {
+  friend class Group;
+  friend class GroupSingle;
+
+protected:
+  rect::Rect m_rect;
+  std::shared_ptr<const surface::Surface> m_image;
+
+  mutable std::vector<std::weak_ptr<Group>> m_groups;
+  mutable std::vector<std::shared_ptr<Group>> m_groups_cache;
+  mutable bool m_cache_dirty = true;
+
 public:
   Sprite() = default;
-  Sprite(std::vector<std::shared_ptr<Group>>);
-  Sprite(const Sprite&);
-  Sprite(Sprite&&);
-  Sprite &operator=(const Sprite&);
-  Sprite &operator=(Sprite&&);
-  /**
-   * return a set of group that conrtain this sprite
-   */
-  std::set<Group *> &groups();
+  explicit Sprite(const std::shared_ptr<const surface::Surface> &image);
+
+  Sprite(const Sprite &) = delete;
+  Sprite(Sprite &&) = delete;
+  Sprite &operator=(const Sprite &) = delete;
+  Sprite &operator=(Sprite &&) = delete;
+
+  virtual ~Sprite();
+
+  std::span<const std::shared_ptr<Group>> groups() const;
   virtual void update() = 0;
-  void add(std::vector<std::shared_ptr<Group>> groups);
-  void add(std::shared_ptr<Group> group);
-  void remove(std::vector<std::shared_ptr<Group>> groups);
-  void remove(std::shared_ptr<Group> group);
+  void add(const std::shared_ptr<Group> &group);
+  void remove(const std::shared_ptr<Group> &group);
+
   /**
    * remove this sprite from all group, still usable after call
    */
   void kill();
-  bool alive();
+  bool alive() const;
+
+  rect::Rect &get_rect();
+  const rect::Rect &get_rect() const;
 };
 
 /**
  * Also a sprite group, the only difference is it only hold 1 sprite,
  * if you call add, it will replace that sprite
  */
-class GroupSingle : public AbstractGroup {
+class GroupSingle : public Group {
 public:
-  Sprite *sprite;
-  GroupSingle(Sprite *sprite = nullptr);
-  void add(Sprite *sprite);
+  explicit GroupSingle(const std::shared_ptr<Sprite> &sprite = nullptr);
+  void add(const std::shared_ptr<Sprite> &sprite) override;
   void remove();
-  void update();
-  void draw(sdlgame::surface::Surface &surface);
+  using Group::remove;
 };
 
 /**
@@ -103,13 +90,16 @@ public:
  * each Sprite. The dokill argument is a bool. If set to True, all Sprites that
  * collide will be removed from the Group.
  */
-std::vector<Sprite *> spritecollide(Sprite *sprite, Group *group,
-                                    bool dokill = false);
+std::vector<std::shared_ptr<Sprite>>
+spritecollide(std::shared_ptr<Sprite> sprite, std::shared_ptr<Group> group,
+              bool dokill = false);
+
 /**
  * @return if 2 sprite is collide or not, but using 2 sprite, both must have
  * rect attr defined
  */
-bool collide_rect(Sprite *left, Sprite *right);
+bool collide_rect(const Sprite &left, const Sprite &right);
+
 /**
  * Tests for collision between two sprites,
  * by testing to see if two circles centered on the sprites overlap.
@@ -118,10 +108,9 @@ bool collide_rect(Sprite *left, Sprite *right);
  * circle is created that is big enough to completely enclose the sprites rect
  * as given by the "rect" attribute.
  */
-bool collide_circle(Sprite *left, Sprite *right, double left_radius = 0,
-                    double right_radius = 0);
+bool collide_circle(const Sprite &left, const Sprite &right,
+                    double left_radius = 0, double right_radius = 0);
 
-} // namespace sprite
-} // namespace sdlgame
+} // namespace sdlgame::sprite
 
 #endif

@@ -1,161 +1,153 @@
 #include "sprite.hpp"
 #include "rect.hpp"
 #include "surface.hpp"
-#include <set>
-#include <vector>
+#include <algorithm>
+#include <memory>
 
 namespace sdlgame::sprite {
-Group::Group(std::vector<Sprite *> sprites) {
-  for (auto sprite : sprites)
-    add(sprite);
-}
-Group &Group::operator=(Group oth) {
-  sprite_list = oth.sprite_list;
-  return *this;
-}
 
-Sprite::Sprite(std::vector<Group *> groups) {
-  for (Group *group : groups)
-    add(group);
+std::span<const std::shared_ptr<Sprite>> Group::sprites() const {
+  return m_sprites;
 }
-/**
- * return a set of group that conrtain this sprite
- */
-std::set<Group *> &Sprite::groups() { return group_list; }
-void Sprite::add(std::vector<Group *> groups) {
-  for (auto &group : groups) {
-    group->sprite_list.insert(this);
-    group_list.insert(group);
-  }
-}
-void Sprite::add(Group *group) {
-  group->sprite_list.insert(this);
-  group_list.insert(group);
-}
-void Sprite::remove(std::vector<Group *> groups) {
-  for (auto &group : groups) {
-    auto it = group_list.find(group);
-    if (it != group_list.end()) {
-      group->sprite_list.erase(this);
-      group_list.erase(group);
-    }
-  }
-}
-void Sprite::remove(Group *group) {
-  auto it = group_list.find(group);
-  if (it != group_list.end()) {
-    group->sprite_list.erase(this);
-    group_list.erase(group);
-  }
-}
-/**
- * remove this sprite from all group, still usable after call
- */
-void Sprite::kill() {
-  for (auto &group : group_list)
-    group->sprite_list.erase(this);
-  group_list.clear();
-}
-bool Sprite::alive() { return group_list.size() > 0; }
+void Group::add(const std::shared_ptr<Sprite> &sprite) {
+  if (!sprite)
+    return;
 
-std::set<Sprite *> &Group::sprites() { return sprite_list; }
-void Group::add(Sprite *sprite) {
-  sprite_list.insert(sprite);
-  sprite->group_list.insert(this);
-}
-void Group::add(std::vector<Sprite *> &sprites) {
-  for (auto &sprite : sprites) {
-    sprite_list.insert(sprite);
-    sprite->group_list.insert(this);
+  auto it = std::ranges::find(m_sprites, sprite);
+
+  if (it == m_sprites.end()) {
+    m_sprites.push_back(sprite);
+
+    sprite->m_groups.push_back(weak_from_this());
+    sprite->m_cache_dirty = true;
   }
 }
-void Group::remove(std::vector<Sprite *> &sprites) {
-  for (auto &sprite : sprites) {
-    auto it = sprite_list.find(sprite);
-    if (it != sprite_list.end()) {
-      sprite->remove(this);
-      sprite_list.erase(it);
-    }
+void Group::remove(const std::shared_ptr<Sprite> &sprite) {
+
+  if (auto it = std::ranges::find(m_sprites, sprite); it != m_sprites.end()) {
+    *it = std::move(m_sprites.back());
+    m_sprites.pop_back();
+
+    auto &sprite_groups = sprite->m_groups;
+
+    std::erase_if(sprite_groups, [this](const auto &weak) {
+      auto locked = weak.lock();
+      return !locked || locked.get() == this;
+    });
+
+    sprite->m_cache_dirty = true;
   }
 }
-void Group::remove(Sprite *sprite) {
-  auto it = sprite_list.find(sprite);
-  if (it != sprite_list.end()) {
-    sprite->remove(this);
-    sprite_list.erase(it);
-  }
-}
-bool Group::has(std::vector<Sprite *> &sprites) {
-  for (auto &sprite : sprites) {
-    if (sprite_list.find(sprite) == sprite_list.end())
-      return false;
-  }
-  return true;
-}
-bool Group::has(Sprite *sprite) {
-  if (sprite_list.find(sprite) == sprite_list.end())
-    return false;
-  return true;
+bool Group::has(const std::shared_ptr<Sprite> &sprite) const {
+  return std::ranges::contains(m_sprites, sprite);
 }
 void Group::update() {
-  for (auto &sprite : sprite_list) {
+  for (auto &sprite : m_sprites) {
     sprite->update();
   }
 }
-void Group::draw(sdlgame::surface::Surface &surface) {
-  for (auto &sprite : sprite_list) {
-    surface.blit(*sprite->image, sprite->rect.getTopLeft());
+void Group::draw(surface::Surface &surface) {
+  for (const auto &sprite : m_sprites) {
+    surface.blit(*sprite->m_image, sprite->get_rect().getTopLeft(),
+                 sprite->get_rect().getSize(), sprite->get_rect());
   }
 }
 
-GroupSingle::GroupSingle(Sprite *sprite) { sprite = sprite; }
-void GroupSingle::add(Sprite *sprite) { sprite = sprite; }
-void GroupSingle::remove() { sprite = nullptr; }
-void GroupSingle::update() { sprite->update(); }
-void GroupSingle::draw(sdlgame::surface::Surface &surface) {
-  surface.blit(*sprite->image, sprite->rect.getTopLeft());
+auto Group::begin() const { return m_sprites.begin(); }
+auto Group::end() const { return m_sprites.end(); }
+
+Sprite::Sprite(const std::shared_ptr<const surface::Surface> &image)
+    : m_image(image), m_rect(image->get_rect()) {}
+
+std::span<const std::shared_ptr<Group>> Sprite::groups() const {
+  if (!m_cache_dirty)
+    return m_groups_cache;
+
+  m_groups_cache.clear();
+  m_groups_cache.reserve(m_groups.size());
+
+  std::erase_if(m_groups, [&](const auto &weak) {
+    if (auto shared = weak.lock()) {
+      m_groups_cache.push_back(std::move(shared));
+      return false;
+    }
+    return true;
+  });
+
+  m_cache_dirty = false;
+  return m_groups_cache;
+}
+void Sprite::add(const std::shared_ptr<Group> &group) {
+  group->add(shared_from_this());
+}
+void Sprite::remove(const std::shared_ptr<Group> &group) {
+  group->remove(shared_from_this());
 }
 
-std::vector<Sprite *> spritecollide(Sprite *sprite, Group *group, bool dokill) {
-  std::vector<Sprite *> res;
-  for (auto &img : group->sprite_list) {
-    if (img->rect.colliderect(sprite->rect)) {
-      res.push_back(img);
+void Sprite::kill() {
+
+  for (auto &group : groups()) {
+    group->remove(shared_from_this());
+  }
+
+  m_groups.clear();
+  m_groups_cache.clear();
+  m_cache_dirty = false;
+}
+bool Sprite::alive() const { return !m_groups.empty(); }
+
+rect::Rect &Sprite::get_rect() { return m_rect; }
+const rect::Rect &Sprite::get_rect() const { return m_rect; }
+
+GroupSingle::GroupSingle(const std::shared_ptr<Sprite> &sprite) {
+  if (sprite)
+    this->add(sprite);
+}
+
+void GroupSingle::add(const std::shared_ptr<Sprite> &sprite) {
+  if (!sprite)
+    return;
+
+  if (!m_sprites.empty()) {
+    Group::remove(m_sprites.back());
+  }
+
+  Group::add(sprite);
+}
+
+void GroupSingle::remove() {
+  if (!m_sprites.empty())
+    Group::remove(m_sprites.back());
+}
+
+std::vector<std::shared_ptr<Sprite>>
+spritecollide(const std::shared_ptr<Sprite> &sprite,
+              const std::shared_ptr<Group> &group, bool dokill) {
+  std::vector<std::shared_ptr<Sprite>> res;
+
+  for (const auto &g_sprite : *group) {
+    if (collide_rect(*g_sprite, *sprite)) {
+      res.push_back(g_sprite);
     }
   }
-  if (dokill)
-    group->remove(res);
+
+  if (dokill) {
+    for (const auto &r_sprite : res) {
+      group->remove(r_sprite);
+    }
+  }
+
   return res;
 }
-/**
- * @return if 2 sprite is collide or not, but using 2 sprite, both must have
- * rect attr defined
- */
-bool collide_rect(Sprite *left, Sprite *right) {
-  return left->rect.colliderect(right->rect);
+
+inline bool collide_rect(const Sprite &left, const Sprite &right) {
+  return left.get_rect().colliderect(right.get_rect());
 }
-/**
- * Tests for collision between two sprites,
- * by testing to see if two circles centered on the sprites overlap.
- * If the radius value is passed, it will check if 2 circle center at the both
- * rect center is collide with that center and that radius or not otherwise a
- * circle is created that is big enough to completely enclose the sprites rect
- * as given by the "rect" attribute.
- */
-bool collide_circle(Sprite *left, Sprite *right, double left_radius,
-                    double right_radius) {
-  left_radius = (left_radius == 0
-                     ? (left->rect.getTopLeft() - left->rect.getBottomRight())
-                               .magnitude() /
-                           2
-                     : left_radius);
-  right_radius =
-      (right_radius == 0
-           ? (right->rect.getTopLeft() - right->rect.getBottomRight())
-                     .magnitude() /
-                 2
-           : right_radius);
-  return (left->rect.getCenter() - right->rect.getCenter()).magnitude() <=
+
+inline bool collide_circle(const Sprite &left, const Sprite &right,
+                           double left_radius, double right_radius) {
+  return left.get_rect().getCenter().distance_to(right.get_rect().getCenter()) <
          left_radius + right_radius;
 }
+
 } // namespace sdlgame::sprite

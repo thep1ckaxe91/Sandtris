@@ -21,8 +21,8 @@
 #include "transform.hpp"
 #include <filesystem>
 using Event = sdlgame::event::Event;
-using Rect = rect::Rect;
-using Vector2 = math::Vector2;
+using Rect = sdlgame::rect::Rect;
+using Vector2 = sdlgame::math::Vector2;
 using Surface = sdlgame::surface::Surface;
 using Color = sdlgame::color::Color;
 using Sound = sdlgame::mixer::Sound;

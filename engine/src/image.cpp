@@ -11,10 +11,10 @@ namespace sdlgame::image {
 void init() {
   if ((IMG_Init(IMG_INIT_JPG) & IMG_INIT_JPG) != IMG_INIT_JPG) {
     printf("Failed to init JPG image flags\n%s\n", IMG_GetError());
-    exit(0);
+    exit(1);
   } else if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
     printf("Failed to init PNG image flags\n%s\n", IMG_GetError());
-    exit(0);
+    exit(1);
   } else {
     printf("Image successfully initialized\n");
     return;
@@ -26,7 +26,7 @@ void init() {
       IMG_LoadTexture(sdlgame::display::get_renderer(), path.c_str());
   if (tex == nullptr) {
     printf("Cant load image\n%s\n", IMG_GetError());
-    exit(0);
+    exit(1);
   }
   // img_transfer_surf =sdlgame::surface::Surface(tex);
   return sdlgame::surface::Surface(tex);
