@@ -2,7 +2,7 @@
 #define TETRIS_CONSTANT_HPP
 #include "engine.hpp"
 #include <thread>
-const std::string base_path = sdlgame::get_base_path();
+const auto base_path = sdlgame::get_base_path();
 enum Window_Constant { RESOLUTION_WIDTH = 160, RESOLUTION_HEIGHT = 144 };
 constexpr auto MAXFPS = 10000;
 enum grid_size {
@@ -10,10 +10,10 @@ enum grid_size {
   GRID_HEIGHT = 144 + 32 // the +32 is for the area tetrimino spawn, every
                          // update only apply to those in this range
 };
-enum grid_pos {
-  GRID_X = 16,
-  GRID_Y = -32,
-};
+
+constexpr int GRID_X = 16;
+constexpr int GRID_Y = -32;
+
 enum tetrimino_size {
   EDGE_SIZE = 32,
 };
@@ -38,7 +38,7 @@ const int dy[] = {
     0,
     // 1,1,-1,-1
 };
-enum class SandShift : uint8_t {
+enum SandShift : uint8_t {
   EMPTY_SAND = 0x0,   // 0000 0000
   RED_SAND = 0x1,     // 0000 0001
   YELLOW_SAND = 0x2,  // 0000 0010
@@ -77,5 +77,6 @@ const Vector2 midbottom_pb = Vector2(80, 77);
 const double gameplay_bg_speed = 10;
 const double gforce = 1; // pix/sec^2
 const int client_cores = std::thread::hardware_concurrency();
-const std::string font_path = base_path + "assets/fonts/sandtris pixel.ttf";
+const std::string font_path =
+    base_path / "assets" / "fonts" / "sandtris pixel.ttf";
 #endif

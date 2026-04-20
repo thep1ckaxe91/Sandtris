@@ -4,13 +4,13 @@
 #include "scene_transitions.hpp"
 ResumeButton::ResumeButton(Game &game) {
   game = &game;
-  set_images(game->images.resume_button_idle,
-                   game->images.resume_button_hover,
-                   game->images.resume_button_click);
+  set_images(game->m_images.resume_button_idle,
+                   game->m_images.resume_button_hover,
+                   game->m_images.resume_button_click);
 }
 ResumeButton::ResumeButton() = default;
 void ResumeButton::update() { Button::update(); }
-void ResumeButton::handle_event(Event &event) { Button::handle_event(event); }
+void ResumeButton::handle_event(const Event &event) { Button::handle_event(event); }
 void ResumeButton::on_click() {
   auto out = std::make_unique<OutSwipeDown>(1);
   auto in = std::make_unique<InSwipeDown>(1);

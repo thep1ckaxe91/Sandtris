@@ -22,7 +22,7 @@ public:
     void render_message(std::string new_message);
     void display_message();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void draw();
 };
 

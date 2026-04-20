@@ -30,7 +30,7 @@ MainMenu::MainMenu(Game &game) : Scene(game)
     sdlgame::music::load(base_path + "assets/audio/music/mainmenu_theme_loop.mp3");
     sdlgame::music::play(-1, 1000);
 }
-void MainMenu::handle_event(Event &event)
+void MainMenu::handle_event(const Event &event)
 {
     start_button.handle_event(event);
     quit_button.handle_event(event);
@@ -54,15 +54,15 @@ void MainMenu::update()
 }
 void MainMenu::draw()
 {
-    game->window.blit(game->images.mainmenu_background, math::Vector2());
-    game->window.blit(*start_button.image, start_button.rect.getTopLeft());
-    game->window.blit(*credit_button.image, credit_button.rect.getTopLeft());
-    game->window.blit(*quit_button.image, quit_button.rect.getTopLeft());
-    game->window.blit(*pb_button.image, pb_button.rect.getTopLeft());
-    game->window.blit(*htp_button.image, htp_button.rect.getTopLeft());
-    game->window.blit(*option_button.image, option_button.rect.getTopLeft());
+    game->m_window.blit(game->m_images.mainmenu_background, math::Vector2());
+    game->m_window.blit(*start_button.image, start_button.rect.getTopLeft());
+    game->m_window.blit(*credit_button.image, credit_button.rect.getTopLeft());
+    game->m_window.blit(*quit_button.image, quit_button.rect.getTopLeft());
+    game->m_window.blit(*pb_button.image, pb_button.rect.getTopLeft());
+    game->m_window.blit(*htp_button.image, htp_button.rect.getTopLeft());
+    game->m_window.blit(*option_button.image, option_button.rect.getTopLeft());
     if (can_resume)
-        game->window.blit(*resume_button.image, resume_button.rect.getTopLeft());
+        game->m_window.blit(*resume_button.image, resume_button.rect.getTopLeft());
 }
 MainMenu::~MainMenu()
 {

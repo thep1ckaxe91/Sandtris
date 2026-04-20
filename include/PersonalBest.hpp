@@ -17,7 +17,7 @@ public:
     PersonalBest(Game &game);
     void update();
     void draw();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
 };
 
 #endif

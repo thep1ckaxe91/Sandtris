@@ -1,40 +1,28 @@
 #ifndef TETRIMINO_CONTROLLER_HPP
 #define TETRIMINO_CONTROLLER_HPP
-#include "Tetrimino.hpp"
 #include "Game.hpp"
-using Event = sdlgame::event::Event;
-using Rect = rect::Rect;
-using Vector2 = math::Vector2;
-using Surface = sdlgame::surface::Surface;
-using Color = sdlgame::color::Color;
-using Sound = sdlgame::mixer::Sound;
-using Channel = sdlgame::mixer::Channel;
-using Font = sdlgame::font::Font;
-
-
-
+#include "Tetrimino.hpp"
 /**
- * 
- * The controller IS NOT RESPONSIBLE to check if the tetrimino is collide with any Sand yet,
- * that's the grid responsible for that
- * this also responsible for drawing and controlling the tetrimino movement, rotation
- * The grid should have a properties of type TetriminoController
-*/
-class TetriminoController
-{
+ *
+ * The controller IS NOT RESPONSIBLE to check if the tetrimino is collide with
+ * any Sand yet, that's the grid responsible for that this also responsible for
+ * drawing and controlling the tetrimino movement, rotation The grid should have
+ * a properties of type TetriminoController
+ */
+class TetriminoController {
 public:
-    Surface draw_surf;
-    Tetrimino tetrimino;
-    Vector2 topleft;
-    Game* game;
-    TetriminoController(Game &game, Tetrimino tetrimino);
-    TetriminoController();
-    void reset(Tetrimino tetrimino);
-    void draw();
-    void redraw();
-    void update();
-    void rotate();
-    void handle_event(Event &event);
+  Surface draw_surf;
+  Vector2 topleft;
+  Game &game;
+  Tetrimino tetrimino;
+  TetriminoController(Game &game, Tetrimino tetrimino);
+  TetriminoController();
+  void reset(Tetrimino tetrimino);
+  void draw();
+  void redraw();
+  void update();
+  void rotate();
+  void handle_event(const Event &event);
 };
 
 #endif

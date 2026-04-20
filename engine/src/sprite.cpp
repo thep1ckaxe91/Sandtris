@@ -99,6 +99,10 @@ bool Sprite::alive() const { return !m_groups.empty(); }
 rect::Rect &Sprite::get_rect() { return m_rect; }
 const rect::Rect &Sprite::get_rect() const { return m_rect; }
 
+const surface::Surface & Sprite::get_image() const {
+  return *m_image;
+}
+
 GroupSingle::GroupSingle(const std::shared_ptr<Sprite> &sprite) {
   if (sprite)
     this->add(sprite);
@@ -140,12 +144,12 @@ spritecollide(const std::shared_ptr<Sprite> &sprite,
   return res;
 }
 
-inline bool collide_rect(const Sprite &left, const Sprite &right) {
+bool collide_rect(const Sprite &left, const Sprite &right) {
   return left.get_rect().colliderect(right.get_rect());
 }
 
-inline bool collide_circle(const Sprite &left, const Sprite &right,
-                           double left_radius, double right_radius) {
+bool collide_circle(const Sprite &left, const Sprite &right, double left_radius,
+                    double right_radius) {
   return left.get_rect().getCenter().distance_to(right.get_rect().getCenter()) <
          left_radius + right_radius;
 }

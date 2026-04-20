@@ -20,12 +20,12 @@ void PersonalBest::update()
 
 void PersonalBest::draw()
 {
-    game->window.blit(game->images.pb_background,Vector2());
-    game->window.blit(pb_surf,pb_rect.getTopLeft());
-    game->window.blit(*back_button.image,bb_pos);
+    game->m_window.blit(game->m_images.pb_background,Vector2());
+    game->m_window.blit(pb_surf,pb_rect.getTopLeft());
+    game->m_window.blit(*back_button.image,bb_pos);
 }
 
-void PersonalBest::handle_event(Event &event)
+void PersonalBest::handle_event(const Event &event)
 {
     back_button.handle_event(event);
 }

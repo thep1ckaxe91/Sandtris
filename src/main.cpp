@@ -25,10 +25,10 @@ public:
   bool gameactive = 1;
   bool played = 0;
   Sandtris() : Game() {
-    window_object =
+    m_window_object =
         sdlgame::display::set_mode(RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
                                    0 | sdlgame::MAXIMIZED | sdlgame::RESIZABLE);
-    window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
+    m_window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
     sdlgame::display::get_window_size(); // TODO: this is intended to assign
                                          // proxy_surf a value it suppose to be,
                                          // but there should be a way to make
@@ -43,9 +43,9 @@ public:
     // sdlgame::display::set_window_size(res.second.first, res.second.second);
     // sdlgame::display::set_window_pos(res.first.first, res.first.second);
     // }
-    audio_manager = AudioManager();
-    images = Images();
-    images.load();
+    m_audio_manager = AudioManager();
+    m_images = Images();
+    m_images.load();
     sdlgame::display::set_caption("Sandtris - Made by thep1ckaxe");
     sdlgame::display::set_icon(
         (base_path + "assets/image/icon/icon.png").c_str());
@@ -53,52 +53,52 @@ public:
   }
   void update() {
     Timer t("update");
-    if (!scene_list.empty())
-      if (scene_list.back()) {
-        scene_list.back()->update();
+    if (!m_scene_list.empty())
+      if (m_scene_list.back()) {
+        m_scene_list.back()->update();
       }
-    if (out) {
+    if (m_out) {
       played = true;
-      out->update(clock.delta_time().count());
-      if (out->isDone) {
-        out.reset();
+      m_out->update(m_clock.delta_time().count());
+      if (m_out->isDone) {
+        m_out.reset();
         played = 0;
       }
-    } else if (in) {
-      if (next) {
-        if (command == POP) {
-          command = NONE;
-          scene_list.pop_back();
-        } else if (command == CLEAR) {
-          command = NONE;
-          while (!scene_list.empty()) {
-            scene_list.pop_back();
+    } else if (m_in) {
+      if (m_next) {
+        if (m_command == POP) {
+          m_command = NONE;
+          m_scene_list.pop_back();
+        } else if (m_command == CLEAR) {
+          m_command = NONE;
+          while (!m_scene_list.empty()) {
+            m_scene_list.pop_back();
           }
         }
-        scene_list.emplace_back(std::move(next));
-      } else if (command == REMOVE) {
-        command = NONE;
-        scene_list.pop_back();
+        m_scene_list.emplace_back(std::move(m_next));
+      } else if (m_command == REMOVE) {
+        m_command = NONE;
+        m_scene_list.pop_back();
       }
-      in->update(clock.delta_time().count());
-      if (in->isDone) {
-        in.reset();
+      m_in->update(m_clock.delta_time().count());
+      if (m_in->isDone) {
+        m_in.reset();
       }
     }
-    audio_manager.update();
+    m_audio_manager.update();
   }
   void draw() {
     Timer t("draw");
-    window.fill(Color(0, 0, 0));
-    if (!scene_list.empty())
-      if (scene_list.back()) {
-        scene_list.back()->draw();
+    m_window.fill(Color(0, 0, 0));
+    if (!m_scene_list.empty())
+      if (m_scene_list.back()) {
+        m_scene_list.back()->draw();
       }
-    window_object.blit(window, window_draw_offset);
-    if (out) {
-      out->draw();
-    } else if (in) {
-      in->draw();
+    m_window_object.blit(m_window, m_window_draw_offset);
+    if (m_out) {
+      m_out->draw();
+    } else if (m_in) {
+      m_in->draw();
     }
   }
   void run() {
@@ -111,7 +111,7 @@ public:
     add_scene(nullptr, std::move(next), std::move(in));
     bool running = true;
     while (running) {
-      clock.tick(1e9);
+      m_clock.tick(1e9);
       {
         Timer t("event");
         for (auto &event : sdlgame::event::get()) {
@@ -162,7 +162,7 @@ public:
         draw();
         sdlgame::display::flip();
         sdlgame::display::set_caption(
-            (std::to_string(clock.get_fps())).c_str());
+            (std::to_string(m_clock.get_fps())).c_str());
       }
     }
   }

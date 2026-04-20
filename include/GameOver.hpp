@@ -19,7 +19,7 @@ class GameOver : public Scene
     int pb;
 public:
     GameOver(Game &game, int new_score);
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void update();
     void draw();
 };

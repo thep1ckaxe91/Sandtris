@@ -70,6 +70,8 @@ public:
 
   rect::Rect &get_rect();
   const rect::Rect &get_rect() const;
+
+  const surface::Surface & get_image() const;
 };
 
 /**
@@ -91,8 +93,8 @@ public:
  * collide will be removed from the Group.
  */
 std::vector<std::shared_ptr<Sprite>>
-spritecollide(std::shared_ptr<Sprite> sprite, std::shared_ptr<Group> group,
-              bool dokill = false);
+spritecollide(const std::shared_ptr<Sprite> &sprite,
+              const std::shared_ptr<Group> &group, bool dokill = false);
 
 /**
  * @return if 2 sprite is collide or not, but using 2 sprite, both must have

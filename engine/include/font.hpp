@@ -39,8 +39,8 @@ public:
   int get_height() const;
 
 private:
-  memory::SDLSharedPtr<TTF_Font> font;
-  int height;
+  memory::SDLSharedPtr<TTF_Font> m_font;
+  int m_height;
 };
 
 } // namespace sdlgame::font

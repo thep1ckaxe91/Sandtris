@@ -10,7 +10,7 @@ public:
     BackButton back_button;
     const Vector2 bb_pos = Vector2(123,123);
     Credit(Game &game);
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void update();
     void draw();
 };

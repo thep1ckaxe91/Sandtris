@@ -1,37 +1,47 @@
-#include "engine.hpp"
 #include "Game.hpp"
+#include "engine.hpp"
 #include <filesystem>
+#include <memory>
 namespace fs = std::filesystem;
 
-class Animation : public sdlgame::sprite::Sprite
-{
+class Animation : public sdlgame::sprite::Sprite {
 protected:
-    Surface default_img;
-    double time_cnt = 0;
+  std::shared_ptr<const Surface> m_default_image;
+  double m_time_count = 0;
+  std::vector<std::shared_ptr<const Surface>> m_frames;
+  const Game &v_game;
+  size_t m_frame_id;
+  uint32_t m_frame_rate;
+  bool m_frame_changed = false;
+  bool m_loop;
+  bool m_playing = false;
+
 public:
-    std::vector<Surface> frames;
-    size_t frame_id;
-    Game *game;
-    int frame_rate;
-    bool frame_change=0;
-    bool loop;
-    bool playing;
-    /**
-     * @brief init an animation object
-     * @param path path to the folder that only have file for the 
-     * 
-     */
-    Animation(Game &game, int frame_rate=60, bool loop=0);
-    Animation();
-    /**
-     * @brief load the animation's images in folder 'path'
-     * 
-     * @param path the path to the folder the contain only images of the animation
-     */
-    void load(const fs::path& path);
-    void play();
-    void update()override;
-    void pause();
-    void reset();
-    void set_default(const Surface oth);
+  /**
+   * @brief init an animation object
+   */
+  Animation(const Game &game, uint32_t frame_rate = 60, bool loop = false);
+
+  /**
+   * @brief load the animation's images in folder 'path'
+   *
+   * @param path the path to the folder the contain only images of the animation
+   */
+  void load(const fs::path &path);
+  void play();
+  void update() override;
+  void pause();
+  void reset();
+  void set_default_image(const std::shared_ptr<Surface> &oth);
+  const std::shared_ptr<const Surface>& get_default_image() const;
+  bool is_playing() const;
+  bool is_looped() const;
+  size_t get_frame_index() const;
+
+  /**
+  @return `true` if in that frame, the animation's frame has changed 
+   */
+  bool frame_changed() const;
+  uint32_t get_frame_rate() const;
+  void set_frame_rate(uint32_t frame_rate);
 };
