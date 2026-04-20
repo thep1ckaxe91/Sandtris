@@ -47,7 +47,7 @@ void Slider::set_color(Color nob, Color valid, Color invalid) {
   value_color = valid;
   no_value_color = invalid;
 }
-void Slider::handle_event(Event &event) {
+void Slider::handle_event(const Event &event) {
   if (event.type == sdlgame::MOUSEBUTTONDOWN and
       nob.collidepoint(sdlgame::mouse::get_pos())) {
     holding = 1;

@@ -23,15 +23,15 @@ void TetriminoController::reset(Tetrimino tetrimino) {
   topleft = spawn_pos;
   redraw();
 }
-void TetriminoController::draw() { game->window.blit(draw_surf, topleft); }
+void TetriminoController::draw() { game->m_window.blit(draw_surf, topleft); }
 void TetriminoController::update() {
   // movement
   //  redraw();
   auto keys = sdlgame::key::get_pressed();
   topleft.x += ((keys[sdlgame::K_d] or keys[sdlgame::K_RIGHT]) -
                 (keys[sdlgame::K_a] or keys[sdlgame::K_LEFT])) *
-               sideway_move_speed * game->clock.delta_time().count();
-  topleft.y += game->clock.delta_time().count() *
+               sideway_move_speed * game->m_clock.delta_time().count();
+  topleft.y += game->m_clock.delta_time().count() *
                (keys[sdlgame::K_s] or keys[sdlgame::K_DOWN] ? fast_fall_speed
                                                             : fall_speed);
 }
@@ -49,7 +49,7 @@ void TetriminoController::redraw() {
                : Color()),
           Rect(8 * j, 8 * i, 8, 8));
 }
-void TetriminoController::handle_event(Event &event) {
+void TetriminoController::handle_event(const Event &event) {
   if (event.type == sdlgame::KEYDOWN) {
     if (event["key"] == sdlgame::K_UP or event["key"] == sdlgame::K_w)
       rotate();

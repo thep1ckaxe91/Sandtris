@@ -32,7 +32,7 @@ GameOver::GameOver(Game &game, int new_score) : Scene(game)
     pb_rect.setMidBottom(midbottom_pb);
 }
 
-void GameOver::handle_event(Event &event)
+void GameOver::handle_event(const Event &event)
 {
     menu.handle_event(event);
     retry.handle_event(event);
@@ -46,10 +46,10 @@ void GameOver::update()
 
 void GameOver::draw()
 {
-    game->window.blit(game->images.gameover_screen, Vector2());
-    game->window.blit((*menu.image), menu.rect.getTopLeft());
-    game->window.blit((*retry.image), retry.rect.getTopLeft());
+    game->m_window.blit(game->m_images.gameover_screen, Vector2());
+    game->m_window.blit((*menu.image), menu.rect.getTopLeft());
+    game->m_window.blit((*retry.image), retry.rect.getTopLeft());
 
-    game->window.blit(new_score_surf, new_score_rect.getTopLeft());
-    game->window.blit(pb_surf, pb_rect.getTopLeft());
+    game->m_window.blit(new_score_surf, new_score_rect.getTopLeft());
+    game->m_window.blit(pb_surf, pb_rect.getTopLeft());
 }

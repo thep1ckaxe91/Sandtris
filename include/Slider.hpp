@@ -31,7 +31,7 @@ public:
   void set_label(std::string text, Color color);
   void set_color(Color nob, Color valid, Color invalid);
   virtual void update();
-  virtual void handle_event(Event &event);
+  virtual void handle_event(const Event &event);
   virtual void draw() = 0;
   virtual void on_change_value() = 0;
 };

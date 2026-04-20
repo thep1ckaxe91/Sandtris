@@ -10,22 +10,22 @@ SFXVolumeSlider::SFXVolumeSlider(Game &game, Vector2 topleft, float val,
 }
 SFXVolumeSlider::SFXVolumeSlider() = default;
 void SFXVolumeSlider::update() { Slider::update(); }
-void SFXVolumeSlider::handle_event(Event &event) {
+void SFXVolumeSlider::handle_event(const Event &event) {
   Slider::handle_event(event);
 }
 void SFXVolumeSlider::draw() {
-  game->window.blit(label_surf, label_rect.getTopLeft());
-  sdlgame::draw::line(game->window, value_color, topleft,
+  game->m_window.blit(label_surf, label_rect.getTopLeft());
+  sdlgame::draw::line(game->m_window, value_color, topleft,
                       topleft + Vector2(slide_length, 0) *
                                     (value / max_value));
-  sdlgame::draw::line(game->window, no_value_color,
+  sdlgame::draw::line(game->m_window, no_value_color,
                       topleft + Vector2(slide_length, 0),
                       topleft + Vector2(slide_length, 0) *
                                     (value / max_value));
-  sdlgame::draw::rect(game->window, nob_color, nob);
+  sdlgame::draw::rect(game->m_window, nob_color, nob);
 }
 void SFXVolumeSlider::on_change_value() {
-  game->audio_manager.set_sfx_volume(value / max_value);
+  game->m_audio_manager.set_sfx_volume(value / max_value);
 }
 
 MusicVolumeSlider::MusicVolumeSlider(Game &game, Vector2 topleft, float val,
@@ -38,22 +38,22 @@ MusicVolumeSlider::MusicVolumeSlider(Game &game, Vector2 topleft, float val,
 }
 MusicVolumeSlider::MusicVolumeSlider() = default;
 void MusicVolumeSlider::update() { Slider::update(); }
-void MusicVolumeSlider::handle_event(Event &event) {
+void MusicVolumeSlider::handle_event(const Event &event) {
   Slider::handle_event(event);
 }
 void MusicVolumeSlider::draw() {
-  game->window.blit(label_surf, label_rect.getTopLeft());
-  sdlgame::draw::line(game->window, value_color, topleft,
+  game->m_window.blit(label_surf, label_rect.getTopLeft());
+  sdlgame::draw::line(game->m_window, value_color, topleft,
                       topleft + Vector2(slide_length, 0) *
                                     (value / max_value));
-  sdlgame::draw::line(game->window, no_value_color,
+  sdlgame::draw::line(game->m_window, no_value_color,
                       topleft + Vector2(slide_length, 0),
                       topleft + Vector2(slide_length, 0) *
                                     (value / max_value));
-  sdlgame::draw::rect(game->window, nob_color, nob);
+  sdlgame::draw::rect(game->m_window, nob_color, nob);
 }
 void MusicVolumeSlider::on_change_value() {
-  game->audio_manager.set_music_volume(value / max_value);
+  game->m_audio_manager.set_music_volume(value / max_value);
 }
 
 FullscreenSlider::FullscreenSlider(Game &game, Vector2 topleft, float value,
@@ -69,19 +69,19 @@ void FullscreenSlider::update() {
       topleft +
       Vector2(value * slide_length / max_value, 0));
 }
-void FullscreenSlider::handle_event(Event &event) {
+void FullscreenSlider::handle_event(const Event &event) {
   Slider::handle_event(event);
 }
 void FullscreenSlider::draw() {
-  game->window.blit(label_surf, label_rect.getTopLeft());
-  sdlgame::draw::line(game->window, value_color, topleft,
+  game->m_window.blit(label_surf, label_rect.getTopLeft());
+  sdlgame::draw::line(game->m_window, value_color, topleft,
                       topleft + Vector2(slide_length, 0) *
                                     (value / max_value));
-  sdlgame::draw::line(game->window, no_value_color,
+  sdlgame::draw::line(game->m_window, no_value_color,
                       topleft + Vector2(slide_length, 0),
                       topleft + Vector2(slide_length, 0) *
                                     (value / max_value));
-  sdlgame::draw::rect(game->window, nob_color, nob);
+  sdlgame::draw::rect(game->m_window, nob_color, nob);
 }
 void FullscreenSlider::on_change_value() {
   value = (value == 0 ? max_value : 0);

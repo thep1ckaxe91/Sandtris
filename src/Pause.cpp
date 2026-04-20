@@ -25,7 +25,7 @@ void Pause::render_message(std::string new_message)
 }
 void Pause::display_message()
 {
-    game->window.blit(message_surf,message_rect.getTopLeft());
+    game->m_window.blit(message_surf,message_rect.getTopLeft());
 }
 void Pause::update()
 {
@@ -38,7 +38,7 @@ void Pause::update()
     back_button.update();        
 }
 
-void Pause::handle_event(Event &event)
+void Pause::handle_event(const Event &event)
 {
     menu_button.handle_event(event);
     option_button.handle_event(event);
@@ -47,10 +47,10 @@ void Pause::handle_event(Event &event)
 }
 void Pause::draw()
 {
-    game->window.blit(game->images.pause_background,Vector2());
-    game->window.blit(*menu_button.image,menu_button.rect.getTopLeft());
-    game->window.blit(*option_button.image,option_button.rect.getTopLeft());
-    game->window.blit(*retry_button.image,retry_button.rect.getTopLeft());
-    game->window.blit(*back_button.image,back_button.rect.getTopLeft());
+    game->m_window.blit(game->m_images.pause_background,Vector2());
+    game->m_window.blit(*menu_button.image,menu_button.rect.getTopLeft());
+    game->m_window.blit(*option_button.image,option_button.rect.getTopLeft());
+    game->m_window.blit(*retry_button.image,retry_button.rect.getTopLeft());
+    game->m_window.blit(*back_button.image,back_button.rect.getTopLeft());
     if(menu_button.hovering) display_message();
 }

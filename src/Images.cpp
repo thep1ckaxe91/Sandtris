@@ -1,6 +1,9 @@
 #include "Images.hpp"
 #include "engine.hpp"
 Images::Images() = default;
+
+// FIXME: this is disastrous, should have use an asset manager instead
+
 void Images::load()
 {
     const fs::path base_path = sdlgame::get_base_path() / "assets" / "image";
@@ -40,7 +43,7 @@ void Images::load()
     pause_button_hover = sdlgame::image::load(base_path /  "ui" / "pause_button" / "pause_button_hover.png");
     pause_button_click = sdlgame::image::load(base_path /  "ui" / "pause_button" / "pause_button_click.png");
 
-    option_button_idle = sdlgame::image::load(base_path /  "ui" / "option_button" / "option_button_idle.png");
+    option_button_idle = sdlgame::image::load(base_path /  "ui" / "option_button" / "opation_button_idle.png");
     option_button_hover = sdlgame::image::load(base_path /  "ui" / "option_button" / "option_button_hover.png");
     option_button_click = sdlgame::image::load(base_path /  "ui" / "option_button" / "option_button_click.png");
 

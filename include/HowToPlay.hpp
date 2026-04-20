@@ -11,7 +11,7 @@ public:
     double height_pos;
     const Vector2 bb_pos = Vector2(123,123);
     HowToPlay(Game &game);
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void update();
     void draw();
 };

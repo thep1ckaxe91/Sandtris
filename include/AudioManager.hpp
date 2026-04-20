@@ -11,7 +11,7 @@ public:
     SFX sfx;
     AudioManager();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void set_sfx_volume(float value);
     float get_sfx_volume();
     void set_music_volume(float value);

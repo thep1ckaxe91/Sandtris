@@ -9,7 +9,7 @@ AudioManager::AudioManager()
     set_sfx_volume(sfx_volume);
     set_music_volume(music_volume);
 }
-void AudioManager::handle_event(Event &event)
+void AudioManager::handle_event(const Event &event)
 {
     switch (event.type)
     {

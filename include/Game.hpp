@@ -16,22 +16,22 @@
 */
 class Game {
 protected:
-  std::unique_ptr<SceneTransition> in;
-  std::unique_ptr<SceneTransition> out;
-  std::unique_ptr<Scene> next;
-  SceneCommand command;
-  bool gameactive;
+  std::unique_ptr<SceneTransition> m_in;
+  std::unique_ptr<SceneTransition> m_out;
+  std::unique_ptr<Scene> m_next;
+  SceneCommand m_command;
+  bool m_gameactive;
 
 public:
-  std::vector<std::unique_ptr<Scene>> scene_list;
-  Images images;
-  AudioManager audio_manager;
+  std::vector<std::unique_ptr<Scene>> m_scene_list;
+  Images m_images;
+  AudioManager m_audio_manager;
   sdlgame::surface::Surface
-      window; // window is an actual texture getting drawn on
+      m_window; // window is an actual texture getting drawn on
   sdlgame::surface::Surface
-      window_object; // a nullptr texture surface, represent the actual window
-  sdlgame::time::Clock clock;
-  Vector2 window_draw_offset;
+      m_window_object; // a nullptr texture surface, represent the actual window
+  sdlgame::time::Clock m_clock;
+  Vector2 m_window_draw_offset; // TODO: this is just a quick patch to be able to create a screen shake effect, there must be a cleaner way
   Game();
   virtual void draw() = 0;
   virtual void update() = 0;

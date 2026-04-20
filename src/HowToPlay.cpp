@@ -8,7 +8,7 @@ HowToPlay::HowToPlay(Game &game) : Scene(game)
     height_pos = 0;
 }
 
-void HowToPlay::handle_event(Event &event)
+void HowToPlay::handle_event(const Event &event)
 {
     back_button.handle_event(event);
     if (event.type == sdlgame::MOUSEWHEEL)
@@ -28,6 +28,6 @@ void HowToPlay::update()
 
 void HowToPlay::draw()
 {
-    game->window.blit(game->images.instruction_image, Vector2(0, height_pos));
-    game->window.blit((*back_button.image), bb_pos);
+    game->m_window.blit(game->m_images.instruction_image, Vector2(0, height_pos));
+    game->m_window.blit((*back_button.image), bb_pos);
 }

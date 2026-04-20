@@ -11,7 +11,7 @@ public:
     SFXVolumeSlider(Game &game, Vector2 topleft, float value, float length, float max_value);
     SFXVolumeSlider();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void draw();
     void on_change_value();
 };
@@ -23,7 +23,7 @@ public:
     MusicVolumeSlider(Game &game, Vector2 topleft, float value, float length, float max_value);
     MusicVolumeSlider();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void draw();
     void on_change_value();
 };
@@ -35,7 +35,7 @@ public:
     FullscreenSlider(Game &game, Vector2 topleft, float value, float length, float max_value);
     FullscreenSlider();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void draw();
     void on_change_value();
 };
@@ -52,7 +52,7 @@ public:
 //     OptionElement(Vector2 topleft, std::string name, float value, float max_value);
 //     OptionElement();
 //     void update();
-//     void handle_event(Event &event);
+//     void handle_event(const Event &event);
 //     void draw();
 // };
 

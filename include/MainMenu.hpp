@@ -21,7 +21,7 @@ public:
     ResumeButton resume_button;
     bool can_resume;
     MainMenu(Game &game);
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void update();
     void draw();
     ~MainMenu();

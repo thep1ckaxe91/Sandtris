@@ -15,7 +15,7 @@ public:
     Option(Game &game);
     Option();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void draw();
 };
 #endif

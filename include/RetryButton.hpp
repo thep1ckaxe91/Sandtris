@@ -9,7 +9,7 @@ public:
     RetryButton(Game &game);
     RetryButton();
     void on_click();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
     void update();
 };
 #endif

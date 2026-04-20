@@ -12,7 +12,7 @@ public:
     PauseButton();
     void on_click();
     void update();
-    void handle_event(Event &event);
+    void handle_event(const Event &event);
 };
 
 #endif
