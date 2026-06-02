@@ -7,10 +7,10 @@ ShapeInfo::ShapeInfo(uint16_t m0, uint16_t m1, uint16_t m2, uint16_t m3, char sh
     mask[3] = m3;
     type = shape;
 }
-Tetrimino::Tetrimino(char shape, SandShift color)
+Tetrimino::Tetrimino(char shape, SandShift tetriminoColor)
 {
     type = shape;
-    color = color;
+    color = tetriminoColor;
     mask =  ShapeInfoList.at(type).mask[0];
 }
 Tetrimino::Tetrimino()=default;

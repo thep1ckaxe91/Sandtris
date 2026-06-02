@@ -8,9 +8,9 @@ using Vector2 = sdlgame::math::Vector2;
 using Surface = sdlgame::surface::Surface;
 using Color = sdlgame::color::Color;
 
-OutSwipeDown::OutSwipeDown(double time) : SceneTransition(time) {
+OutSwipeDown::OutSwipeDown(double duration) : SceneTransition(duration) {
   vel = cur_height = 0;
-  accelerate = (sdlgame::display::get_height() * 2 / (time * time));
+  accelerate = (sdlgame::display::get_height() * 2 / (duration * duration));
 }
 void OutSwipeDown::update(double delta_time) {
   vel += accelerate * delta_time;
@@ -24,9 +24,9 @@ void OutSwipeDown::draw() {
       sdlgame::display::get_surf(), Color("black"s),
       Rect(0.0, 0.0, sdlgame::display::get_width(), cur_height));
 }
-InSwipeDown::InSwipeDown(double time) : SceneTransition(time) {
+InSwipeDown::InSwipeDown(double duration) : SceneTransition(duration) {
   vel = cur_height = 0;
-  accelerate = (sdlgame::display::get_height() * 2) / time / time;
+  accelerate = (sdlgame::display::get_height() * 2) / duration / duration;
 }
 void InSwipeDown::update(double delta_time) {
   vel += accelerate * delta_time;
@@ -42,12 +42,12 @@ void InSwipeDown::draw() {
                            sdlgame::display::get_height()));
 }
 
-OutFade::OutFade(double time) : SceneTransition(time) {
+OutFade::OutFade(double duration) : SceneTransition(duration) {
   mask =
-      Surface(sdlgame::display::get_width(), sdlgame::display::get_height());
+      Surface(static_cast<int>(sdlgame::display::get_width()), static_cast<int>(sdlgame::display::get_height()));
   cur_color = Color("none"s);
   mask.fill(cur_color);
-  vel = 255 / time;
+  vel = 255 / duration;
   cur_alpha = 0;
 }
 void OutFade::update(double delta_time) {
@@ -63,12 +63,12 @@ void OutFade::draw() {
   sdlgame::display::get_surf().blit(mask, Vector2());
 }
 
-InFade::InFade(double time) : SceneTransition(time) {
+InFade::InFade(double duration) : SceneTransition(duration) {
   mask =
-      Surface(sdlgame::display::get_width(), sdlgame::display::get_height());
+      Surface(static_cast<int>(sdlgame::display::get_width()), static_cast<int>(sdlgame::display::get_height()));
   cur_color = Color("black"s);
   mask.fill(cur_color);
-  vel = -255 / time;
+  vel = -255 / duration;
   cur_alpha = 255;
 }
 void InFade::update(double delta_time) {

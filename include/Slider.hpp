@@ -30,7 +30,7 @@ public:
          float max_value = 1);
   Slider();
   void set_label(std::string text, Color color);
-  void set_color(Color nob, Color valid, Color invalid);
+  void set_color(Color nobColor, Color valid, Color invalid);
   virtual void update();
   virtual void handle_event(const Event &event);
   virtual void draw() = 0;

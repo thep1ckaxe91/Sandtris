@@ -1,7 +1,7 @@
 #include "SplashScreen.hpp"
 
-SplashScreen::SplashScreen(Game &game, double time, std::shared_ptr<Animation> anim)
-    : Scene(game), splash(anim), time(time), done(false) {}
+SplashScreen::SplashScreen(Game &gameInstance, double duration, std::shared_ptr<Animation> anim)
+    : Scene(gameInstance), splash(anim), time(duration), done(false) {}
 
 void SplashScreen::play() { splash->play(); }
 
