@@ -16,7 +16,7 @@ public:
   Game &game; // FIXME: the Game reference is really drilling through every source file lol 
   // figure out a way to get this off, maybe utilize event bus more, localize
 
-  Scene(Game &game);
+  Scene(Game &);
   virtual ~Scene() = default;
 
   Scene(Scene &&) = delete;

@@ -17,7 +17,7 @@ public:
    * @param time total time for splash screen from in transition start and out
    * transition end;
    */
-  SplashScreen(Game &game, double time, std::shared_ptr<Animation> anim);
+  SplashScreen(Game &gameInstance, double duration, std::shared_ptr<Animation> anim);
   void play();
   virtual void on_finish() = 0;
   void handle_event(const Event &event) override;

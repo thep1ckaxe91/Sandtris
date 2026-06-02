@@ -42,8 +42,8 @@ void Slider::update() {
  * @param valid color for the part that represent the total value
  * @param invalid color for the part that dont represent the value
  */
-void Slider::set_color(Color nob, Color valid, Color invalid) {
-  nob_color = nob;
+void Slider::set_color(Color nobColor, Color valid, Color invalid) {
+  nob_color = nobColor;
   value_color = valid;
   no_value_color = invalid;
 }

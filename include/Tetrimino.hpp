@@ -50,7 +50,7 @@ struct Tetrimino {
    * @param shape the character stand for the shape
    * @param color SandShift color for the shape
    */
-  Tetrimino(char shape, SandShift color);
+  Tetrimino(char shape, SandShift tetriminoColor);
   Tetrimino();
 
   void rotate();

@@ -1,7 +1,7 @@
 #include "Option.hpp"
 #include "SaveData.hpp"
 
-Option::Option(Game &game) : Scene(game) {
+Option::Option(Game &_game) : Scene(_game) {
   sfx_slider = std::make_shared<SFXVolumeSlider>(
       game, Vector2(80, 32), game.audio_manager.get_sfx_volume(), 48, 1);
   music_slider = std::make_shared<MusicVolumeSlider>(

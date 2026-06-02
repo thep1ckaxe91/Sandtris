@@ -7,7 +7,7 @@
 
 class StudioSC : public SplashScreen {
 public:
-  StudioSC(Game &game, std::shared_ptr<Animation> anim, double time = 3);
+  StudioSC(Game &gameInstance, std::shared_ptr<Animation> anim, double duration = 3);
   void handle_event(const Event &event) override;
   void update() override;
   void on_finish() override;
@@ -15,7 +15,7 @@ public:
 
 class SDLSC : public SplashScreen {
 public:
-  SDLSC(Game &game, std::shared_ptr<Animation> anim, double time = 2);
+  SDLSC(Game &gameInstance, std::shared_ptr<Animation> anim, double duration = 2);
   void handle_event(const Event &event) override;
   void update() override;
   void on_finish() override;

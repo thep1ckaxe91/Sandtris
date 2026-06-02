@@ -3,9 +3,9 @@
 
 using namespace std::string_literals;
 
-SFXVolumeSlider::SFXVolumeSlider(Game &g, Vector2 topleft, float val,
+SFXVolumeSlider::SFXVolumeSlider(Game &g, Vector2 start_pos, float start_val,
                                  float length, float max_val)
-    : Slider(topleft, val, length, max_val), game(g) {
+    : Slider(start_pos, start_val, length, max_val), game(g) {
   set_color("white"s, "white"s, "gray"s);
   set_label("SFX Volume: "s, "white"s);
 }
@@ -26,9 +26,9 @@ void SFXVolumeSlider::on_change_value() {
   game.audio_manager.set_sfx_volume(value / max_value);
 }
 
-MusicVolumeSlider::MusicVolumeSlider(Game &g, Vector2 topleft, float val,
+MusicVolumeSlider::MusicVolumeSlider(Game &g, Vector2 start_pos, float start_val,
                                      float length, float max_val)
-    : Slider(topleft, val, length, max_val), game(g) {
+    : Slider(start_pos, start_val, length, max_val), game(g) {
   set_color("white"s, "white"s, "gray"s);
   set_label("Music Volume: "s, "white"s);
 }
@@ -49,9 +49,9 @@ void MusicVolumeSlider::on_change_value() {
   game.audio_manager.set_music_volume(value / max_value);
 }
 
-FullscreenSlider::FullscreenSlider(Game &g, Vector2 topleft, float value,
-                                   float length, float max_value)
-    : Slider(topleft, value, length, max_value), game(g) {
+FullscreenSlider::FullscreenSlider(Game &g, Vector2 start_pos, float start_val,
+                                   float length, float max_val)
+    : Slider(start_pos, start_val, length, max_val), game(g) {
   set_color("white"s, "orange"s, "saddle brown"s);
   set_label("Fullscreen :"s, "white"s);
 }

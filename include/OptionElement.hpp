@@ -7,8 +7,8 @@
 class SFXVolumeSlider : public Slider {
 public:
   Game &game;
-  SFXVolumeSlider(Game &game, Vector2 topleft, float value, float length,
-                  float max_value);
+  SFXVolumeSlider(Game &game, Vector2 start_pos, float start_val, float length,
+                  float max_val);
   void update();
   void handle_event(const Event &event);
   void draw();
@@ -18,8 +18,8 @@ public:
 class MusicVolumeSlider : public Slider {
 public:
   Game &game;
-  MusicVolumeSlider(Game &game, Vector2 topleft, float value, float length,
-                    float max_value);
+  MusicVolumeSlider(Game &game, Vector2 start_pos, float start_val, float length,
+                    float max_val);
   void update();
   void handle_event(const Event &event);
   void draw();
@@ -29,8 +29,8 @@ public:
 class FullscreenSlider : public Slider {
 public:
   Game &game;
-  FullscreenSlider(Game &game, Vector2 topleft, float value, float length,
-                   float max_value);
+  FullscreenSlider(Game &game, Vector2 start_pos, float start_val, float length,
+                   float max_val);
   void update();
   void handle_event(const Event &event);
   void draw();

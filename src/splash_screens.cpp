@@ -4,8 +4,8 @@
 #include "scene_transitions.hpp"
 #include <memory>
 
-SDLSC::SDLSC(Game &game, std::shared_ptr<Animation> anim, double time)
-    : SplashScreen(game, time, anim) {}
+SDLSC::SDLSC(Game &gameInstance, std::shared_ptr<Animation> anim, double duration)
+    : SplashScreen(gameInstance, duration, anim) {}
 void SDLSC::handle_event(const Event &event) { SplashScreen::handle_event(event); }
 void SDLSC::update() { SplashScreen::update(); }
 void SDLSC::on_finish() {
@@ -15,9 +15,9 @@ void SDLSC::on_finish() {
   game.pop_scene(std::move(out), std::move(next), std::move(in));
 }
 
-StudioSC::StudioSC(Game &game, std::shared_ptr<Animation> anim, double time)
-    : SplashScreen(game, time, anim) {
-  game.audio_manager.sfx.soft_wind_blow.play();
+StudioSC::StudioSC(Game &gameInstance, std::shared_ptr<Animation> anim, double duration)
+    : SplashScreen(gameInstance, duration, anim) {
+  gameInstance.audio_manager.sfx.soft_wind_blow.play();
 }
 void StudioSC::handle_event(const Event &event) { SplashScreen::handle_event(event); }
 void StudioSC::update() { SplashScreen::update(); }
