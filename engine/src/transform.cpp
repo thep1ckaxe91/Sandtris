@@ -43,7 +43,6 @@ surface::Surface scale_by(const surface::Surface &surface, double factor) {
 /**
  * return a surface that rotated a certain angle counter-clokcwise with passed
  * center angle unit is degrees
- * TODO: calculate the new size for the res surface
  */
 surface::Surface rotate(const surface::Surface &surface, double angle_deg,
                         math::Vector2 center) {

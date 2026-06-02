@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_RANDOM_
 #define SDLGAME_RANDOM_
 

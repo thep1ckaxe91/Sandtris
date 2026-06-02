@@ -1,30 +1,33 @@
+#pragma once
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
-#include "Scene.hpp"
-#include "StartButton.hpp"
-#include "QuitButton.hpp"
 #include "CreditButton.hpp"
-#include "engine.hpp"
-#include "PBButton.hpp"
 #include "HTPButton.hpp"
 #include "OptionButton.hpp"
+#include "PBButton.hpp"
+#include "QuitButton.hpp"
 #include "ResumeButton.hpp"
-class MainMenu : public Scene
-{
+#include "Scene.hpp"
+#include "StartButton.hpp"
+#include "engine.hpp"
+#include <memory>
+
+class MainMenu : public Scene {
 public:
-    StartButton start_button;
-    QuitButton quit_button;
-    CreditButton credit_button;
-    PBButton pb_button;
-    HTPButton htp_button;
-    OptionButton option_button;
-    ResumeButton resume_button;
-    bool can_resume;
-    MainMenu(Game &game);
-    void handle_event(const Event &event);
-    void update();
-    void draw();
-    ~MainMenu();
+  std::shared_ptr<StartButton> start_button;
+  std::shared_ptr<QuitButton> quit_button;
+  std::shared_ptr<CreditButton> credit_button;
+  std::shared_ptr<PBButton> pb_button;
+  std::shared_ptr<HTPButton> htp_button;
+  std::shared_ptr<OptionButton> option_button;
+  std::shared_ptr<ResumeButton> resume_button;
+
+  bool can_resume;
+  MainMenu(Game &game);
+  void handle_event(const Event &event);
+  void update();
+  void draw();
+  ~MainMenu();
 };
 
 #endif

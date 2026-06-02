@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SFX_HPP
 #define SFX_HPP
 

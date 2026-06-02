@@ -18,7 +18,7 @@ void init() {
   }
 }
 
-inline std::span<const uint8_t> get_pressed() {
+std::span<const uint8_t> get_pressed() {
   assert(keyState != nullptr && "sdlgame::key::init() was never called\n");
   return {keyState, static_cast<size_t>(numKeys)};
 }

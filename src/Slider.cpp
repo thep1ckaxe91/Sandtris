@@ -15,13 +15,13 @@ Slider::Slider(Vector2 topleft, float value, float slide_length,
     : nob(Rect{0, 0, 3, 3}), topleft(topleft),
       label_font(Font(font_path, FONT_SIZE)), value(value),
       slide_length(slide_length), max_value(max_value), holding(0) {
-  set_label("default label", "white");
-  set_color("white", "white", "gray");
+  set_label("default label", "white"s);
+  set_color("white"s, "white"s, "gray"s);
   nob.setCenter(topleft + Vector2(value / max_value * slide_length, 0));
 }
 Slider::Slider() = default;
 void Slider::set_label(std::string text, Color color) {
-  label_surf = label_font.render(text, 0, color);
+  label_surf = label_font.render(text, sdlgame::font::AntiAlias::SOLID, color);
   label_rect = label_surf.get_rect();
   label_rect.setMidRight(topleft);
 }

@@ -1,55 +1,48 @@
 #include "GameOver.hpp"
-#include "constant.hpp"
 #include "SaveData.hpp"
 #include "Scene.hpp"
-GameOver::GameOver(Game &game, int new_score) : Scene(game)
-{
-    menu = MenuButton(game);
-    menu.rect = (*menu.image).get_rect();
-    menu.rect.setTopLeft(menu_button_pos);
+#include "constant.hpp"
 
-    retry = RetryButton(game);
-    retry.rect = (*retry.image).get_rect();
-    retry.rect.setTopLeft(retry_button_pos);
+using namespace std::string_literals;
 
-    score_font = Font(font_path, FONT_SIZE);
+GameOver::GameOver(Game &game, int score)
+    : Scene(game), new_score(score), score_font(font_path, FONT_SIZE) {
+  menu = std::make_shared<MenuButton>(game);
+  menu->get_rect().setTopLeft(menu_button_pos);
 
-    new_score = new_score;
-    pb = get_personal_best();
+  retry = std::make_shared<RetryButton>(game);
+  retry->get_rect().setTopLeft(retry_button_pos);
 
-    if (new_score > pb)
-    {
-        set_personal_best(new_score);
-        pb_surf = score_font.render("NEW PB !", 0, "white");
-    }
-    else
-        pb_surf = score_font.render(std::to_string(pb), 0, "white");
+  pb = get_personal_best();
 
-    new_score_surf = score_font.render(std::to_string(new_score), 0, "white");
-    new_score_rect = new_score_surf.get_rect();
-    new_score_rect.setMidBottom(midbottom_newscore);
-    pb_rect = pb_surf.get_rect();
-    pb_rect.setMidBottom(midbottom_pb);
+  if (new_score > pb) {
+    set_personal_best(new_score);
+    pb_surf = score_font.render("NEW PB !", sdlgame::font::AntiAlias::SOLID, "white"s);
+  } else
+    pb_surf = score_font.render(std::to_string(pb), sdlgame::font::AntiAlias::SOLID, "white"s);
+
+  new_score_surf = score_font.render(std::to_string(new_score), sdlgame::font::AntiAlias::SOLID, "white"s);
+  new_score_rect = new_score_surf.get_rect();
+  new_score_rect.setMidBottom(midbottom_newscore);
+  pb_rect = pb_surf.get_rect();
+  pb_rect.setMidBottom(midbottom_pb);
 }
 
-void GameOver::handle_event(const Event &event)
-{
-    menu.handle_event(event);
-    retry.handle_event(event);
+void GameOver::handle_event(const Event &event) {
+  menu->handle_event(event);
+  retry->handle_event(event);
 }
 
-void GameOver::update()
-{
-    menu.update();
-    retry.update();
+void GameOver::update() {
+  menu->update();
+  retry->update();
 }
 
-void GameOver::draw()
-{
-    game->m_window.blit(game->m_images.gameover_screen, Vector2());
-    game->m_window.blit((*menu.image), menu.rect.getTopLeft());
-    game->m_window.blit((*retry.image), retry.rect.getTopLeft());
+void GameOver::draw() {
+  game.m_window.blit(*game.images.gameover_screen, Vector2());
+  game.m_window.blit(menu->get_image(), menu->get_rect().getTopLeft());
+  game.m_window.blit(retry->get_image(), retry->get_rect().getTopLeft());
 
-    game->m_window.blit(new_score_surf, new_score_rect.getTopLeft());
-    game->m_window.blit(pb_surf, pb_rect.getTopLeft());
+  game.m_window.blit(new_score_surf, new_score_rect.getTopLeft());
+  game.m_window.blit(pb_surf, pb_rect.getTopLeft());
 }

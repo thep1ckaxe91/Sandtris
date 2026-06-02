@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SAND_HPP
 #define SAND_HPP
 #include <array>

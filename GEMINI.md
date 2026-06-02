@@ -1,53 +1,78 @@
-# Sandtris: Performance-Focused Falling Sand Simulation
+# Sandtris: Refactor for Performance - Technical Guide
 
-Sandtris is a 2D falling sand simulation game built with C++23. It's a refactor of an earlier project, specifically optimized for high performance and scalability to handle a massive number of sand particles.
+## 1. Project Objective
 
-## Project Overview
+The primary goal of this project is to refactor the Sandtris game to significantly improve its performance and scalability, allowing it to simulate a much larger number of sand particles at a higher resolution. The project has been modernized to use C++23 and a robust dependency management system.
 
-- **Core Technologies:** C++23, SDL2, CMake, Conan.
-- **Engine Architecture:** A custom-built `GameEngine` (located in `engine/`) provides a hardware abstraction layer for graphics, audio, input, and time management.
-- **Game Logic:** Implemented using a scene-based architecture where the `Game` class manages scene transitions and the main loop.
-- **Performance:** Extensive profiling and optimization work has been done, including redundant work removal and architectural refactoring (e.g., `time` namespace with `std::chrono` and ring buffers).
+## 2. Game Architecture
 
-## Building and Running
+The project is structured into two main components:
 
-The project uses **Conan** for dependency management and **CMake** for building.
+### 2.1. Game Engine (`engine/`)
+A custom C++ engine that wraps SDL2, providing a Pygame-inspired API.
+*   **Location:** `/engine`
+*   **Source:** `/engine/src`
+*   **Headers:** `/engine/include`
+*   **Build:** Compiled as a static library `GameEngine`.
+*   **Optimization:** Uses aggressive compiler flags (`-O3`, `-ftree-vectorize`, `-march=native`) in Release/RelWithDebInfo modes for SIMD and performance.
 
-### Prerequisites
-- C++23 compatible compiler (e.g., GCC 13+, Clang 16+)
-- CMake 3.24+
-- Conan 2.x
+### 2.2. Game Logic (`src/`)
+Contains the Sandtris-specific implementation.
+*   **Source:** `/src`
+*   **Headers:** `/include`
+*   **Simulation:** Focuses on high-performance sand physics and efficient rendering.
 
-### Build Steps (Inferred)
-1.  **Install Dependencies:**
+## 3. Build System & Dependency Management
+
+### 3.1. Conan 2.0
+The project uses **Conan** as its primary package manager. 
+*   **Config:** `conanfile.py`
+*   **Dependencies:** SDL2 (2.32.10), SDL2_ttf, SDL2_image, SDL2_mixer, Protobuf, and GTest.
+*   **Integration:** Conan generates CMake toolchain and dependency files, which are used by CMake to locate and link libraries.
+
+### 3.2. CMake
+The build is orchestrated by CMake (minimum version 3.24).
+*   **Root `CMakeLists.txt`:** Manages the main executable and assets.
+*   **`engine/CMakeLists.txt`:** Manages the engine library and its specific optimizations.
+*   **Modern Practices:** Uses target-based linking and explicit include directories.
+
+## 4. Build and Run Instructions
+
+1.  **Install Dependencies (Conan):**
     ```bash
     conan install . --output-folder=build --build=missing
     ```
-2.  **Configure CMake:**
+2.  **Configure and Build:**
     ```bash
-    cmake --preset conan-release
+    ./cmake_build.sh
     ```
-3.  **Build the Project:**
-    ```bash
-    cmake --build --preset conan-release
-    ```
-4.  **Run the Game:**
-    The executable `Sandtris` will be located in the build output directory (e.g., `build/Release/Sandtris`).
+    *(The script typically handles CMake configuration and building using the Conan toolchain.)*
 
-*Note: Assets in the `assets/` directory are automatically copied to the build directory as a post-build step.*
+---
 
-## Development Conventions
+## 5. Evaluation of Current Setup (Conan + CMake)
 
-### Architectural Patterns
-- **Scene Management:** The game operates through discrete scenes (e.g., `MainMenu`, `GamePlay`, `GameOver`). Use `Game::add_scene`, `Game::pop_scene`, and `Game::clear_scene` for transitions.
-- **Memory Management:** While the engine uses RAII, some game-level pointers (like `SceneTransition`) require manual cleanup or careful management as noted in `Game.hpp`.
-- **Performance-First Design:** All major changes should be evaluated for performance impact. Check `profiling results/` for historical context and methodologies. The `Sand` struct is optimized to be extremely small (e.g., 2 bytes) to minimize memory overhead.
+### 5.1. Pros
+*   **Reliable Dependency Management:** Conan handles the complex tree of SDL2 dependencies (Ogg, Vorbis, etc.) automatically, ensuring binary compatibility and correct linking.
+*   **Modern C++ Standards:** The use of C++23 allows for the latest language features, and CMake 3.24+ integration provides a smoother experience with Conan 2.0.
+*   **Build Speed:** Once dependencies are installed by Conan, they are cached. Rebuilding the project only recompiles the game and engine source code.
+*   **Clean Source Tree:** No need for a `vendored/` folder, keeping the repository lean and focused on project-specific code.
 
-### Coding Style
-- **C++ Standards:** Adhere to C++23 standards and modern idioms.
-- **Engine Wrappers:** Use the `sdlgame` namespace provided by the engine for SDL-related operations instead of calling SDL directly when possible.
-- **Profiling:** Utilize the `Timer` and `TimerManager` classes from the `sdlgame::time` namespace for benchmarking critical paths.
+### 5.2. Cons
+*   **Configuration Complexity:** The `conanfile.py` and CMake integration can be complex to set up initially, especially with target aliasing and custom flags.
+*   **Developer Onboarding:** Requires developers to have Conan 2.0 installed and configured on their system.
+*   **Hidden Magic:** Issues within the Conan-generated files can sometimes be harder to debug than manual `add_subdirectory` calls.
 
-### Asset Handling
-- Images, animations, audio, and fonts should be placed in their respective subdirectories within `assets/`.
-- New assets added to `assets/` will be copied to the build directory upon the next successful build.
+### 5.3. Potential Improvements
+*   **Full CMake Integration:** Instead of a separate `cmake_build.sh`, the Conan installation can be integrated directly into the CMake configure step using `conan_cmake_run` (though the current approach is often more robust).
+*   **Binary Caching:** Using a remote Conan server (like Artifactory) would allow the team to share pre-compiled binaries for the engine itself.
+*   **Testing Integration:** Ensure `GTest` is fully integrated into the CMake test runner (`ctest`) for automated validation of physics logic.
+
+---
+
+## 6. Architecture Mandates
+
+*   **SDL Version:** SDL2 (via Conan).
+*   **Standards:** C++23.
+*   **Optimizations:** Explicit SIMD and tree vectorization in the engine.
+*   **Memory:** RAII compliance. No raw `new/delete` in game logic.

@@ -1,12 +1,12 @@
 #include "scene_transitions.hpp"
-using Event = sdlgame::event::Event;
-using Rect = rect::Rect;
-using Vector2 = math::Vector2;
+#include <string>
+
+using namespace std::string_literals;
+
+using Rect = sdlgame::rect::Rect;
+using Vector2 = sdlgame::math::Vector2;
 using Surface = sdlgame::surface::Surface;
 using Color = sdlgame::color::Color;
-using Sound = sdlgame::mixer::Sound;
-using Channel = sdlgame::mixer::Channel;
-using Font = sdlgame::font::Font;
 
 OutSwipeDown::OutSwipeDown(double time) : SceneTransition(time) {
   vel = cur_height = 0;
@@ -17,12 +17,11 @@ void OutSwipeDown::update(double delta_time) {
   time -= delta_time;
   if (time <= 0)
     isDone = 1;
-  // cout << vel << " " << accelerate << " " << delta_time << endl;
   cur_height += vel * delta_time;
 }
 void OutSwipeDown::draw() {
   sdlgame::draw::rect(
-      sdlgame::display::get_surf(), "black",
+      sdlgame::display::get_surf(), Color("black"s),
       Rect(0.0, 0.0, sdlgame::display::get_width(), cur_height));
 }
 InSwipeDown::InSwipeDown(double time) : SceneTransition(time) {
@@ -38,7 +37,7 @@ void InSwipeDown::update(double delta_time) {
   cur_height += vel * delta_time;
 }
 void InSwipeDown::draw() {
-  sdlgame::draw::rect(sdlgame::display::get_surf(), "black",
+  sdlgame::draw::rect(sdlgame::display::get_surf(), Color("black"s),
                       Rect(0.0, cur_height, sdlgame::display::get_width(),
                            sdlgame::display::get_height()));
 }
@@ -46,7 +45,7 @@ void InSwipeDown::draw() {
 OutFade::OutFade(double time) : SceneTransition(time) {
   mask =
       Surface(sdlgame::display::get_width(), sdlgame::display::get_height());
-  cur_color = Color("none");
+  cur_color = Color("none"s);
   mask.fill(cur_color);
   vel = 255 / time;
   cur_alpha = 0;
@@ -67,7 +66,7 @@ void OutFade::draw() {
 InFade::InFade(double time) : SceneTransition(time) {
   mask =
       Surface(sdlgame::display::get_width(), sdlgame::display::get_height());
-  cur_color = Color("black");
+  cur_color = Color("black"s);
   mask.fill(cur_color);
   vel = -255 / time;
   cur_alpha = 255;

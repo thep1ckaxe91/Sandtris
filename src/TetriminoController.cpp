@@ -1,54 +1,45 @@
 #include "TetriminoController.hpp"
+#include "Sand.hpp"
 
-TetriminoController::TetriminoController(Game &game, Tetrimino tetrimino) {
-  game = &game;
-  tetrimino = tetrimino;
-  draw_surf = Surface(EDGE_SIZE, EDGE_SIZE);
-  topleft = spawn_pos;
-  for (int i = 0; i < 4; i++)
-    for (int j = 0; j < 4; j++)
-      sdlgame::draw::rect(
-          draw_surf,
-          (tetrimino.mask >> (15 - i * 4 - j) & 1
-               ? SandShiftColor[static_cast<uint8_t>(tetrimino.color)]
-               : Color()),
-          Rect(8 * j, 8 * i, 8, 8));
+TetriminoController::TetriminoController(Game &g, Tetrimino t)
+    : game(g), tetrimino(t), draw_surf(TETRIMINO_EDGE_SIZE, TETRIMINO_EDGE_SIZE),
+      topleft(spawn_pos) {
+  redraw();
 }
-TetriminoController::TetriminoController() {
-  game = nullptr;
-  tetrimino = Tetrimino('I', SandShift::RED_SAND);
-}
-void TetriminoController::reset(Tetrimino tetrimino) {
-  tetrimino = tetrimino;
+
+void TetriminoController::reset(Tetrimino t) {
+  tetrimino = t;
   topleft = spawn_pos;
   redraw();
 }
-void TetriminoController::draw() { game->m_window.blit(draw_surf, topleft); }
+
+void TetriminoController::draw() { game.m_window.blit(draw_surf, topleft); }
+
 void TetriminoController::update() {
-  // movement
-  //  redraw();
   auto keys = sdlgame::key::get_pressed();
   topleft.x += ((keys[sdlgame::K_d] or keys[sdlgame::K_RIGHT]) -
                 (keys[sdlgame::K_a] or keys[sdlgame::K_LEFT])) *
-               sideway_move_speed * game->m_clock.delta_time().count();
-  topleft.y += game->m_clock.delta_time().count() *
+               sideway_move_speed * game.m_clock.delta_time().count();
+  topleft.y += game.m_clock.delta_time().count() *
                (keys[sdlgame::K_s] or keys[sdlgame::K_DOWN] ? fast_fall_speed
                                                             : fall_speed);
 }
+
 void TetriminoController::rotate() {
   tetrimino.rotate();
   redraw();
 }
+
 void TetriminoController::redraw() {
+  draw_surf.fill(Color());
   for (int i = 0; i < 4; i++)
     for (int j = 0; j < 4; j++)
-      sdlgame::draw::rect(
-          draw_surf,
-          (tetrimino.mask >> (15 - i * 4 - j) & 1
-               ? SandShiftColor[static_cast<uint8_t>(tetrimino.color)]
-               : Color()),
-          Rect(8 * j, 8 * i, 8, 8));
+      if (tetrimino.mask >> (15 - i * 4 - j) & 1)
+        sdlgame::draw::rect(
+            draw_surf, SandShiftColor[static_cast<uint8_t>(tetrimino.color)],
+            Rect(8 * j, 8 * i, 8, 8));
 }
+
 void TetriminoController::handle_event(const Event &event) {
   if (event.type == sdlgame::KEYDOWN) {
     if (event["key"] == sdlgame::K_UP or event["key"] == sdlgame::K_w)

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_SPRITE_
 #define SDLGAME_SPRITE_
 #include "rect.hpp"

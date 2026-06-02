@@ -1,6 +1,10 @@
+#pragma once
 #ifndef SCENE_HPP
 #define SCENE_HPP
-#include "Game.hpp"
+
+#include "event.hpp"
+
+using Event = sdlgame::event::Event;
 
 class Game;
 
@@ -9,8 +13,12 @@ class Game;
  */
 class Scene {
 public:
-  Game &game;
+  Game &game; // FIXME: the Game reference is really drilling through every source file lol 
+  // figure out a way to get this off, maybe utilize event bus more, localize
+
   Scene(Game &game);
+  virtual ~Scene() = default;
+
   Scene(Scene &&) = delete;
   Scene(const Scene &) = delete;
   void operator=(Scene &&) = delete;
@@ -20,6 +28,5 @@ public:
   virtual void update() = 0;
   virtual void draw() = 0;
   virtual void handle_event(const Event &event) = 0;
-  virtual ~Scene();
 };
 #endif

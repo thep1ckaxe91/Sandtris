@@ -2,9 +2,13 @@
 #include "TetrisEvent.hpp"
 #include "engine.hpp"
 
-void Button::set_images(const std::shared_ptr<const Surface> &idle,
-                        const std::shared_ptr<const Surface> &hover,
-                        const std::shared_ptr<const Surface> &click) {
+Button::Button()
+    : m_idle(nullptr), m_hover(nullptr), m_click(nullptr), hovering(false),
+      prev_hovered(false) {}
+
+void Button::set_images(std::shared_ptr<const sdlgame::surface::Surface> idle,
+                        std::shared_ptr<const sdlgame::surface::Surface> hover,
+                        std::shared_ptr<const sdlgame::surface::Surface> click) {
   m_idle = idle;
   m_hover = hover;
   m_click = click;

@@ -1,69 +1,66 @@
 #include "MainMenu.hpp"
-#include "constant.hpp"
 #include "SaveData.hpp"
-MainMenu::MainMenu(Game &game) : Scene(game)
-{
+#include "constant.hpp"
 
-    if (have_grid_data())
-    {
-        resume_button = ResumeButton(game);
-        resume_button.rect.setTopLeft(8, RESOLUTION_HEIGHT - 8 * 4 - 16 * 4);
-        can_resume = 1;
-    }
-    else
-        can_resume = 0;
+MainMenu::MainMenu(Game &game) : Scene(game) {
+  if (have_grid_data()) {
+    resume_button = std::make_shared<ResumeButton>(game);
+    resume_button->get_rect().setTopLeft(8, RESOLUTION_HEIGHT - 8 * 4 - 16 * 4);
+    can_resume = true;
+  } else {
+    can_resume = false;
+  }
 
-    start_button = StartButton(game);
-    start_button.rect.setTopLeft(8, RESOLUTION_HEIGHT - 8 * 3 - 16 * 3);
-    credit_button = CreditButton(game);
-    credit_button.rect.setTopLeft(8, RESOLUTION_HEIGHT - 8 * 2 - 16 * 2);
-    quit_button = QuitButton(game);
-    quit_button.rect.setTopLeft(8, RESOLUTION_HEIGHT - 8 - 16);
+  start_button = std::make_shared<StartButton>(game);
+  start_button->get_rect().setTopLeft(8, RESOLUTION_HEIGHT - 8 * 3 - 16 * 3);
+  credit_button = std::make_shared<CreditButton>(game);
+  credit_button->get_rect().setTopLeft(8, RESOLUTION_HEIGHT - 8 * 2 - 16 * 2);
+  quit_button = std::make_shared<QuitButton>(game);
+  quit_button->get_rect().setTopLeft(8, RESOLUTION_HEIGHT - 8 - 16);
 
-    pb_button = PBButton(game);
-    pb_button.rect.setTopLeft(119 - 32 - 2, 104);
-    htp_button = HTPButton(game);
-    htp_button.rect.setTopLeft(119, 104);
-    option_button = OptionButton(game);
-    option_button.rect.setTopLeft(119 - 64 - 4, 104);
+  pb_button = std::make_shared<PBButton>(game);
+  pb_button->get_rect().setTopLeft(119 - 32 - 2, 104);
+  htp_button = std::make_shared<HTPButton>(game);
+  htp_button->get_rect().setTopLeft(119, 104);
+  option_button = std::make_shared<OptionButton>(game);
+  option_button->get_rect().setTopLeft(119 - 64 - 4, 104);
 
-    sdlgame::music::load(base_path + "assets/audio/music/mainmenu_theme_loop.mp3");
-    sdlgame::music::play(-1, 1000);
+  sdlgame::music::load(base_path / "assets/audio/music/mainmenu_theme_loop.mp3");
+  sdlgame::music::play(-1, 1000);
 }
-void MainMenu::handle_event(const Event &event)
-{
-    start_button.handle_event(event);
-    quit_button.handle_event(event);
-    credit_button.handle_event(event);
-    pb_button.handle_event(event);
-    htp_button.handle_event(event);
-    option_button.handle_event(event);
-    if (can_resume)
-        resume_button.handle_event(event);
+
+void MainMenu::handle_event(const Event &event) {
+  start_button->handle_event(event);
+  quit_button->handle_event(event);
+  credit_button->handle_event(event);
+  pb_button->handle_event(event);
+  htp_button->handle_event(event);
+  option_button->handle_event(event);
+  if (can_resume)
+    resume_button->handle_event(event);
 }
-void MainMenu::update()
-{
-    start_button.update();
-    quit_button.update();
-    credit_button.update();
-    pb_button.update();
-    htp_button.update();
-    option_button.update();
-    if (can_resume)
-        resume_button.update();
+
+void MainMenu::update() {
+  start_button->update();
+  quit_button->update();
+  credit_button->update();
+  pb_button->update();
+  htp_button->update();
+  option_button->update();
+  if (can_resume)
+    resume_button->update();
 }
-void MainMenu::draw()
-{
-    game->m_window.blit(game->m_images.mainmenu_background, math::Vector2());
-    game->m_window.blit(*start_button.image, start_button.rect.getTopLeft());
-    game->m_window.blit(*credit_button.image, credit_button.rect.getTopLeft());
-    game->m_window.blit(*quit_button.image, quit_button.rect.getTopLeft());
-    game->m_window.blit(*pb_button.image, pb_button.rect.getTopLeft());
-    game->m_window.blit(*htp_button.image, htp_button.rect.getTopLeft());
-    game->m_window.blit(*option_button.image, option_button.rect.getTopLeft());
-    if (can_resume)
-        game->m_window.blit(*resume_button.image, resume_button.rect.getTopLeft());
+
+void MainMenu::draw() {
+  game.m_window.blit(*game.images.mainmenu_background, Vector2());
+  game.m_window.blit(start_button->get_image(), start_button->get_rect().getTopLeft());
+  game.m_window.blit(credit_button->get_image(), credit_button->get_rect().getTopLeft());
+  game.m_window.blit(quit_button->get_image(), quit_button->get_rect().getTopLeft());
+  game.m_window.blit(pb_button->get_image(), pb_button->get_rect().getTopLeft());
+  game.m_window.blit(htp_button->get_image(), htp_button->get_rect().getTopLeft());
+  game.m_window.blit(option_button->get_image(), option_button->get_rect().getTopLeft());
+  if (can_resume)
+    game.m_window.blit(resume_button->get_image(), resume_button->get_rect().getTopLeft());
 }
-MainMenu::~MainMenu()
-{
-}
+
+MainMenu::~MainMenu() {}

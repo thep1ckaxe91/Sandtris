@@ -1,3 +1,4 @@
+#pragma once
 #ifndef AUDIO_MANAGER_HPP
 #define AUDIO_MANAGER_HPP
 #include "engine.hpp"

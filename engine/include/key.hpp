@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_KEY_
 #define SDLGAME_KEY_
 

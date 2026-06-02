@@ -1,23 +1,18 @@
 #include "QuitButton.hpp"
-#include "engine.hpp"
 #include "Game.hpp"
-QuitButton::QuitButton(Game &game) : Button()
-{
-    game = &game;
-    set_images(game->m_images.quit_button_idle,game->m_images.quit_button_hover,game->m_images.quit_button_click);
-    rect = (*image).get_rect();
+#include "engine.hpp"
+
+QuitButton::QuitButton(Game &g) : game(&g) {
+  set_images(game->images.quit_button_idle,
+             game->images.quit_button_hover,
+             game->images.quit_button_click);
 }
-QuitButton::QuitButton(){}
-void QuitButton::handle_event(const Event &event)
-{
-    Button::handle_event(event);
+
+void QuitButton::handle_event(const Event &event) {
+  Button::handle_event(event);
 }
-void QuitButton::on_click()
-{
-    sdlgame::quit();
-    exit(0);
+void QuitButton::on_click() {
+  sdlgame::quit();
+  exit(0);
 }
-void QuitButton::update()
-{
-    Button::update();
-}
+void QuitButton::update() { Button::update(); }

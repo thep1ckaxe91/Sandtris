@@ -1,12 +1,14 @@
+#pragma once
 #ifndef SDLGAME_DISPLAY_
 #define SDLGAME_DISPLAY_
 #include "SDL2/SDL_render.h"
 #include "SDL2/SDL_video.h"
 #include "math.hpp"
 #include "surface.hpp"
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace sdlgame::display {
-
 
 /**
  * Setup a window surface for use
@@ -54,12 +56,13 @@ bool set_render_scale_quality(bool linear);
  */
 bool grab(int enable = -1);
 
-void set_icon(const char *icon_path);
+void set_icon(const fs::path &icon_path);
+
 /**
  *  get and set the borderless state of the active window;
  */
 bool borderless(int enable = -1);
-void set_caption(const char *title);
+void set_caption(const std::string& title);
 SDL_Window *get_window();
 SDL_Renderer *get_renderer();
 void quit();

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_MEMORY_
 #define SDLGAME_MEMORY_
 #include "SDL2/SDL.h"
@@ -18,6 +19,10 @@ template <> struct SDLTraits<SDL_Renderer> {
 
 template <> struct SDLTraits<SDL_Window> {
   static void Free(SDL_Window *p) { SDL_DestroyWindow(p); }
+};
+
+template <> struct SDLTraits<SDL_Surface> {
+  static void Free(SDL_Surface *p) { SDL_FreeSurface(p); }
 };
 
 template <> struct SDLTraits<Mix_Music> {
