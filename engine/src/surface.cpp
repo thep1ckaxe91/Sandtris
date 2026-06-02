@@ -77,6 +77,8 @@ Surface::Surface(SDL_Texture *oth) {
   SDL_RenderClear(display::get_renderer());
   SDL_RenderCopy(display::get_renderer(), old_tex.get(), nullptr, nullptr);
   SDL_SetRenderTarget(display::get_renderer(), nullptr);
+  size.x = w;
+  size.y = h;
 }
 
 Surface::Surface(SDL_Surface *surf) : size(surf->w, surf->h) {
@@ -94,6 +96,7 @@ Surface &Surface::operator=(const Surface &other) {
       printf("Warning: Copy a null texture.\n");
       texture.reset();
     }
+    size = other.size;
   } else if (this != &other) [[likely]] {
     if (texture != nullptr)
       texture.reset();
@@ -150,18 +153,20 @@ void Surface::blit(const Surface &source, math::Vector2 pos,
   rect::Rect destrect = rect::Rect(
       pos.x, pos.y, (_size.x < 0 ? source.get_width() : _size.x),
       (_size.y < 0 ? source.get_height() : _size.y));
+      
   if (SDL_SetRenderTarget(display::get_renderer(), texture.get())) {
     printf("Failed to set target: %s\n", SDL_GetError());
   }
+
   SDL_Rect srcrect = area.to_SDL_Rect();
   SDL_FRect dstrect = destrect.to_SDL_FRect();
-  // printf("src: %p ren: %p \n",source.getTexture(),
-  // display::get_renderer());
+  
   if (SDL_RenderCopyF(display::get_renderer(), source.getTexture(),
                       &srcrect, &dstrect)) {
     printf("Error copy texture onto another\n%s\n", SDL_GetError());
     exit(1);
   }
+  
   if (SDL_SetRenderTarget(display::get_renderer(), nullptr)) {
     printf("Failed to set target: %s\n", SDL_GetError());
   }
@@ -170,16 +175,18 @@ void Surface::fill(sdlgame::color::Color color) {
   if (SDL_SetRenderTarget(display::get_renderer(), texture.get())) {
     printf("Failed to set target: %s\n", SDL_GetError());
   }
-
+  
   if (SDL_SetRenderDrawColor(display::get_renderer(), color.r, color.g,
                              color.b, color.a)) {
-    printf("Failed to set draw color\nErr:%s\n", SDL_GetError());
-    exit(0);
+    printf("Cannot set renderer draw color before fill surface \nErr: %s\n",
+           SDL_GetError());
+    exit(1);
   }
   if (SDL_RenderClear(display::get_renderer())) {
-    printf("Failed to clear the render target\nErr:%s\n", SDL_GetError());
-    exit(0);
+    printf("Cannot perform fill on surface\nErr: %s\n", SDL_GetError());
+    exit(1);
   }
+  
   if (SDL_SetRenderTarget(display::get_renderer(), nullptr)) {
     printf("Failed to set target: %s\n", SDL_GetError());
   }

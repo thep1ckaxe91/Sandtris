@@ -60,6 +60,10 @@ public:
       if (m_scene_list.back()) {
         m_scene_list.back()->update();
       }
+
+    // FIXME: This could be refactor to a state machine for readability and also
+    // scalability
+
     if (m_out) {
       played = true;
       m_out->update(m_clock.delta_time().count());
@@ -93,6 +97,7 @@ public:
   void draw() override {
     Timer t("draw");
     m_window.fill(Color(0, 0, 0));
+    m_window_object.fill(Color(0, 0, 0));
     if (!m_scene_list.empty())
       if (m_scene_list.back()) {
         m_scene_list.back()->draw();
