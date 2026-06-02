@@ -14,10 +14,10 @@
 
 using namespace std::string_literals;
 
-GamePlay::GamePlay(Game &game)
-    : Scene(game), m_color_flow1("none"s), m_color_flow2("none"s), m_grid(game),
-      m_gameover(false), m_blipcount(100), m_pausing(false),
-      m_score_font(font_path, FONT_SIZE) {
+GamePlay::GamePlay(Game &game_ref)
+    : Scene(game_ref), m_grid(game_ref), m_score_font(font_path, FONT_SIZE),
+      m_color_flow1("none"s), m_color_flow2("none"s),
+      m_blipcount(100), m_gameover(false), m_pausing(false) {
 
   m_score_surf =
       m_score_font.render("0", sdlgame::font::AntiAlias::SOLID, "white"s);
@@ -28,8 +28,8 @@ GamePlay::GamePlay(Game &game)
   m_flow1 = next_color_display_rect.inflate(0, 5);
   m_flow2 = m_flow1.move(0, next_color_display_rect.getHeight());
 
-  m_next_shape_surf = Surface(next_shape_display_rect.getWidth(),
-                              next_shape_display_rect.getHeight());
+  m_next_shape_surf = Surface(static_cast<int>(next_shape_display_rect.getWidth()),
+                              static_cast<int>(next_shape_display_rect.getHeight()));
   redraw_next_shape();
 
   m_change_shape = std::make_shared<Animation>(game, 120);
@@ -55,7 +55,7 @@ GamePlay::GamePlay(Game &game)
   m_pause_button->get_rect().setTopRight(RESOLUTION_WIDTH, 0);
 }
 
-void GamePlay::load_grid(Grid grid) {
+void GamePlay::load_grid(Grid /*grid*/) {
   std::cerr << "Load grid have not yet implemented properly\n";
 }
 

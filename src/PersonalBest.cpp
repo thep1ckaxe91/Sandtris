@@ -4,7 +4,7 @@
 
 using namespace std::string_literals;
 
-PersonalBest::PersonalBest(Game &game) : Scene(game) {
+PersonalBest::PersonalBest(Game &game_ref) : Scene(game_ref) {
   back_button = std::make_shared<BackButton>(game);
   back_button->get_rect().setTopLeft(bb_pos);
 

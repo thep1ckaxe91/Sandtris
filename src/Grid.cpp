@@ -9,11 +9,10 @@
 
 using namespace std::string_literals;
 
-Grid::Grid(Game &game)
-    : game(game),
-      controller(TetriminoController(game, Tetriminoes::randomTetrimino())),
-      ghost_topleft(0, -1000), next(Tetriminoes::randomTetrimino()),
-      ghost(Surface(32, 32)), ghost_color("white"s) {
+Grid::Grid(Game &game_ref)
+    : ghost(Surface(32, 32)), game(game_ref),
+      ghost_topleft(0, -1000), controller(TetriminoController(game_ref, Tetriminoes::randomTetrimino())),
+      ghost_color("white"s), next(Tetriminoes::randomTetrimino()) {
   update_ghost_shape();
 
   for (int i = 0; i < GRID_HEIGHT + 2; i++)
@@ -128,7 +127,7 @@ int Grid::check_scoring(
     }
     sdlgame::event::post(SCORING);
   }
-  return pos.size();
+  return static_cast<int>(pos.size());
 }
 
 static std::pair<int, int> shift_to_xy(int shift) {
@@ -148,8 +147,8 @@ void Grid::merge(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
   for (int shift = 0; shift < 16; shift++) {
     if (controller.tetrimino.mask >> shift & 1) {
       auto [x, y] = shift_to_xy(shift);
-      int start_x = x * 8 + controller.topleft.x - GRID_X + 1;
-      int start_y = y * 8 + controller.topleft.y - GRID_Y + 1;
+      int start_x = x * 8 + static_cast<int>(controller.topleft.x) - GRID_X + 1;
+      int start_y = y * 8 + static_cast<int>(controller.topleft.y) - GRID_Y + 1;
 
       for (int i = start_y; i < start_y + 8; i++) {
         for (int j = start_x; j < start_x + 8; j++) {
@@ -229,8 +228,8 @@ void Grid::update_ghost() {
   std::bitset<4> checked;      // if the i-th column is checked or not
   int min_drop_distance = 144; // min vertical distance the ghost can fall
 
-  const int controller_x = controller.topleft.x,
-            controller_y = controller.topleft.y;
+  const int controller_x = static_cast<int>(controller.topleft.x),
+            controller_y = static_cast<int>(controller.topleft.y);
 
   for (int shift = 0; shift < 16; shift++) {
     if ((controller.tetrimino.mask >> shift & 1) && !checked[shift % 4]) {
@@ -264,9 +263,9 @@ void Grid::update() {
       for (int j = 1; j <= GRID_WIDTH; j++) {
         if (grid[i][j].mask != SandShift::EMPTY_SAND) {
           int step_times = sdlgame::random::randint(1, step_range);
-          std::pair<uint8_t, uint8_t> pos = step(i, j, step_times);
-          if (i != pos.first or j != pos.second)
-            updated_sands.push_back(pos);
+          std::pair<uint8_t, uint8_t> new_pos = step(i, j, step_times);
+          if (i != new_pos.first or j != new_pos.second)
+            updated_sands.push_back(new_pos);
         }
       }
     }

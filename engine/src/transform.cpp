@@ -23,7 +23,7 @@ surface::Surface flip(const surface::Surface &surface, bool flip_x,
   return res;
 }
 surface::Surface scale(const surface::Surface &surface, math::Vector2 size) {
-  surface::Surface res = surface::Surface(size.x, size.y);
+  surface::Surface res = surface::Surface(static_cast<int>(size.x), static_cast<int>(size.y));
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           res.getTexture())) {
     printf("Failed to set target: %s\n", SDL_GetError());
@@ -56,14 +56,14 @@ surface::Surface rotate(const surface::Surface &surface, double angle_deg,
       (surface.get_rect().getBottomRight() - center).rotate(angle_deg);
 
   surface::Surface res =
-      surface::Surface(std::ranges::max({newtopleft.x, newbotleft.x,
+      surface::Surface(static_cast<int>(std::ranges::max({newtopleft.x, newbotleft.x,
                                          newbotright.x, newtopright.x}) -
                            std::ranges::min({newtopleft.x, newbotleft.x,
-                                             newbotright.x, newtopright.x}),
-                       std::ranges::max({newtopleft.y, newbotleft.y,
+                                             newbotright.x, newtopright.x})),
+                       static_cast<int>(std::ranges::max({newtopleft.y, newbotleft.y,
                                          newbotright.y, newtopright.y}) -
                            std::ranges::min({newtopleft.y, newbotleft.y,
-                                             newbotright.y, newtopright.y}));
+                                             newbotright.y, newtopright.y})));
 
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           res.getTexture())) {

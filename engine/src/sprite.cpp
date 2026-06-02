@@ -48,8 +48,10 @@ void Group::update() {
 }
 void Group::draw(surface::Surface &surface) {
   for (const auto &sprite : m_sprites) {
-    surface.blit(*sprite->m_image, sprite->get_rect().getTopLeft(),
-                 sprite->get_rect().getSize(), sprite->get_rect());
+    if (sprite->m_image) {
+      surface.blit(*sprite->m_image, sprite->get_rect().getTopLeft(),
+                   sprite->get_rect().getSize(), sprite->get_rect());
+    }
   }
 }
 
@@ -57,7 +59,7 @@ auto Group::begin() const { return m_sprites.begin(); }
 auto Group::end() const { return m_sprites.end(); }
 
 Sprite::Sprite(const std::shared_ptr<const surface::Surface> &image)
-    : m_image(image), m_rect(image->get_rect()) {}
+    : m_rect(image->get_rect()), m_image(image) {}
 
 std::span<const std::shared_ptr<Group>> Sprite::groups() const {
   if (!m_cache_dirty)

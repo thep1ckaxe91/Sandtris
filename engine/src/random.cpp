@@ -16,6 +16,6 @@ int randint(int l, int r) {
  */
 float randf() {
   std::uniform_real_distribution<> tmp(0, 1);
-  return tmp(engine);
+  return static_cast<float>(tmp(engine));
 }
 } // namespace sdlgame::random

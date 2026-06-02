@@ -27,5 +27,12 @@ void sdlgame::quit()
 }
 fs::path sdlgame::get_base_path()
 {
-    return SDL_GetBasePath();
+    static fs::path p;
+    if (p.empty()){
+        char* base_path = SDL_GetBasePath();
+        if (!base_path) p = fs::path("./");
+        else p = base_path;
+        SDL_free(base_path);
+    }
+    return p;
 }

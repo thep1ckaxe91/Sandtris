@@ -55,7 +55,7 @@ void line(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
 
-  if (SDL_RenderDrawLineF(sdlgame::display::get_renderer(), x1, y1, x2, y2)) {
+  if (SDL_RenderDrawLineF(sdlgame::display::get_renderer(), static_cast<float>(x1), static_cast<float>(y1), static_cast<float>(x2), static_cast<float>(y2))) {
     printf("Failed to draw a line: %s\n", SDL_GetError());
     exit(0);
   }
@@ -72,8 +72,8 @@ void line(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
 
-  if (SDL_RenderDrawLineF(sdlgame::display::get_renderer(), start.x, start.y,
-                          end.x, end.y)) {
+  if (SDL_RenderDrawLineF(sdlgame::display::get_renderer(), static_cast<float>(start.x), static_cast<float>(start.y),
+                          static_cast<float>(end.x), static_cast<float>(end.y))) {
     printf("Failed to draw a line: %s\n", SDL_GetError());
     exit(0);
   }
@@ -94,17 +94,17 @@ void circle(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     int quality = 90;
     math::Vector2 rad(radius, 0);
     for (int i = 0; i <= quality; i++) {
-      math::Vector2 next = rad.rotate(360.f / quality);
-      SDL_RenderDrawLineF(sdlgame::display::get_renderer(), centerX + rad.x,
-                          centerY + rad.y, centerX + next.x, centerY + next.y);
+      math::Vector2 next = rad.rotate(360.0 / static_cast<double>(quality));
+      SDL_RenderDrawLineF(sdlgame::display::get_renderer(), static_cast<float>(centerX + rad.x),
+                          static_cast<float>(centerY + rad.y), static_cast<float>(centerX + next.x), static_cast<float>(centerY + next.y));
       rad = next;
     }
   } else {
     double x;
     for (int i = -radius; i <= radius; i++) {
       x = radius * std::cos(std::asin(i * 1.0 / radius));
-      SDL_RenderDrawLineF(sdlgame::display::get_renderer(), x + centerX,
-                          i + centerY, centerX - x, i + centerY);
+      SDL_RenderDrawLineF(sdlgame::display::get_renderer(), static_cast<float>(x + centerX),
+                          static_cast<float>(i + centerY), static_cast<float>(centerX - x), static_cast<float>(i + centerY));
     }
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
@@ -152,7 +152,7 @@ void points(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
   for (size_t i = 0; i < points.size(); i++)
     sdl_points[i] = points[i].to_SDL_FPoint();
   if (SDL_RenderDrawPointsF(sdlgame::display::get_renderer(), sdl_points.data(),
-                            points.size())) {
+                            static_cast<int>(points.size()))) {
     printf("Failed to draw points: %s\n", SDL_GetError());
     exit(0);
   }

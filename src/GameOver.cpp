@@ -5,8 +5,8 @@
 
 using namespace std::string_literals;
 
-GameOver::GameOver(Game &game, int score)
-    : Scene(game), new_score(score), score_font(font_path, FONT_SIZE) {
+GameOver::GameOver(Game &game_ref, int score)
+    : Scene(game_ref), score_font(font_path, FONT_SIZE), new_score(score) {
   menu = std::make_shared<MenuButton>(game);
   menu->get_rect().setTopLeft(menu_button_pos);
 

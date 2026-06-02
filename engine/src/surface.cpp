@@ -143,13 +143,13 @@ will be its original size
  * the surface or image will stretch or shrink acoording to the size
  */
 void Surface::blit(const Surface &source, math::Vector2 pos,
-                   math::Vector2 size, rect::Rect area) {
+                   math::Vector2 _size, rect::Rect area) {
   if (area == rect::Rect()) {
     area = rect::Rect(0, 0, source.get_width(), source.get_height());
   }
   rect::Rect destrect = rect::Rect(
-      pos.x, pos.y, (size.x < 0 ? source.get_width() : size.x),
-      (size.y < 0 ? source.get_height() : size.y));
+      pos.x, pos.y, (_size.x < 0 ? source.get_width() : _size.x),
+      (_size.y < 0 ? source.get_height() : _size.y));
   if (SDL_SetRenderTarget(display::get_renderer(), texture.get())) {
     printf("Failed to set target: %s\n", SDL_GetError());
   }
