@@ -1,6 +1,7 @@
 #include "MainMenu.hpp"
 #include "SaveData.hpp"
 #include "constant.hpp"
+#include <iostream>
 
 MainMenu::MainMenu(Game &game_ref) : Scene(game_ref) {
   if (have_grid_data()) {
@@ -25,7 +26,7 @@ MainMenu::MainMenu(Game &game_ref) : Scene(game_ref) {
   option_button = std::make_shared<OptionButton>(game);
   option_button->get_rect().setTopLeft(119 - 64 - 4, 104);
 
-  sdlgame::music::load(base_path / "assets/audio/music/mainmenu_theme_loop.mp3");
+  sdlgame::music::load(base_path / "assets" / "audio" / "music" /"mainmenu_theme_loop.mp3");
   sdlgame::music::play(-1, 1000);
 }
 
@@ -53,14 +54,21 @@ void MainMenu::update() {
 
 void MainMenu::draw() {
   game.m_window.blit(*game.images.mainmenu_background, Vector2());
-  game.m_window.blit(start_button->get_image(), start_button->get_rect().getTopLeft());
-  game.m_window.blit(credit_button->get_image(), credit_button->get_rect().getTopLeft());
-  game.m_window.blit(quit_button->get_image(), quit_button->get_rect().getTopLeft());
-  game.m_window.blit(pb_button->get_image(), pb_button->get_rect().getTopLeft());
-  game.m_window.blit(htp_button->get_image(), htp_button->get_rect().getTopLeft());
-  game.m_window.blit(option_button->get_image(), option_button->get_rect().getTopLeft());
+  game.m_window.blit(start_button->get_image(),
+                     start_button->get_rect().getTopLeft());
+  game.m_window.blit(credit_button->get_image(),
+                     credit_button->get_rect().getTopLeft());
+  game.m_window.blit(quit_button->get_image(),
+                     quit_button->get_rect().getTopLeft());
+  game.m_window.blit(pb_button->get_image(),
+                     pb_button->get_rect().getTopLeft());
+  game.m_window.blit(htp_button->get_image(),
+                     htp_button->get_rect().getTopLeft());
+  game.m_window.blit(option_button->get_image(),
+                     option_button->get_rect().getTopLeft());
   if (can_resume)
-    game.m_window.blit(resume_button->get_image(), resume_button->get_rect().getTopLeft());
+    game.m_window.blit(resume_button->get_image(),
+                       resume_button->get_rect().getTopLeft());
 }
 
 MainMenu::~MainMenu() {}
