@@ -139,9 +139,9 @@ namespace sdlgame::time
         return functions_stats;
     }
 
-    Timer::Timer(const std::string &name) : name(name), start(sim_clock_t::now()) {}
-    Timer::Timer(const char *name) : name(name), start(sim_clock_t::now()) {}
-    Timer::Timer(std::string &&name) : name(name), start(sim_clock_t::now()) {}
+    Timer::Timer(const std::string &_name) : name(_name), start(sim_clock_t::now()) {}
+    Timer::Timer(const char *_name) : name(_name), start(sim_clock_t::now()) {}
+    Timer::Timer(std::string &&_name) : name(_name), start(sim_clock_t::now()) {}
 
     Timer::~Timer()
     {

@@ -19,9 +19,9 @@ struct __NamedColor {
   uint8_t g;
   uint8_t b;
 
-  constexpr __NamedColor(std::string_view name,
+  constexpr __NamedColor(std::string_view _name,
                          std::initializer_list<uint8_t> value)
-      : name(name), r(*value.begin()), g(*(value.begin() + 1)),
+      : name(_name), r(*value.begin()), g(*(value.begin() + 1)),
         b(*(value.begin() + 2)) {}
 };
 

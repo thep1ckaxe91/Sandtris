@@ -176,11 +176,6 @@ Rect::clipline(const math::Vector2 &st, const math::Vector2 &ed) const {
   // 4 ele, left, right, top, bottom acoordingly
   Vec4d q = {st.x - x, x + w - st.x, st.y - y, y + h - st.y};
   Vec4d c = {st.x - ed.x, ed.x - st.x, st.y - ed.y, ed.y - st.y};
-  Vec4d r;
-
-  for (int i = 0; i < 4; i++) {
-    r.values[i] = q.values[i] / c.values[i];
-  }
   double t0 = 0, t1 = 1;
 
   for (int i = 0; i < 4; i++) {

@@ -38,7 +38,7 @@ int get_personal_best() {
   return 0; // Stub for now
 }
 
-void set_personal_best(int score) {
+void set_personal_best(int /*score*/) {
   // Stub for now
 }
 
@@ -95,11 +95,11 @@ bool delete_grid_data() {
   }
 }
 
-bool save_grid_data(Grid &grid) {
+bool save_grid_data(Grid &/*grid*/) {
   return false; // Stub for now
 }
 
-void load_grid_data(Game &game, Grid &grid) {
+void load_grid_data(Game &/*game*/, Grid &grid) {
   std::ifstream file(base_path / "assets" / "save" / "grid.sandtris",
                      std::ios_base::binary);
   if (!file.is_open()) return;

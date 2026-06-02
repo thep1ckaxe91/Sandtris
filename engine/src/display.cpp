@@ -12,7 +12,6 @@ sdlgame::memory::SDLUniquePtr<SDL_Window> window = nullptr;
 sdlgame::memory::SDLUniquePtr<SDL_Renderer> renderer = nullptr;
 
 sdlgame::surface::Surface proxy_surf;
-bool isInit;
 math::Vector2 resolution;
 } // namespace
 

@@ -2,7 +2,7 @@
 #include "SaveData.hpp"
 #include "constant.hpp"
 
-MainMenu::MainMenu(Game &game) : Scene(game) {
+MainMenu::MainMenu(Game &game_ref) : Scene(game_ref) {
   if (have_grid_data()) {
     resume_button = std::make_shared<ResumeButton>(game);
     resume_button->get_rect().setTopLeft(8, RESOLUTION_HEIGHT - 8 * 4 - 16 * 4);

@@ -1,7 +1,7 @@
 #include "Credit.hpp"
 #include "constant.hpp"
 
-Credit::Credit(Game &game) : Scene(game) {
+Credit::Credit(Game &game_ref) : Scene(game_ref) {
   back_button = std::make_shared<BackButton>(game);
   back_button->get_rect().setTopLeft(bb_pos);
 }

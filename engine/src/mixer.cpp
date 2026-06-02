@@ -29,7 +29,7 @@ int convert_volume_value(float value) {
   return int((value >= 1 ? 1 : value) / 1.0 * 128);
 }
 
-Channel::Channel(int id) : id(id), volume(1.0f) {}
+Channel::Channel(int _id) : id(_id), volume(1.0f) {}
 
 void Channel::play(Sound sound, int loops, int maxtime_ms, int fade_ms) {
   if (Mix_FadeInChannelTimed(id, sound.chunk.get(), loops, fade_ms,

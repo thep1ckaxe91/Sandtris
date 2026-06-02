@@ -12,9 +12,4 @@ std::array<Color, 9> SandShiftColor = {
     Color(),
     Color(),
     GREEN_SAND_COLOR};
-Sand::Sand(SandShift mask)
-{
-    mask = mask;
-    color_offset_rgb = sdlgame::random::randint(0, 255);
-    // inertia = 1;
-}
+Sand::Sand(SandShift mask_val) : mask(mask_val), color_offset_rgb(static_cast<Uint8>(sdlgame::random::randint(0, 255))){}

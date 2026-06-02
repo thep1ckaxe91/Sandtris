@@ -5,8 +5,8 @@
 #include <memory>
 namespace fs = std::filesystem;
 
-Animation::Animation(Game &game, uint32_t frame_rate, bool loop)
-    : game(&game), m_frame_rate(frame_rate), m_loop(loop) {}
+Animation::Animation(Game &game_ref, uint32_t frame_rate, bool loop)
+    : game(&game_ref), m_frame_rate(frame_rate), m_loop(loop) {}
 
 /**
  * @brief load the animation's images in folder 'path'

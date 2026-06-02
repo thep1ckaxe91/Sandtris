@@ -10,11 +10,11 @@
  * @param max_value 0 to max value is the value range
  * @param text text for the label
  */
-Slider::Slider(Vector2 topleft, float value, float slide_length,
-               float max_value)
-    : nob(Rect{0, 0, 3, 3}), topleft(topleft),
-      label_font(Font(font_path, FONT_SIZE)), value(value),
-      slide_length(slide_length), max_value(max_value), holding(0) {
+Slider::Slider(Vector2 _topleft, float _value, float _slide_length,
+               float _max_value)
+    : nob(Rect{0, 0, 3, 3}), topleft(_topleft),
+      label_font(Font(font_path, FONT_SIZE)), value(_value),
+      slide_length(_slide_length), max_value(_max_value), holding(0) {
   set_label("default label", "white"s);
   set_color("white"s, "white"s, "gray"s);
   nob.setCenter(topleft + Vector2(value / max_value * slide_length, 0));
@@ -32,7 +32,7 @@ void Slider::update() {
                                        topleft.x + slide_length),
                   topleft.y);
     value =
-        (nob.getCenterX() - topleft.x) / slide_length * max_value;
+        static_cast<float>((nob.getCenterX() - topleft.x) / slide_length * max_value);
   }
 }
 /**

@@ -1,7 +1,6 @@
 #include "HowToPlay.hpp"
-#include "constant.hpp"
 
-HowToPlay::HowToPlay(Game &game) : Scene(game) {
+HowToPlay::HowToPlay(Game &game_ref) : Scene(game_ref) {
   back_button = std::make_shared<BackButton>(game);
   back_button->get_rect().setTopLeft(bb_pos);
   height_pos = 0;
@@ -10,7 +9,7 @@ HowToPlay::HowToPlay(Game &game) : Scene(game) {
 void HowToPlay::handle_event(const Event &event) {
   back_button->handle_event(event);
   if (event.type == sdlgame::MOUSEWHEEL) {
-    height_pos += event["y"] * 4;
+    height_pos += static_cast<double>(event["y"] * 4);
     height_pos = sdlgame::math::clamp(height_pos, -145.0, 0.0);
   }
 }
