@@ -7,11 +7,13 @@
 #include <bitset>
 #include <queue>
 
+using namespace std::string_literals;
+
 Grid::Grid(Game &game)
     : game(game),
       controller(TetriminoController(game, Tetriminoes::randomTetrimino())),
       ghost_topleft(0, -1000), next(Tetriminoes::randomTetrimino()),
-      ghost(Surface(32, 32)), ghost_color("white") {
+      ghost(Surface(32, 32)), ghost_color("white"s) {
   update_ghost_shape();
 
   for (int i = 0; i < GRID_HEIGHT + 2; i++)
@@ -146,19 +148,12 @@ void Grid::merge(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
   for (int shift = 0; shift < 16; shift++) {
     if (controller.tetrimino.mask >> shift & 1) {
       auto [x, y] = shift_to_xy(shift);
-      x = x * 8 + controller.topleft.x - GRID_X + 1;
-      y = y * 8 + controller.topleft.y - GRID_Y + 1;
+      int start_x = x * 8 + controller.topleft.x - GRID_X + 1;
+      int start_y = y * 8 + controller.topleft.y - GRID_Y + 1;
 
-      // Vector2 topleft =
-      //     (controller.topleft + Vector2(3 - shift % 4, 3 - shift / 4) * 8) -
-      //     Vector2(static_cast<double>GRID_X, static_cast<double>GRID_Y);
-      // topleft.x = int(topleft.x);
-      // topleft.y = int(topleft.y);
-      // topleft.x += 1;
-      // topleft.y += 1;
-      for (int i = y; i < y + 8; i++) {
-        for (int j = x; j < x + 8; j++) {
-          if (i <= GRID_HEIGHT) {
+      for (int i = start_y; i < start_y + 8; i++) {
+        for (int j = start_x; j < start_x + 8; j++) {
+          if (i >= 1 && i <= GRID_HEIGHT && j >= 1 && j <= GRID_WIDTH) {
             updated.push_back({i, j});
             grid[i][j].mask = controller.tetrimino.color;
           }
@@ -168,10 +163,6 @@ void Grid::merge(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
   }
 }
 void Grid::collision_check(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
-  // check collision if the tetrimino is collided with the grid
-  /*
-   */
-
   for (int i = 1; i <= GRID_HEIGHT + 1; i++) {
     for (int j = 1; j <= GRID_WIDTH; j++) {
       if (grid[i][j].mask != SandShift::EMPTY_SAND) {
@@ -184,10 +175,12 @@ void Grid::collision_check(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
               while (tmp.collidepoint(check_point)) {
                 controller.topleft.y -= 1;
                 tmp.move_ip(0, -1);
-                if (grid[int(check_point.y - GRID_Y - 1)]
-                        [int(check_point.x - GRID_X)]
-                            .mask != SandShift::EMPTY_SAND)
-                  check_point.y--;
+                int check_y = int(check_point.y - GRID_Y - 1);
+                int check_x = int(check_point.x - GRID_X);
+                if (check_y >= 0 && check_y < GRID_HEIGHT + 2 && check_x >= 0 && check_x < GRID_WIDTH + 2) {
+                    if (grid[check_y][check_x].mask != SandShift::EMPTY_SAND)
+                        check_point.y--;
+                }
               }
               merge(updated);
               controller.reset(next);
@@ -206,24 +199,6 @@ void Grid::collision_check(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
 std::pair<uint8_t, uint8_t> Grid::step(int i, int j, int times) {
   int x = i, y = j;
   while (times--) {
-    // if (grid[i + 1][j].mask == SandShift::EMPTY_SAND) {
-    //   std::swap(grid[i][j], grid[i + 1][j]);
-    //   // return step(i+1,j,times-1);
-    //   i++;
-    // } else if (grid[i + 1][j - 1].mask == SandShift::EMPTY_SAND and
-    //            grid[i][j - 1].mask == SandShift::EMPTY_SAND) {
-    //   std::swap(grid[i][j], grid[i + 1][j - 1]);
-    //   // return step(i+1,j-1,times-1);
-    //   j--;
-    //   i++;
-    // } else if (grid[i + 1][j + 1].mask == SandShift::EMPTY_SAND and
-    //            grid[i][j + 1].mask == SandShift::EMPTY_SAND) {
-    //   std::swap(grid[i][j], grid[i + 1][j + 1]);
-    //   // return step(i+1,j+1,times-1);
-    //   j++;
-    //   i++;
-    // }
-
     x += ((grid[i + 1][j - 1].mask | grid[i + 1][j].mask |
            grid[i + 1][j + 1].mask) != 0);
 
@@ -236,10 +211,6 @@ std::pair<uint8_t, uint8_t> Grid::step(int i, int j, int times) {
   return {x, y};
 }
 
-/**
- * @brief everytime rotate or change shape due to merge, we should redraw the
- * ghost acoording to the current tetrimino
- */
 void Grid::update_ghost_shape() {
   auto get_from_pos = [&](const int i, const int j) {
     return (3 - i) * 4 + (3 - j);
@@ -255,13 +226,11 @@ void Grid::update_ghost_shape() {
 }
 
 void Grid::update_ghost() {
-  std::bitset<4> checked; // if the i-th column is checked or not
-  int min_drop_distance = 144;   // min vertical distance the ghost can fall
+  std::bitset<4> checked;      // if the i-th column is checked or not
+  int min_drop_distance = 144; // min vertical distance the ghost can fall
 
   const int controller_x = controller.topleft.x,
             controller_y = controller.topleft.y;
-
-  // get the min distance from the tetrimino down to display the ghost
 
   for (int shift = 0; shift < 16; shift++) {
     if ((controller.tetrimino.mask >> shift & 1) && !checked[shift % 4]) {
@@ -270,9 +239,10 @@ void Grid::update_ghost() {
       const int left = static_cast<int>(controller_x) + 8 * x - GRID_X;
       const int right = left + 8;
 
-      for (int j = left, i = controller_y + 8 * y - GRID_Y; j < right; j++) {
+      for (int j = left; j < right; j++) {
+        int i = controller_y + 8 * y - GRID_Y;
         int cnt = 0;
-        while (grid[i++][j + 1].mask == SandShift::EMPTY_SAND) {
+        while (i < GRID_HEIGHT + 1 && grid[i++][j + 1].mask == SandShift::EMPTY_SAND) {
           if (++cnt >= min_drop_distance)
             break;
         }
@@ -280,10 +250,9 @@ void Grid::update_ghost() {
       }
     }
   }
-  
-  // Set the ghost's top-left position to where the tetrimino would land if dropped;
-  // subtract 8 to align with the block size and 1 for pixel-perfect placement.
-  ghost_topleft = Vector2(controller_x, controller_y + min_drop_distance - 8 - 1);
+
+  ghost_topleft =
+      Vector2(controller_x, controller_y + min_drop_distance - 8 - 1);
 }
 void Grid::update() {
   update_timer += game.m_clock.delta_time().count();
@@ -318,7 +287,6 @@ void Grid::update() {
   update_ghost();
 }
 void Grid::draw_ghost() {
-  // sdlgame::draw::rect(ghost,"red",Rect(0,0,32,32),1);
   game.m_window.blit(ghost, ghost_topleft);
 }
 void Grid::draw() {
@@ -334,22 +302,17 @@ void Grid::draw() {
   int width_in_pixels = pitch / 4;
 
   for (int i = 1; i <= GRID_HEIGHT; i++) {
-
-    // -1 since grid is 1 indexed
     int row_offset = (i - 1) * width_in_pixels;
-
     for (int j = 1; j <= GRID_WIDTH; j++) {
       if (grid[i][j].mask == SandShift::EMPTY_SAND) {
         pixels[row_offset + (j - 1)] = 0xff000000;
         continue;
       }
-      Color c = SandShiftColor.at(static_cast<uint8_t>(grid[i][j].mask))
-                    .add_value(grid[i][j].color_offset_rgb >> 4 & 15,
-                               grid[i][j].color_offset_rgb >> 2 & 15,
-                               grid[i][j].color_offset_rgb & 15);
+      Color c = SandShiftColor.at(static_cast<uint8_t>(grid[i][j].mask)) + Color{uint8_t(grid[i][j].color_offset_rgb >> 4 & 15),
+                 uint8_t(grid[i][j].color_offset_rgb >> 2 & 15),
+                 uint8_t(grid[i][j].color_offset_rgb & 15)};
 
       uint32_t pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
-
       pixels[row_offset + (j - 1)] = pixel_color;
     }
   }

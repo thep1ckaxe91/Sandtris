@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TETRIMINOES_HPP
 #define TETRIMINOES_HPP
 #include "Tetrimino.hpp"

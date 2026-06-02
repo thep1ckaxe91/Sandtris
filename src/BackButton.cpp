@@ -3,14 +3,11 @@
 #include "scene_transitions.hpp"
 #include <memory>
 
-BackButton::BackButton(Game &game) {
-  game = &game;
-  set_images(game->m_images.back_button_idle,
-                   game->m_images.back_button_hover,
-                   game->m_images.back_button_click);
-  rect = (*image).get_rect();
+BackButton::BackButton(Game &g) : game(&g) {
+  set_images(game->images.back_button_idle,
+             game->images.back_button_hover,
+             game->images.back_button_click);
 }
-BackButton::BackButton() {}
 void BackButton::handle_event(const Event &event) { Button::handle_event(event); }
 void BackButton::on_click() {
   auto out = std::make_unique<OutFade>(0.5);

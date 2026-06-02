@@ -10,16 +10,14 @@
 namespace sdlgame::surface {
 
 Surface::Surface(int width, int height) {
-  auto new_tex =
-      SDL_CreateTexture(display::get_renderer(),
-                        SDL_PIXELFORMAT_RGBA32, SURFACE_TYPE, width, height);
+  texture.reset(SDL_CreateTexture(display::get_renderer(),
+                                  SDL_PIXELFORMAT_RGBA32, SURFACE_TYPE, width,
+                                  height));
 
-  if (!new_tex) {
+  if (!texture) {
     printf("Failed to create texture\nErr: %s\n", SDL_GetError());
     exit(0);
   }
-
-  texture.reset(new_tex);
 
   size.x = width;
   size.y = height;
@@ -39,9 +37,9 @@ Surface::Surface(const Surface &oth) {
     exit(1);
   }
 
-  auto new_tex = SDL_CreateTexture(display::get_renderer(),
-                                   SDL_PIXELFORMAT_RGBA32, SURFACE_TYPE, w, h);
-  if (new_tex == nullptr) [[unlikely]] {
+  texture.reset(SDL_CreateTexture(display::get_renderer(),
+                                  SDL_PIXELFORMAT_RGBA32, SURFACE_TYPE, w, h));
+  if (texture == nullptr) [[unlikely]] {
     printf("Failed to create texture from another Surface object\nErr: %s\n",
            SDL_GetError());
     exit(1);
@@ -62,37 +60,32 @@ Surface::Surface(Surface &&other) noexcept
       size(std::exchange(other.size, {0, 0})) {}
 
 Surface::Surface(SDL_Texture *oth) {
+  sdlgame::memory::SDLUniquePtr<SDL_Texture> old_tex(oth);
   int w, h;
-  SDL_QueryTexture(oth, nullptr, nullptr, &w, &h);
-  auto new_tex = SDL_CreateTexture(display::get_renderer(),
-                                   SDL_PIXELFORMAT_RGBA32, SURFACE_TYPE, w, h);
-  if (new_tex == nullptr) {
+  SDL_QueryTexture(old_tex.get(), nullptr, nullptr, &w, &h);
+  texture.reset(SDL_CreateTexture(display::get_renderer(),
+                                  SDL_PIXELFORMAT_RGBA32, SURFACE_TYPE, w, h));
+  if (texture == nullptr) {
     printf("Failed to create texture from another texture\nErr: %s\n",
            SDL_GetError());
     exit(0);
   }
 
-  texture.reset(new_tex);
-
   SDL_SetTextureBlendMode(texture.get(), SDL_BLENDMODE_BLEND);
   SDL_SetRenderTarget(display::get_renderer(), texture.get());
   SDL_SetRenderDrawColor(display::get_renderer(), 0, 0, 0, 0);
   SDL_RenderClear(display::get_renderer());
-  SDL_RenderCopy(display::get_renderer(), oth, nullptr, nullptr);
+  SDL_RenderCopy(display::get_renderer(), old_tex.get(), nullptr, nullptr);
   SDL_SetRenderTarget(display::get_renderer(), nullptr);
-
-  SDL_DestroyTexture(oth);
 }
 
 Surface::Surface(SDL_Surface *surf) : size(surf->w, surf->h) {
-  auto new_tex = SDL_CreateTextureFromSurface(display::get_renderer(), surf);    
+  texture.reset(SDL_CreateTextureFromSurface(display::get_renderer(), surf));
   // printf("tex: %p | surf: %p\n",texture,surf);
-  if (!new_tex) {
+  if (!texture) {
     printf("Failed to create texture form surface\nErr:%s\n", SDL_GetError());
     exit(1);
   }
-
-  texture.reset(new_tex);
 }
 
 Surface &Surface::operator=(const Surface &other) {
@@ -142,9 +135,8 @@ Surface &Surface::operator=(Surface &&other) noexcept(true) {
  * Return a copy of the surface rect
  *
  */
-rect::Rect Surface::get_rect() const {
-  return rect::Rect(0, 0, size.x, size.y);
-}
+rect::Rect Surface::get_rect() const { return rect::Rect(0, 0, size.x, size.y); }
+SDL_Texture *Surface::getTexture() const { return texture.get(); }
 /**
  * Blit a surface onto this surface with position and size, leave size be -1,-1
 will be its original size

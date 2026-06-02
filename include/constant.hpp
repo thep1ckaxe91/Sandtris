@@ -1,10 +1,14 @@
+#pragma once
 #ifndef TETRIS_CONSTANT_HPP
 #define TETRIS_CONSTANT_HPP
 #include "engine.hpp"
 #include <thread>
 const auto base_path = sdlgame::get_base_path();
+
 enum Window_Constant { RESOLUTION_WIDTH = 160, RESOLUTION_HEIGHT = 144 };
+
 constexpr auto MAXFPS = 10000;
+
 enum grid_size {
   GRID_WIDTH = 80,
   GRID_HEIGHT = 144 + 32 // the +32 is for the area tetrimino spawn, every
@@ -14,15 +18,14 @@ enum grid_size {
 constexpr int GRID_X = 16;
 constexpr int GRID_Y = -32;
 
-enum tetrimino_size {
-  EDGE_SIZE = 32,
-};
-enum SceneCommand {
-  NONE = 0,
-  ADD = 1,
-  POP = 2,
-  REMOVE = 3,
-  CLEAR = 4,
+const int TETRIMINO_EDGE_SIZE = 32;
+
+enum class SceneCommand {
+  NONE,
+  ADD,
+  POP,
+  REMOVE,
+  CLEAR,
 };
 const int dx[] = {
     0,

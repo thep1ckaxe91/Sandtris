@@ -1,3 +1,4 @@
+#pragma once
 #ifndef GAMEPLAY_HPP
 #define GAMEPLAY_HPP
 #include "Animation.hpp"
@@ -6,6 +7,8 @@
 #include "PauseButton.hpp"
 #include "Scene.hpp"
 #include "engine.hpp"
+#include <memory>
+
 class GamePlay : public Scene {
 private:
   Vector2 m_bg_offset;
@@ -15,11 +18,11 @@ private:
   Font m_score_font;
   Surface m_score_surf;
   Rect m_score_rect;
-  PauseButton m_pause_button;
+  std::shared_ptr<PauseButton> m_pause_button;
   SandShift m_next_display_color;
   Rect m_flow1, m_flow2;
-  Animation m_change_shape;
-  Animation m_count_down;
+  std::shared_ptr<Animation> m_change_shape;
+  std::shared_ptr<Animation> m_count_down;
   Color m_color_flow1;
   Color m_color_flow2;
   int m_blipcount;
@@ -30,11 +33,11 @@ private:
 public:
   GamePlay(Game &game);
   void redraw_next_shape();
-  void update();
-  void draw();
+  void update() override;
+  void draw() override;
   void load_grid(Grid grid);
-  void handle_event(sdlgame::event::Event &event);
-  ~GamePlay();
+  void handle_event(const sdlgame::event::Event &event) override;
+  ~GamePlay() override;
 };
 
 #endif

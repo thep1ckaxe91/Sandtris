@@ -1,21 +1,22 @@
+#pragma once
 #ifndef OPTION_HPP
 #define OPTION_HPP
 
-#include "Game.hpp"
-#include "Scene.hpp"
-#include "OptionElement.hpp"
 #include "BackButton.hpp"
-class Option : public Scene
-{
+#include "Game.hpp"
+#include "OptionElement.hpp"
+#include "Scene.hpp"
+#include <memory>
+
+class Option : public Scene {
 public:
-    BackButton back_button;
-    SFXVolumeSlider sfx_slider;
-    MusicVolumeSlider music_slider;
-    FullscreenSlider fs_slider;
-    Option(Game &game);
-    Option();
-    void update();
-    void handle_event(const Event &event);
-    void draw();
+  std::shared_ptr<BackButton> back_button;
+  std::shared_ptr<SFXVolumeSlider> sfx_slider;
+  std::shared_ptr<MusicVolumeSlider> music_slider;
+  std::shared_ptr<FullscreenSlider> fs_slider;
+  Option(Game &game);
+  void update() override;
+  void handle_event(const Event &event) override;
+  void draw() override;
 };
 #endif

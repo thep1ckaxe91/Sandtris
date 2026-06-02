@@ -1,8 +1,10 @@
+#pragma once
 #ifndef SAVEDATA_HPP
 #define SAVEDATA_HPP
 #include "constant.hpp"
 #include "Grid.hpp"
 
+class Game;
 
 int get_personal_best();
 void set_personal_best(int score);
@@ -18,7 +20,7 @@ void set_music_volume(float value);
 bool have_grid_data();
 bool delete_grid_data();
 bool save_grid_data(Grid &grid);
-Grid load_grid_data(Game *game);
+void load_grid_data(Game &game, Grid &grid);
 
 bool save_window_info(int x,int y, int width, int height);
 std::pair<std::pair<int,int>,std::pair<int,int>> load_window_info();

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_EVENT_
 #define SDLGAME_EVENT_
 #include "SDL2/SDL_events.h"
@@ -19,7 +20,7 @@ public:
   SDL_Event sdl_event;
   Event();
   Event(SDL_Event e);
-  int64_t operator[](std::string key);
+  int64_t operator[](std::string key) const;
 };
 std::vector<Event> &get();
 /**please only use this for user event*/

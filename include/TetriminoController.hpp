@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TETRIMINO_CONTROLLER_HPP
 #define TETRIMINO_CONTROLLER_HPP
 #include "Game.hpp"
@@ -11,12 +12,15 @@
  */
 class TetriminoController {
 public:
-  Surface draw_surf;
-  Vector2 topleft;
   Game &game;
   Tetrimino tetrimino;
+  Surface draw_surf;
+  Vector2 topleft;
   TetriminoController(Game &game, Tetrimino tetrimino);
-  TetriminoController();
+  
+  // deleted default constructor because of Game&
+  TetriminoController() = delete;
+  
   void reset(Tetrimino tetrimino);
   void draw();
   void redraw();

@@ -21,14 +21,13 @@ void init() {
   }
 }
 // sdlgame::surface::Surface img_transfer_surf;
-[[nodiscard]] sdlgame::surface::Surface load(const fs::path path) {
-  SDL_Texture *tex =
-      IMG_LoadTexture(sdlgame::display::get_renderer(), path.c_str());
-  if (tex == nullptr) {
+[[nodiscard]] std::shared_ptr<const surface::Surface> load(const fs::path path) {
+  auto tex = IMG_LoadTexture(sdlgame::display::get_renderer(), path.string().c_str());
+
+  if (!tex) {
     printf("Cant load image\n%s\n", IMG_GetError());
     exit(1);
   }
-  // img_transfer_surf =sdlgame::surface::Surface(tex);
-  return sdlgame::surface::Surface(tex);
+  return std::make_shared<const surface::Surface>(tex);
 }
 } // namespace sdlgame::image

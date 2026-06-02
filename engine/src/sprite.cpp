@@ -84,12 +84,12 @@ void Sprite::remove(const std::shared_ptr<Group> &group) {
   group->remove(shared_from_this());
 }
 
-void Sprite::kill() {
+Sprite::~Sprite() { kill(); }
 
+void Sprite::kill() {
   for (auto &group : groups()) {
     group->remove(shared_from_this());
   }
-
   m_groups.clear();
   m_groups_cache.clear();
   m_cache_dirty = false;

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_MOUSE_
 #define SDLGAME_MOUSE_
 #include <span>

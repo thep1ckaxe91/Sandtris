@@ -3,15 +3,16 @@
 #include "SaveData.hpp"
 #include "scene_transitions.hpp"
 #include <memory>
-RetryButton::RetryButton(Game &game) {
-  game = &game;
-  set_images(game->m_images.retry_button_idle,
-                   game->m_images.retry_button_hover,
-                   game->m_images.retry_button_click);
-  rect = (*image).get_rect();
+
+RetryButton::RetryButton(Game &g) : game(&g) {
+  set_images(game->images.retry_button_idle,
+             game->images.retry_button_hover,
+             game->images.retry_button_click);
 }
-RetryButton::RetryButton() = default;
-void RetryButton::handle_event(const Event &event) { Button::handle_event(event); }
+
+void RetryButton::handle_event(const Event &event) {
+  Button::handle_event(event);
+}
 void RetryButton::on_click() {
   auto out = std::make_unique<OutSwipeDown>();
   auto in = std::make_unique<InSwipeDown>();

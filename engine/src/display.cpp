@@ -5,6 +5,7 @@
 #include "memory.hpp"
 #include "surface.hpp"
 #include <iostream>
+
 namespace sdlgame::display {
 namespace {
 sdlgame::memory::SDLUniquePtr<SDL_Window> window = nullptr;
@@ -131,9 +132,10 @@ bool grab(int enable) {
   return enable;
 }
 
-void set_icon(const char *icon_path) {
-  SDL_Surface *icon = IMG_Load(icon_path);
-  SDL_SetWindowIcon(window.get(), icon);
+void set_icon(const fs::path &icon_path) {
+  sdlgame::memory::SDLUniquePtr<SDL_Surface> icon(
+      IMG_Load(icon_path.string().c_str()));
+  SDL_SetWindowIcon(window.get(), icon.get());
 }
 
 /**
@@ -145,14 +147,14 @@ bool borderless(int enable) {
   SDL_SetWindowBordered(window.get(), (enable ? SDL_FALSE : SDL_TRUE));
   return (SDL_GetWindowFlags(window.get()) & SDL_WINDOW_BORDERLESS) > 0;
 }
-void set_caption(const char *title) { SDL_SetWindowTitle(window.get(), title); }
+void set_caption(const std::string &title) {
+  SDL_SetWindowTitle(window.get(), title.c_str());
+}
 SDL_Window *get_window() { return window.get(); }
 SDL_Renderer *get_renderer() { return renderer.get(); }
 void quit() {
-  if (window.get())
-    SDL_DestroyWindow(window.get());
-  if (renderer)
-    SDL_DestroyRenderer(renderer.get());
+  window.reset();
+  renderer.reset();
 }
 void flip() {
   SDL_SetRenderTarget(renderer.get(), nullptr);

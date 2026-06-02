@@ -2,14 +2,13 @@
 #include "Credit.hpp"
 #include "scene_transitions.hpp"
 #include <memory>
-CreditButton::CreditButton(Game &game) {
-  game = &game;
-  set_images(game->m_images.credit_button_idle,
-             game->m_images.credit_button_hover,
-             game->m_images.credit_button_click);
-  rect = (*image).get_rect();
+
+CreditButton::CreditButton(Game &g) : game(&g) {
+  set_images(game->images.credit_button_idle,
+             game->images.credit_button_hover,
+             game->images.credit_button_click);
 }
-CreditButton::CreditButton() = default;
+
 void CreditButton::update() { Button::update(); }
 void CreditButton::handle_event(const Event &event) { Button::handle_event(event); }
 void CreditButton::on_click() {

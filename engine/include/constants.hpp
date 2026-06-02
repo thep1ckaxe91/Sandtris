@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_CONSTANTS_
 #define SDLGAME_CONSTANTS_
 #include "SDL2/SDL_events.h"

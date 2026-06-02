@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SCENE_TRANSITION_HPP
 #define SCENE_TRANSITION_HPP
 

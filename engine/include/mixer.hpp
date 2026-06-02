@@ -60,9 +60,9 @@ public:
   memory::SDLSharedPtr<Mix_Chunk> chunk;
   Sound();
   Sound(fs::path path);
-  Sound(Sound&&);
+  Sound(Sound&&) noexcept;
   Sound &operator=(const Sound &);
-  Sound &operator=(Sound&&);
+  Sound &operator=(Sound&&) noexcept;
   /**
    * @param loops -1 to loop infinitely, 0 is play once, 1 is twice...
    * @param maxtime_ms maximum time in miliseconds the sound will be play in ms

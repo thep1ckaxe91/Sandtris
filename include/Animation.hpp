@@ -1,3 +1,4 @@
+#pragma once
 #include "Game.hpp"
 #include "engine.hpp"
 #include <filesystem>
@@ -6,10 +7,10 @@ namespace fs = std::filesystem;
 
 class Animation : public sdlgame::sprite::Sprite {
 protected:
-  std::shared_ptr<const Surface> m_default_image;
+  std::shared_ptr<const Surface> default_img;
   double m_time_count = 0;
-  std::vector<std::shared_ptr<const Surface>> m_frames;
-  const Game &v_game;
+  std::vector<std::shared_ptr<const Surface>> frames;
+  Game *game;
   size_t m_frame_id;
   uint32_t m_frame_rate;
   bool m_frame_changed = false;
@@ -20,7 +21,7 @@ public:
   /**
    * @brief init an animation object
    */
-  Animation(const Game &game, uint32_t frame_rate = 60, bool loop = false);
+  Animation(Game &game, uint32_t frame_rate = 60, bool loop = false);
 
   /**
    * @brief load the animation's images in folder 'path'
@@ -32,16 +33,18 @@ public:
   void update() override;
   void pause();
   void reset();
-  void set_default_image(const std::shared_ptr<Surface> &oth);
-  const std::shared_ptr<const Surface>& get_default_image() const;
+  void set_default_image(const std::shared_ptr<const Surface> &oth);
+  const std::shared_ptr<const Surface> &get_default_image() const;
   bool is_playing() const;
   bool is_looped() const;
   size_t get_frame_index() const;
 
   /**
-  @return `true` if in that frame, the animation's frame has changed 
+  @return `true` if in that frame, the animation's frame has changed
    */
   bool frame_changed() const;
   uint32_t get_frame_rate() const;
   void set_frame_rate(uint32_t frame_rate);
+
+  std::span<const std::shared_ptr<const Surface>> get_frames() const;
 };

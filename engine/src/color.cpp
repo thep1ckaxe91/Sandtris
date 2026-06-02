@@ -11,6 +11,8 @@
 
 namespace sdlgame::color {
 
+constexpr size_t __named_color_size = 144;
+
 struct __NamedColor {
   std::string_view name;
   uint8_t r;
@@ -175,7 +177,8 @@ static void to_lowercase(std::string &str) {
                          [](unsigned char c) { return std::tolower(c); });
 }
 
-Color::Color(std::string name) : a(255) {
+Color::Color(const std::string &p_name) : a(255) {
+  auto name = p_name;
   to_lowercase(name);
   if (name == "none" || name.size() == 0) {
     r = g = b = a = 0;
@@ -190,22 +193,28 @@ Color::Color(std::string name) : a(255) {
     g = it->g;
     b = it->b;
   } else [[unlikely]] {
-    std::cerr << "Unrecognize color identifier: " << name << '\n';
+    std::cerr << "Unrecognize color identifier: " << p_name << '\n';
     exit(1);
   }
 }
 
-Color::Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
-    : r(r), b(b), g(g), a(a) {}
-
-// TODO:: not sure if this implementation is fit with pygame description, need
-// to check later'
-Color Color::add_value(uint8_t r_add, uint8_t g_add, uint8_t b_add) {
-
-  return Color{static_cast<uint8_t>(std::max(0, std::min(255, r + r_add))),
-               static_cast<uint8_t>(std::max(0, std::min(255, g + g_add))),
-               static_cast<uint8_t>(std::max(0, std::min(255, b + b_add)))};
+Color Color::operator+(const Color &oth) const {
+  return {r + oth.r, g + oth.g, b + oth.b, a + oth.a};
 }
+Color Color::operator-(const Color &oth) const {
+  return {r - oth.r, g - oth.g, b - oth.b, a - oth.a};
+}
+Color Color::operator*(const Color &oth) const {
+  return {r * oth.r, g * oth.g, b * oth.b, a * oth.a};
+}
+Color Color::operator/(const Color &oth) const {
+  return {r / oth.r, g / oth.g, b / oth.b, a / oth.a};
+}
+Color Color::operator%(const Color &oth) const {
+  return {r % oth.r, g % oth.g, b % oth.b, a % oth.a};
+}
+
+Color Color::operator~() const { return {255 - r, 255 - g, 255 - b, a}; }
 
 SDL_Color Color::to_SDL_Color() const { return SDL_Color{r, g, b, a}; }
 /**return uint32_t kind of color with RGBA format*/

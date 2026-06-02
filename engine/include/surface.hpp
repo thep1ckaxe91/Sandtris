@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_SURFACE_
 #define SDLGAME_SURFACE_
 #include "color.hpp"

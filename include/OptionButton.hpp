@@ -1,17 +1,16 @@
+#pragma once
 #ifndef OPTION_BUTTON_HPP
 #define OPTION_BUTTON_HPP
 
 #include "Button.hpp"
 #include "Game.hpp"
-class OptionButton : public Button
-{
+class OptionButton : public Button {
 public:
-    Game *game;
-    OptionButton(Game &game);
-    OptionButton();
-    void update();
-    void handle_event(const Event &event);
-    void on_click();
+  Game* game;
+  OptionButton(Game &game);
+  void update();
+  void handle_event(const Event &event);
+  void on_click();
 };
 
 #endif

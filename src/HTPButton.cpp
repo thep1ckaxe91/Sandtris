@@ -2,14 +2,13 @@
 #include "HowToPlay.hpp"
 #include "scene_transitions.hpp"
 #include <memory>
-HTPButton::HTPButton(Game &game) {
-  game = &game;
-  set_images(game->m_images.htp_button_idle,
-             game->m_images.htp_button_hover,
-             game->m_images.htp_button_click);
-  rect = (*image).get_rect();
+
+HTPButton::HTPButton(Game &g) : game(&g) {
+  set_images(game->images.htp_button_idle,
+             game->images.htp_button_hover,
+             game->images.htp_button_click);
 }
-HTPButton::HTPButton() = default;
+
 void HTPButton::update() { Button::update(); }
 void HTPButton::handle_event(const Event &event) { Button::handle_event(event); }
 void HTPButton::on_click() {

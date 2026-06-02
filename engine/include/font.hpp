@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDLGAME_FONT_
 #define SDLGAME_FONT_
 #include "SDL2/SDL_ttf.h"
