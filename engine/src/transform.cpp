@@ -9,7 +9,7 @@ surface::Surface flip(const surface::Surface &surface, bool flip_x,
   surface::Surface res = surface;
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           res.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when flip:\nTexture: %p\nError: %s\n", (void *)res.getTexture(), SDL_GetError());
   }
   SDL_RendererFlip flipType = static_cast<SDL_RendererFlip>(
       SDL_FLIP_NONE | (static_cast<int>(flip_x) * SDL_FLIP_HORIZONTAL) |
@@ -18,7 +18,7 @@ surface::Surface flip(const surface::Surface &surface, bool flip_x,
                        nullptr, nullptr, 0, nullptr, flipType))
     printf("Failed to flip\n");
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when flip: %s\n", SDL_GetError());
   }
   return res;
 }
@@ -26,12 +26,12 @@ surface::Surface scale(const surface::Surface &surface, math::Vector2 size) {
   surface::Surface res = surface::Surface(static_cast<int>(size.x), static_cast<int>(size.y));
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           res.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when scale:\nTexture: %p\nError: %s\n", (void *)res.getTexture(), SDL_GetError());
   }
   SDL_RenderCopyF(sdlgame::display::get_renderer(), surface.getTexture(),
                   nullptr, nullptr);
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when scale: %s\n", SDL_GetError());
   }
   return res;
 }
@@ -67,7 +67,7 @@ surface::Surface rotate(const surface::Surface &surface, double angle_deg,
 
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           res.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when rotate:\nTexture: %p\nError: %s\n", (void *)res.getTexture(), SDL_GetError());
   }
 
 
@@ -75,7 +75,7 @@ surface::Surface rotate(const surface::Surface &surface, double angle_deg,
   SDL_RenderCopyExF(sdlgame::display::get_renderer(), surface.getTexture(),
                     nullptr, nullptr, angle_deg, &tmp, SDL_FLIP_NONE);
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when rotate: %s\n", SDL_GetError());
   }
   return res;
 }

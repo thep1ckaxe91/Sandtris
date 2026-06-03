@@ -155,7 +155,7 @@ void Surface::blit(const Surface &source, math::Vector2 pos,
       (_size.y < 0 ? source.get_height() : _size.y));
       
   if (SDL_SetRenderTarget(display::get_renderer(), texture.get())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when blit:\nTexture: %p\nError: %s\n", (void *)texture.get(), SDL_GetError());
   }
 
   SDL_Rect srcrect = area.to_SDL_Rect();
@@ -168,12 +168,12 @@ void Surface::blit(const Surface &source, math::Vector2 pos,
   }
   
   if (SDL_SetRenderTarget(display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when blit: %s\n", SDL_GetError());
   }
 }
 void Surface::fill(sdlgame::color::Color color) {
   if (SDL_SetRenderTarget(display::get_renderer(), texture.get())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when fill:\nTexture: %p\nError: %s\n", (void *)texture.get(), SDL_GetError());
   }
   
   if (SDL_SetRenderDrawColor(display::get_renderer(), color.r, color.g,
@@ -188,7 +188,7 @@ void Surface::fill(sdlgame::color::Color color) {
   }
   
   if (SDL_SetRenderTarget(display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when fill: %s\n", SDL_GetError());
   }
 }
 math::Vector2 Surface::get_size() const { return size; }
