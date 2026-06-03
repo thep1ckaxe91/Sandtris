@@ -13,7 +13,7 @@ void rect(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
   // "<<rect.toString()<<std::endl;
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           surface.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when draw rect:\nTexture: %p\nError: %s\n", (void *)surface.getTexture(), SDL_GetError());
   }
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
@@ -42,7 +42,7 @@ void rect(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     }
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when draw rect: %s\n", SDL_GetError());
   }
 }
 
@@ -50,7 +50,7 @@ void line(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
           double x1, double y1, double x2, double y2) {
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           surface.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when draw line:\nTexture: %p\nError: %s\n", (void *)surface.getTexture(), SDL_GetError());
   }
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
@@ -60,14 +60,14 @@ void line(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     exit(0);
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when draw line: %s\n", SDL_GetError());
   }
 }
 void line(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
           math::Vector2 start, math::Vector2 end) {
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           surface.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when draw line:\nTexture: %p\nError: %s\n", (void *)surface.getTexture(), SDL_GetError());
   }
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
@@ -78,14 +78,14 @@ void line(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     exit(0);
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when draw line: %s\n", SDL_GetError());
   }
 }
 void circle(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
             int centerX, int centerY, int radius, int width) {
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           surface.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when draw circle:\nTexture: %p\nError: %s\n", (void *)surface.getTexture(), SDL_GetError());
   }
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
@@ -108,7 +108,7 @@ void circle(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     }
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when draw circle: %s\n", SDL_GetError());
   }
 }
 void polygon(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
@@ -126,7 +126,7 @@ void point(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
            double x, double y) {
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           surface.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when draw point:\nTexture: %p\nError: %s\n", (void *)surface.getTexture(), SDL_GetError());
   }
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
@@ -136,7 +136,7 @@ void point(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     exit(0);
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when draw point: %s\n", SDL_GetError());
   }
 }
 
@@ -144,7 +144,7 @@ void points(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
             const std::vector<math::Vector2> &points) {
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(),
                           surface.getTexture())) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to set target when draw points:\nTexture: %p\nError: %s\n", (void *)surface.getTexture(), SDL_GetError());
   }
   SDL_SetRenderDrawColor(sdlgame::display::get_renderer(), color.r, color.g,
                          color.b, color.a);
@@ -157,7 +157,7 @@ void points(sdlgame::surface::Surface &surface, sdlgame::color::Color color,
     exit(0);
   }
   if (SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr)) {
-    printf("Failed to set target: %s\n", SDL_GetError());
+    printf("Failed to reset target when draw points: %s\n", SDL_GetError());
   }
 }
 } // namespace sdlgame::draw
