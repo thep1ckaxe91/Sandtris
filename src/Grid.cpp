@@ -10,8 +10,8 @@
 using namespace std::string_literals;
 
 Grid::Grid(Game &game_ref)
-    : ghost(Surface(32, 32)), game(game_ref),
-      ghost_topleft(0, -1000), controller(TetriminoController(game_ref, Tetriminoes::randomTetrimino())),
+    : ghost(Surface(32, 32)), game(game_ref), ghost_topleft(0, -1000),
+      controller(TetriminoController(game_ref, Tetriminoes::randomTetrimino())),
       ghost_color("white"s), next(Tetriminoes::randomTetrimino()) {
   update_ghost_shape();
 
@@ -176,9 +176,10 @@ void Grid::collision_check(std::vector<std::pair<uint8_t, uint8_t>> &updated) {
                 tmp.move_ip(0, -1);
                 int check_y = int(check_point.y - GRID_Y - 1);
                 int check_x = int(check_point.x - GRID_X);
-                if (check_y >= 0 && check_y < GRID_HEIGHT + 2 && check_x >= 0 && check_x < GRID_WIDTH + 2) {
-                    if (grid[check_y][check_x].mask != SandShift::EMPTY_SAND)
-                        check_point.y--;
+                if (check_y >= 0 && check_y < GRID_HEIGHT + 2 && check_x >= 0 &&
+                    check_x < GRID_WIDTH + 2) {
+                  if (grid[check_y][check_x].mask != SandShift::EMPTY_SAND)
+                    check_point.y--;
                 }
               }
               merge(updated);
@@ -241,7 +242,8 @@ void Grid::update_ghost() {
       for (int j = left; j < right; j++) {
         int i = controller_y + 8 * y - GRID_Y;
         int cnt = 0;
-        while (i < GRID_HEIGHT + 1 && grid[i++][j + 1].mask == SandShift::EMPTY_SAND) {
+        while (i < GRID_HEIGHT + 1 &&
+               grid[i++][j + 1].mask == SandShift::EMPTY_SAND) {
           if (++cnt >= min_drop_distance)
             break;
         }
@@ -285,9 +287,7 @@ void Grid::update() {
   normalize_tetrimino();
   update_ghost();
 }
-void Grid::draw_ghost() {
-  game.m_window.blit(ghost, ghost_topleft);
-}
+void Grid::draw_ghost() { game.m_window.blit(ghost, ghost_topleft); }
 void Grid::draw() {
   void *raw_pixels;
   int pitch;
@@ -307,9 +307,10 @@ void Grid::draw() {
         pixels[row_offset + (j - 1)] = 0xff000000;
         continue;
       }
-      Color c = SandShiftColor.at(static_cast<uint8_t>(grid[i][j].mask)) + Color{uint8_t(grid[i][j].color_offset_rgb >> 4 & 15),
-                 uint8_t(grid[i][j].color_offset_rgb >> 2 & 15),
-                 uint8_t(grid[i][j].color_offset_rgb & 15)};
+      Color c = SandShiftColor.at(static_cast<uint8_t>(grid[i][j].mask)) +
+                Color{uint8_t(grid[i][j].color_offset_rgb >> 4 & 15),
+                      uint8_t(grid[i][j].color_offset_rgb >> 2 & 15),
+                      uint8_t(grid[i][j].color_offset_rgb & 15)};
 
       uint32_t pixel_color = (255 << 24) | (c.r << 16) | (c.g << 8) | c.b;
       pixels[row_offset + (j - 1)] = pixel_color;
