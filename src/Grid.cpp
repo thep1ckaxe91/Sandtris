@@ -4,7 +4,9 @@
 #include "constant.hpp"
 #include "engine.hpp"
 #include "tetriminoes.hpp"
+#include <algorithm>
 #include <bitset>
+#include <iostream>
 #include <queue>
 
 using namespace std::string_literals;
@@ -19,10 +21,7 @@ Grid::Grid(Game &game_ref)
     grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(SandShift::STATIC_SAND);
   for (int i = 0; i < GRID_WIDTH + 2; i++)
     grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(SandShift::STATIC_SAND);
-  for (int i = 1; i <= GRID_HEIGHT; i++)
-    for (int j = 1; j <= GRID_WIDTH; j++)
-      grid[i][j] = Sand();
-
+ 
   sand_texture.reset(SDL_CreateTexture(
       sdlgame::display::get_renderer(), SDL_PIXELFORMAT_ARGB8888,
       SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
@@ -90,7 +89,7 @@ int Grid::check_scoring(
     std::vector<std::pair<uint8_t, uint8_t>> &updated_sands) {
   std::queue<std::pair<uint8_t, uint8_t>> q;
   pos.clear();
-  std::array<std::bitset<GRID_WIDTH + 2>, GRID_HEIGHT + 2> visited;
+  std::array<std::bitset<GRID_HEIGHT + 2>, GRID_WIDTH + 2> visited;
   for (auto &[i, j] : updated_sands) {
     if (visited[i][j] == 1)
       continue;
@@ -109,7 +108,13 @@ int Grid::check_scoring(
         touchright = 1;
       for (size_t k = 0; k < (sizeof(dx) / sizeof(int)); k++) {
         int x = dx[k] + u.first;
-        int y = dy[k] + u.second;
+        int y = dy[k] + u.second; // FIXME: the out of bound access occur from
+                                  // here, probably lacking bound check
+        if (x < 0 or x >= GRID_WIDTH + 2 or y < 0 or y >= GRID_HEIGHT + 2)
+        {
+            std::cerr << "out of bound: " << x << " " << y << std::endl;
+            continue;
+        }
         if (visited[x][y] == 0 and grid[x][y].mask == check_color) {
           q.push({x, y});
           visited[x][y] = 1;

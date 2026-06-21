@@ -6,7 +6,10 @@
 #include "stdio.h"
 #include <SDL_error.h>
 #include <SDL_render.h>
+#include <iostream>
 #include <utility>
+#include <cpptrace/cpptrace.hpp>
+
 namespace sdlgame::surface {
 
 Surface::Surface(int width, int height) {
@@ -174,6 +177,8 @@ void Surface::blit(const Surface &source, math::Vector2 pos,
 void Surface::fill(sdlgame::color::Color color) {
   if (SDL_SetRenderTarget(display::get_renderer(), texture.get())) {
     printf("Failed to set target when fill:\nTexture: %p\nError: %s\n", (void *)texture.get(), SDL_GetError());
+    cpptrace::generate_trace().print();
+    exit(1);
   }
   
   if (SDL_SetRenderDrawColor(display::get_renderer(), color.r, color.g,

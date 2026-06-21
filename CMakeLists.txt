@@ -10,6 +10,7 @@ find_package(SDL2 REQUIRED CONFIG)
 find_package(SDL2_image REQUIRED CONFIG)
 find_package(SDL2_mixer REQUIRED CONFIG)
 find_package(SDL2_ttf REQUIRED CONFIG)
+find_package(cpptrace REQUIRED)
 
 # Sanitizer configuration for Lab builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")

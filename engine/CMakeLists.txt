@@ -13,6 +13,7 @@ target_link_libraries(GameEngine PRIVATE
     SDL2_image::SDL2_image
     SDL2_ttf::SDL2_ttf
     SDL2_mixer::SDL2_mixer
+    cpptrace::cpptrace
 )
 
 # this was generated in an attempt for compiler optimization for SIMD

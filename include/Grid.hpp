@@ -14,7 +14,7 @@
 
 class Grid {
 private:
-  double update_timer = 0;
+  double update_timer = 0; // erm, rather use struct
 
 public:
   Surface ghost;
@@ -29,12 +29,16 @@ public:
   Tetrimino next;
   int score1 = 0, score2 = 0;
 
-  // to be able to move, this must get flatten
-  Sand grid[GRID_HEIGHT + 2][GRID_WIDTH + 2];
+  std::array<std::array<Sand, GRID_WIDTH + 2>, GRID_HEIGHT + 2> grid{};
 
   Grid(Game &game);
+  Grid(
+      Game &game,
+      const std::array<std::array<Sand, GRID_WIDTH + 2>, GRID_HEIGHT + 2> &grid,
+      const Tetrimino &next, const TetriminoController &controller);
 
-  // maybe we should still allow moving and copying?
+  // maybe we should still allow moving and copying? or just create a
+  // constructor that allow restore state
   Grid(const Grid &) = delete;
   Grid(Grid &&) = delete;
   void operator=(const Grid &) = delete;
