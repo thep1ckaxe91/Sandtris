@@ -6,11 +6,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(SDL2 REQUIRED CONFIG)
-find_package(SDL2_image REQUIRED CONFIG)
-find_package(SDL2_mixer REQUIRED CONFIG)
-find_package(SDL2_ttf REQUIRED CONFIG)
-find_package(cpptrace REQUIRED CONFIG)
+find_package(GTest REQUIRED)
+find_package(libsdlgame REQUIRED)
+
+enable_testing()
 
 # Sanitizer configuration for Lab builds
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
@@ -18,7 +17,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInf
     add_link_options(-fsanitize=address,undefined)
 endif()
 
-add_subdirectory(engine)
+add_subdirectory(tests)
 
 file(GLOB SOURCE_FILES "src/*.cpp")
 
@@ -34,7 +33,7 @@ target_compile_options(Sandtris PRIVATE
     # -Werror
 )
 
-target_link_libraries(Sandtris PRIVATE GameEngine)
+target_link_libraries(Sandtris PRIVATE GameEngine::GameEngine)
 
 target_include_directories(Sandtris PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
