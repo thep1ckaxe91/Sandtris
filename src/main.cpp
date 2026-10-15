@@ -1,4 +1,3 @@
-// #define _CRTDBG_MAP_ALLOC
 #include "SaveData.hpp"
 #include "SceneTransition.hpp"
 #include "constant.hpp"
