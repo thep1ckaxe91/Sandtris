@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := relwithdebinfo_build
 
 .PHONY: all relwithdebinfo_build release_build debug_build \
-				install_rwdi install_db install_rel clean distclean
+				install_rwdi install_db install_rel clean distclean \
+				hotspot
 
 # Default alias
 all: relwithdebinfo_build
@@ -32,6 +33,10 @@ clean:
 	@if [ -d "build/RelWithDebInfo" ]; then cmake --build --preset conan-relwithdebinfo --target clean; fi
 	@if [ -d "build/Debug" ]; then cmake --build --preset conan-debug --target clean; fi
 	@if [ -d "build/Release" ]; then cmake --build --preset conan-release --target clean; fi
+
+hotspot: relwithdebinfo_build
+	sudo perf record --call-graph dwarf -F 99 ./build/RelWithDebInfo/Sandtris
+	hotspot ./perf.data
 
 # Full purge of generated trees and presets
 distclean:

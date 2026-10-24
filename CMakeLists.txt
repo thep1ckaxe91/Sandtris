@@ -33,7 +33,7 @@ target_compile_options(Sandtris PRIVATE
     # -Werror
 )
 
-target_link_libraries(Sandtris PRIVATE GameEngine::GameEngine)
+target_link_libraries(Sandtris PRIVATE libsdlgame::libsdlgame)
 
 target_include_directories(Sandtris PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
