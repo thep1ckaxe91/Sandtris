@@ -2,7 +2,9 @@
 #ifndef SCENE_TRANSITIONS_HPP
 #define SCENE_TRANSITIONS_HPP
 #include "SceneTransition.hpp"
-#include "engine.hpp"
+#include <sdlgame/surface.hpp>
+#include <sdlgame/color.hpp>
+
 class OutSwipeDown : public SceneTransition {
 public:
   double accelerate;
@@ -24,18 +26,18 @@ public:
 
 class OutFade : public SceneTransition {
 public:
-  Surface mask;
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> mask;
   double vel, cur_alpha;
-  Color cur_color;
+  sdlgame::color::Color cur_color;
   OutFade(double time = 2);
   void update(double delta_time);
   void draw();
 };
 class InFade : public SceneTransition {
 public:
-  Surface mask;
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> mask;
   double vel, cur_alpha;
-  Color cur_color;
+  sdlgame::color::Color cur_color;
   InFade(double time = 2);
   void update(double delta_time);
   void draw();

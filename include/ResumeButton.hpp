@@ -4,12 +4,13 @@
 
 #include "Button.hpp"
 #include "Game.hpp"
+
 class ResumeButton : public Button {
 public:
-  Game* game;
+  Game *game; // FIXME: why pointer instead of const lref?
   ResumeButton(Game &game);
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void on_click();
 };
 

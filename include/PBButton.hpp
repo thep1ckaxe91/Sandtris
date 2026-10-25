@@ -10,7 +10,7 @@ public:
   PBButton(Game &game);
   void on_click();
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
 };
 
 #endif

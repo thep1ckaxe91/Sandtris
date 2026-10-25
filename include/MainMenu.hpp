@@ -9,7 +9,6 @@
 #include "ResumeButton.hpp"
 #include "Scene.hpp"
 #include "StartButton.hpp"
-#include "engine.hpp"
 #include <memory>
 
 class MainMenu : public Scene {
@@ -24,7 +23,7 @@ public:
 
   bool can_resume;
   MainMenu(Game &game);
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void update();
   void draw();
   ~MainMenu();

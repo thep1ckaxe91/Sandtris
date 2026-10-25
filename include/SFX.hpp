@@ -3,27 +3,25 @@
 #define SFX_HPP
 
 // Load all sfx for use here
-#include "mixer.hpp"
 #include <filesystem>
-
-using Sound = sdlgame::mixer::Sound;
+#include <sdlgame/mixer.hpp>
 
 namespace fs = std::filesystem;
-const fs::path sfx_path{fs::path("assets") / "audio" / "sfx"};
+const fs::path sfx_path{fs::path{"assets"} / "audio" / "sfx"};
 
 class SFX {
 public:
-  Sound button_click;
-  Sound button_hover;
-  Sound count_down;
-  Sound count_down_start;
-  Sound game_over;
-  Sound merge;
-  Sound rotate;
-  Sound scoring;
-  Sound transition_in;
-  Sound transition_out;
-  Sound soft_wind_blow;
+  sdlgame::mixer::Sound button_click;
+  sdlgame::mixer::Sound button_hover;
+  sdlgame::mixer::Sound count_down;
+  sdlgame::mixer::Sound count_down_start;
+  sdlgame::mixer::Sound game_over;
+  sdlgame::mixer::Sound merge;
+  sdlgame::mixer::Sound rotate;
+  sdlgame::mixer::Sound scoring;
+  sdlgame::mixer::Sound transition_in;
+  sdlgame::mixer::Sound transition_out;
+  sdlgame::mixer::Sound soft_wind_blow;
   SFX();
   void load();
 };

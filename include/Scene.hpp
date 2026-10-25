@@ -2,9 +2,7 @@
 #ifndef SCENE_HPP
 #define SCENE_HPP
 
-#include "event.hpp"
-
-using Event = sdlgame::event::Event;
+#include <sdlgame/event.hpp>
 
 class Game;
 
@@ -13,7 +11,8 @@ class Game;
  */
 class Scene {
 public:
-  Game &game; // FIXME: the Game reference is really drilling through every source file lol 
+  Game &game; // FIXME: the Game reference is really drilling through every
+              // source file lol
   // figure out a way to get this off, maybe utilize event bus more, localize
 
   Scene(Game &);
@@ -27,6 +26,6 @@ public:
   bool is_working();
   virtual void update() = 0;
   virtual void draw() = 0;
-  virtual void handle_event(const Event &event) = 0;
+  virtual void handle_event(const sdlgame::event::Event &event) = 0;
 };
 #endif

@@ -6,7 +6,7 @@
 #include "Tetrimino.hpp"
 #include "TetriminoController.hpp"
 #include "constant.hpp"
-#include "memory.hpp"
+#include <sdlgame/surface.hpp>
 
 /**
  * Yes, the array start from 1, the rest is the border
@@ -17,13 +17,13 @@ private:
   double update_timer = 0; // erm, rather use struct
 
 public:
-  Surface ghost;
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> ghost;
   Game &game;
   const double fixed_delta_time = 0.05;
-  sdlgame::memory::SDLUniquePtr<SDL_Texture> sand_texture = nullptr;
-  Vector2 ghost_topleft;
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_STREAMING> sand_texture;
+  sdlgame::math::Vector2 ghost_topleft;
   TetriminoController controller;
-  Color ghost_color;
+  sdlgame::color::Color ghost_color;
 
   std::vector<std::pair<Uint8, Uint8>> pos;
   Tetrimino next;
@@ -58,7 +58,7 @@ public:
 
   void update();
   void draw();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
 
   std::pair<Uint8, Uint8> step(int i, int j, int times);
 };

@@ -6,10 +6,10 @@
 #include "Game.hpp"
 class HTPButton : public Button {
 public:
-  Game* game;
+  Game *game;
   HTPButton(Game &game);
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void on_click();
 };
 

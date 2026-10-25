@@ -1,11 +1,9 @@
 #pragma once
 #ifndef TETRIMINO_HPP
 #define TETRIMINO_HPP
-#include <cstdint>
 #include <constant.hpp>
+#include <cstdint>
 #include <unordered_map>
-
-// TODO: there maybe a better design for this? maybe it's fine since there are only so much type of shape
 
 typedef struct ShapeInfo {
   uint16_t mask[4];

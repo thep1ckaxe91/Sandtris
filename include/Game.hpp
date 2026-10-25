@@ -5,7 +5,7 @@
 #include "Images.hpp"
 #include "SceneTransition.hpp"
 #include "constant.hpp"
-#include "engine.hpp"
+#include <sdlgame/time.hpp>
 
 class Scene;
 
@@ -28,14 +28,15 @@ public:
   std::vector<std::unique_ptr<Scene>> m_scene_list;
   Images images;
   AudioManager audio_manager;
-  sdlgame::surface::Surface
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET>
       m_window; // window is an actual texture getting drawn on
-  sdlgame::surface::Surface
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET>
       m_window_object; // a nullptr texture surface, represent the actual window
   sdlgame::time::Clock m_clock;
-  Vector2 m_window_draw_offset; // TODO: this is just a quick patch to be able
-                                // to create a screen shake effect, there must
-                                // be a cleaner way
+  sdlgame::math::Vector2
+      m_window_draw_offset; // TODO: this is just a quick patch to be able
+                            // to create a screen shake effect, there must
+                            // be a cleaner way
   Game();
   virtual void draw() = 0;
   virtual void update() = 0;

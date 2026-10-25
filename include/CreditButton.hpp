@@ -6,11 +6,11 @@
 #include "Game.hpp"
 class CreditButton : public Button {
 public:
-  Game* game;
+  Game *game;
 
   CreditButton(Game &game);
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void on_click();
 };
 

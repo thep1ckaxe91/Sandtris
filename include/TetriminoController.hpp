@@ -3,6 +3,8 @@
 #define TETRIMINO_CONTROLLER_HPP
 #include "Game.hpp"
 #include "Tetrimino.hpp"
+#include <sdlgame/event.hpp>
+#include <sdlgame/surface.hpp>
 /**
  *
  * The controller IS NOT RESPONSIBLE to check if the tetrimino is collide with
@@ -14,19 +16,19 @@ class TetriminoController {
 public:
   Game &game;
   Tetrimino tetrimino;
-  Surface draw_surf;
-  Vector2 topleft;
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> draw_surf;
+  sdlgame::math::Vector2 topleft;
   TetriminoController(Game &game, Tetrimino tetrimino);
-  
+
   // deleted default constructor because of Game&
   TetriminoController() = delete;
-  
+
   void reset(Tetrimino tetrimino);
   void draw();
   void redraw();
   void update();
   void rotate();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
 };
 
 #endif

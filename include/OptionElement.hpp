@@ -7,10 +7,10 @@
 class SFXVolumeSlider : public Slider {
 public:
   Game &game;
-  SFXVolumeSlider(Game &game, Vector2 start_pos, float start_val, float length,
-                  float max_val);
+  SFXVolumeSlider(Game &game, sdlgame::math::Vector2 start_pos, float start_val,
+                  float length, float max_val);
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void draw();
   void on_change_value();
 };
@@ -18,10 +18,10 @@ public:
 class MusicVolumeSlider : public Slider {
 public:
   Game &game;
-  MusicVolumeSlider(Game &game, Vector2 start_pos, float start_val, float length,
-                    float max_val);
+  MusicVolumeSlider(Game &game, sdlgame::math::Vector2 start_pos,
+                    float start_val, float length, float max_val);
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void draw();
   void on_change_value();
 };
@@ -29,10 +29,10 @@ public:
 class FullscreenSlider : public Slider {
 public:
   Game &game;
-  FullscreenSlider(Game &game, Vector2 start_pos, float start_val, float length,
-                   float max_val);
+  FullscreenSlider(Game &game, sdlgame::math::Vector2 start_pos,
+                   float start_val, float length, float max_val);
   void update();
-  void handle_event(const Event &event);
+  void handle_event(const sdlgame::event::Event &event);
   void draw();
   void on_change_value();
 };

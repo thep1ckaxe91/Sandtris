@@ -4,7 +4,8 @@
  */
 #ifndef TETRIS_EVENT_HPP
 #define TETRIS_EVENT_HPP
-#include "engine.hpp"
+#include <sdlgame/constants.hpp>
+
 // just custom user event, all event here is offset from sdlgame::USEREVENT
 enum Tetris_Event {
   MERGING = sdlgame::USEREVENT + 1,

@@ -16,7 +16,7 @@ public:
   std::shared_ptr<FullscreenSlider> fs_slider;
   Option(Game &game);
   void update() override;
-  void handle_event(const Event &event) override;
+  void handle_event(const sdlgame::event::Event &event) override;
   void draw() override;
 };
 #endif
