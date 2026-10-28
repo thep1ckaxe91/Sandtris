@@ -27,7 +27,6 @@ add_executable(Sandtris ${SOURCE_FILES})
 target_compile_options(Sandtris PRIVATE 
     -Wall 
     -Wextra 
-    -Wconversion 
     -Wshadow 
     -Wpedantic
     # -Werror
