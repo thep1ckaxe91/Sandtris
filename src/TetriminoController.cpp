@@ -1,9 +1,17 @@
 #include "TetriminoController.hpp"
 #include "Sand.hpp"
+#include <sdlgame/color.hpp>
+#include <sdlgame/constants.hpp>
+#include <sdlgame/draw.hpp>
+#include <sdlgame/key.hpp>
+#include <sdlgame/rect.hpp>
+
+using Color = sdlgame::color::Color;
+using Rect = sdlgame::rect::Rect;
 
 TetriminoController::TetriminoController(Game &g, Tetrimino t)
-    : game(g), tetrimino(t), draw_surf(TETRIMINO_EDGE_SIZE, TETRIMINO_EDGE_SIZE),
-      topleft(spawn_pos) {
+    : game(g), tetrimino(t),
+      draw_surf(TETRIMINO_EDGE_SIZE, TETRIMINO_EDGE_SIZE), topleft(spawn_pos) {
   redraw();
 }
 
@@ -40,7 +48,7 @@ void TetriminoController::redraw() {
             Rect(8 * j, 8 * i, 8, 8));
 }
 
-void TetriminoController::handle_event(const Event &event) {
+void TetriminoController::handle_event(const sdlgame::event::Event &event) {
   if (event.type == sdlgame::KEYDOWN) {
     if (event["key"] == sdlgame::K_UP or event["key"] == sdlgame::K_w)
       rotate();

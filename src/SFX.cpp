@@ -1,8 +1,10 @@
 #include "SFX.hpp"
-#include "engine.hpp"
+#include <sdlgame/engine.hpp>
+#include <sdlgame/mixer.hpp>
 
 SFX::SFX() = default;
 void SFX::load() {
+  using sdlgame::mixer::Sound;
   const fs::path base_path = sdlgame::get_base_path();
 
   button_click = Sound(base_path / sfx_path / "button_click.wav");

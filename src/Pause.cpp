@@ -1,11 +1,21 @@
 #include "Pause.hpp"
+#include <sdlgame/color.hpp>
+#include <sdlgame/event.hpp>
+#include <sdlgame/font.hpp>
+#include <sdlgame/math.hpp>
+#include <sdlgame/surface.hpp>
+
+using sdlgame::color::Color;
+using sdlgame::font::Font;
+using sdlgame::math::Vector2;
 
 using namespace std::string_literals;
 
 Pause::Pause(Game &game_ref) : Scene(game_ref) {
   message_font = Font(font_path, FONT_SIZE);
-  message_surf = message_font.render("Progress will be save",
-                                     sdlgame::font::AntiAlias::SOLID, "white"s);
+  message_surf =
+      message_font.render("Progress will be save",
+                          sdlgame::font::AntiAlias::SOLID, Color{"white"s});
   message_rect = message_surf.get_rect();
   message_rect.setCenter(static_cast<int>(RESOLUTION_WIDTH / 2),
                          static_cast<int>(RESOLUTION_HEIGHT) -
@@ -20,9 +30,9 @@ Pause::Pause(Game &game_ref) : Scene(game_ref) {
   option_button->get_rect().setCenter(102, 68);
 }
 
-void Pause::render_message(std::string new_message) {
-  message_surf = message_font.render(new_message,
-                                     sdlgame::font::AntiAlias::SOLID, "white"s);
+void Pause::render_message(const std::string &new_message) {
+  message_surf = message_font.render(
+      new_message, sdlgame::font::AntiAlias::SOLID, Color{"white"s});
   message_rect = message_surf.get_rect();
   message_rect.setCenter(static_cast<int>(RESOLUTION_WIDTH / 2),
                          static_cast<int>(RESOLUTION_HEIGHT) -
@@ -41,7 +51,7 @@ void Pause::update() {
   back_button->update();
 }
 
-void Pause::handle_event(const Event &event) {
+void Pause::handle_event(const sdlgame::event::Event &event) {
   menu_button->handle_event(event);
   option_button->handle_event(event);
   retry_button->handle_event(event);

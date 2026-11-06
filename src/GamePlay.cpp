@@ -5,22 +5,32 @@
 #include "PauseButton.hpp"
 #include "SaveData.hpp"
 #include "TetrisEvent.hpp"
-#include "color.hpp"
 #include "constant.hpp"
-#include "font.hpp"
 #include "scene_transitions.hpp"
-#include <iostream>
+#include "sdlgame/color.hpp"
+#include "sdlgame/font.hpp"
+#include <SDL_render.h>
 #include <memory>
+#include <sdlgame/draw.hpp>
+#include <sdlgame/math.hpp>
+#include <sdlgame/music.hpp>
+#include <sdlgame/rect.hpp>
+#include <sdlgame/surface.hpp>
 
 using namespace std::string_literals;
 
+using sdlgame::color::Color;
+using sdlgame::math::Vector2;
+using sdlgame::rect::Rect;
+template <SDL_TextureAccess Ac> using Surface = sdlgame::surface::Surface<Ac>;
+
 GamePlay::GamePlay(Game &game_ref)
     : Scene(game_ref), m_grid(game_ref), m_score_font(font_path, FONT_SIZE),
-      m_color_flow1("none"s), m_color_flow2("none"s),
-      m_blipcount(100), m_gameover(false), m_pausing(false) {
+      m_color_flow1("none"s), m_color_flow2("none"s), m_blipcount(100),
+      m_gameover(false), m_pausing(false) {
 
   m_score_surf =
-      m_score_font.render("0", sdlgame::font::AntiAlias::SOLID, "white"s);
+      m_score_font.render("0", sdlgame::font::AntiAlias::SOLID, Color{"white"});
   m_score_rect = m_score_surf.get_rect();
   m_score_rect.setCenter(score_display_center);
 
@@ -28,23 +38,28 @@ GamePlay::GamePlay(Game &game_ref)
   m_flow1 = next_color_display_rect.inflate(0, 5);
   m_flow2 = m_flow1.move(0, next_color_display_rect.getHeight());
 
-  m_next_shape_surf = Surface(static_cast<int>(next_shape_display_rect.getWidth()),
-                              static_cast<int>(next_shape_display_rect.getHeight()));
+  m_next_shape_surf = Surface<SDL_TEXTUREACCESS_TARGET>(
+      static_cast<int>(next_shape_display_rect.getWidth()),
+      static_cast<int>(next_shape_display_rect.getHeight()));
   redraw_next_shape();
 
   m_change_shape = std::make_shared<Animation>(game, 120);
   m_change_shape->load(base_path / "assets/animations/change_next_shape/");
-  auto tmp = std::make_shared<Surface>(next_shape_display_area.getWidth(),
-                                       next_shape_display_area.getHeight());
-  tmp->fill("none"s);
-  m_change_shape->set_default_image(tmp);
+  auto tmp = Surface<SDL_TEXTUREACCESS_TARGET>(
+      next_shape_display_area.getWidth(), next_shape_display_area.getHeight());
+  tmp.fill(Color{0, 0, 0, 0});
+  m_change_shape->set_default_image(
+      std::make_shared<Surface<SDL_TEXTUREACCESS_STATIC>>(
+          tmp.copy<SDL_TEXTUREACCESS_STATIC>()));
 
   m_count_down = std::make_shared<Animation>(game, 1);
   m_count_down->load(base_path / "assets/animations/count_down/");
-  tmp = std::make_shared<Surface>(count_down_display_rect.getWidth(),
-                                  count_down_display_rect.getHeight());
-  tmp->fill("none"s);
-  m_count_down->set_default_image(tmp);
+  tmp = Surface<SDL_TEXTUREACCESS_TARGET>(count_down_display_rect.getWidth(),
+                                          count_down_display_rect.getHeight());
+  tmp.fill(Color{0, 0, 0, 0});
+  m_count_down->set_default_image(
+      std::make_shared<Surface<SDL_TEXTUREACCESS_STATIC>>(
+          tmp.copy<SDL_TEXTUREACCESS_STATIC>()));
   m_count_down->play();
 
   sdlgame::music::load(base_path /
@@ -81,7 +96,7 @@ void GamePlay::handle_event(const sdlgame::event::Event &event) {
   if (event.type == SCORING) {
     m_score_surf =
         m_score_font.render(std::to_string(m_grid.get_score()),
-                            sdlgame::font::AntiAlias::SOLID, "white"s);
+                            sdlgame::font::AntiAlias::SOLID, Color{"white"});
     m_score_rect = m_score_surf.get_rect();
     m_score_rect.setCenter(score_display_center);
     if (get_personal_best() < m_grid.get_score())

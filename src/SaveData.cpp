@@ -2,11 +2,10 @@
 #include "Game.hpp"
 #include "Grid.hpp"
 #include "constant.hpp"
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <cstring>
-#include <algorithm>
 
 namespace fs = std::filesystem;
 
@@ -95,14 +94,15 @@ bool delete_grid_data() {
   }
 }
 
-bool save_grid_data(Grid &/*grid*/) {
+bool save_grid_data(Grid & /*grid*/) {
   return false; // Stub for now
 }
 
-void load_grid_data(Game &/*game*/, Grid &grid) {
+void load_grid_data(Game & /*game*/, Grid &grid) {
   std::ifstream file(base_path / "assets" / "save" / "grid.sandtris",
                      std::ios_base::binary);
-  if (!file.is_open()) return;
+  if (!file.is_open())
+    return;
 
   char tmp[8];
   uint8_t tmp_byte;

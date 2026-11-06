@@ -1,11 +1,17 @@
 #include "Game.hpp"
-#include "SceneTransition.hpp"
 #include "Scene.hpp"
+#include "SceneTransition.hpp"
+#include <SDL_render.h>
+#include <sdlgame/surface.hpp>
 
-Game::Game() : m_command(SceneCommand::NONE), m_gameactive(true) {}
+Game::Game(sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> &window_object)
+    : m_command(SceneCommand::NONE), m_gameactive(true),
+      m_window_object(window_object) {}
 
 std::optional<const Scene *const> Game::current_scene() const {
-  return m_scene_list.empty() ? std::nullopt : std::optional<const Scene *const>(m_scene_list.back().get());
+  return m_scene_list.empty()
+             ? std::nullopt
+             : std::optional<const Scene *const>(m_scene_list.back().get());
 }
 
 bool Game::out_transitioning() { return bool(m_out); }

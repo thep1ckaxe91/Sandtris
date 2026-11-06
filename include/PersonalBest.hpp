@@ -1,5 +1,5 @@
 #pragma once
-#include <surface.hpp>
+#include <sdlgame/surface.hpp>
 #ifndef PERSONAL_BEST_HPP
 #define PERSONAL_BEST_HPP
 

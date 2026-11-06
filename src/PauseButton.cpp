@@ -3,13 +3,12 @@
 #include "scene_transitions.hpp"
 
 PauseButton::PauseButton(Game &g) : game(&g) {
-  set_images(game->images.pause_button_idle,
-             game->images.pause_button_hover,
+  set_images(game->images.pause_button_idle, game->images.pause_button_hover,
              game->images.pause_button_click);
 }
 
 void PauseButton::update() { Button::update(); }
-void PauseButton::handle_event(const Event &event) {
+void PauseButton::handle_event(const sdlgame::event::Event &event) {
   Button::handle_event(event);
 }
 void PauseButton::on_click() {

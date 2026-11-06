@@ -1,12 +1,17 @@
 #include "scene_transitions.hpp"
-#include <string>
+#include <SDL_render.h>
+#include <sdlgame/color.hpp>
+#include <sdlgame/draw.hpp>
+#include <sdlgame/math.hpp>
+#include <sdlgame/rect.hpp>
+#include <sdlgame/surface.hpp>
+
+template <SDL_TextureAccess Ac> using Surface = sdlgame::surface::Surface<Ac>;
+using sdlgame::color::Color;
+using sdlgame::math::Vector2;
+using sdlgame::rect::Rect;
 
 using namespace std::string_literals;
-
-using Rect = sdlgame::rect::Rect;
-using Vector2 = sdlgame::math::Vector2;
-using Surface = sdlgame::surface::Surface;
-using Color = sdlgame::color::Color;
 
 OutSwipeDown::OutSwipeDown(double duration) : SceneTransition(duration) {
   vel = cur_height = 0;
@@ -43,8 +48,9 @@ void InSwipeDown::draw() {
 }
 
 OutFade::OutFade(double duration) : SceneTransition(duration) {
-  mask =
-      Surface(static_cast<int>(sdlgame::display::get_width()), static_cast<int>(sdlgame::display::get_height()));
+  mask = Surface<SDL_TEXTUREACCESS_TARGET>(
+      static_cast<int>(sdlgame::display::get_width()),
+      static_cast<int>(sdlgame::display::get_height()));
   cur_color = Color("none"s);
   mask.fill(cur_color);
   vel = 255 / duration;
@@ -59,13 +65,12 @@ void OutFade::update(double delta_time) {
     isDone = 1;
   }
 }
-void OutFade::draw() {
-  sdlgame::display::get_surf().blit(mask, Vector2());
-}
+void OutFade::draw() { sdlgame::display::get_surf().blit(mask, Vector2()); }
 
 InFade::InFade(double duration) : SceneTransition(duration) {
-  mask =
-      Surface(static_cast<int>(sdlgame::display::get_width()), static_cast<int>(sdlgame::display::get_height()));
+  mask = Surface<SDL_TEXTUREACCESS_TARGET>(
+      static_cast<int>(sdlgame::display::get_width()),
+      static_cast<int>(sdlgame::display::get_height()));
   cur_color = Color("black"s);
   mask.fill(cur_color);
   vel = -255 / duration;
@@ -80,6 +85,4 @@ void InFade::update(double delta_time) {
     isDone = 1;
   }
 }
-void InFade::draw() {
-  sdlgame::display::get_surf().blit(mask, Vector2());
-}
+void InFade::draw() { sdlgame::display::get_surf().blit(mask, Vector2()); }

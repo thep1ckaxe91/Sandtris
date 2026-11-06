@@ -2,17 +2,29 @@
 #include "TetriminoController.hpp"
 #include "TetrisEvent.hpp"
 #include "constant.hpp"
-#include "engine.hpp"
 #include "tetriminoes.hpp"
+#include <SDL_render.h>
 #include <algorithm>
 #include <bitset>
 #include <iostream>
 #include <queue>
+#include <sdlgame/color.hpp>
+#include <sdlgame/math.hpp>
+#include <sdlgame/rect.hpp>
+#include <sdlgame/surface.hpp>
+#include <sdlgame/draw.hpp>
+#include <sdlgame/random.hpp>
+
+template <SDL_TextureAccess Ac> using Surface = sdlgame::surface::Surface<Ac>;
+using sdlgame::color::Color;
+using sdlgame::math::Vector2;
+using sdlgame::rect::Rect;
 
 using namespace std::string_literals;
 
 Grid::Grid(Game &game_ref)
-    : ghost(Surface(32, 32)), game(game_ref), ghost_topleft(0, -1000),
+    : ghost(Surface<SDL_TEXTUREACCESS_TARGET>(32, 32)), game(game_ref),
+      sand_texture(GRID_WIDTH, GRID_HEIGHT), ghost_topleft(0, -1000),
       controller(TetriminoController(game_ref, Tetriminoes::randomTetrimino())),
       ghost_color("white"s), next(Tetriminoes::randomTetrimino()) {
   update_ghost_shape();
@@ -21,22 +33,13 @@ Grid::Grid(Game &game_ref)
     grid[i][0] = grid[i][GRID_WIDTH + 1] = Sand(SandShift::STATIC_SAND);
   for (int i = 0; i < GRID_WIDTH + 2; i++)
     grid[0][i] = grid[GRID_HEIGHT + 1][i] = Sand(SandShift::STATIC_SAND);
- 
-  sand_texture.reset(SDL_CreateTexture(
-      sdlgame::display::get_renderer(), SDL_PIXELFORMAT_ARGB8888,
-      SDL_TEXTUREACCESS_STREAMING, // cpu can write to this tex
-      GRID_WIDTH, GRID_HEIGHT));
 
-  if (!sand_texture) {
-    SDL_Log("Cant create or sand texture null for:\n%s\n", SDL_GetError());
-    exit(1);
-  }
-  if (SDL_SetTextureBlendMode(sand_texture.get(), SDL_BLENDMODE_NONE)) {
+  if (SDL_SetTextureBlendMode(sand_texture.getTexture(), SDL_BLENDMODE_NONE)) {
     SDL_Log("Failed to set texture blend mode due to: %s", SDL_GetError());
   }
 }
 
-void Grid::handle_event(const Event &event) {
+void Grid::handle_event(const sdlgame::event::Event &event) {
   controller.handle_event(event);
   if (event.type == sdlgame::KEYDOWN) {
     if (event["key"] == sdlgame::K_SPACE) {
@@ -110,10 +113,9 @@ int Grid::check_scoring(
         int x = dx[k] + u.first;
         int y = dy[k] + u.second; // FIXME: the out of bound access occur from
                                   // here, probably lacking bound check
-        if (x < 0 or x >= GRID_WIDTH + 2 or y < 0 or y >= GRID_HEIGHT + 2)
-        {
-            std::cerr << "out of bound: " << x << " " << y << std::endl;
-            continue;
+        if (x < 0 or x >= GRID_WIDTH + 2 or y < 0 or y >= GRID_HEIGHT + 2) {
+          std::cerr << "out of bound: " << x << " " << y << std::endl;
+          continue;
         }
         if (visited[x][y] == 0 and grid[x][y].mask == check_color) {
           q.push({x, y});
@@ -220,7 +222,7 @@ void Grid::update_ghost_shape() {
   auto get_from_pos = [&](const int i, const int j) {
     return (3 - i) * 4 + (3 - j);
   };
-  ghost.fill("none"s);
+  ghost.fill(Color{"none"});
   for (int i = 0; i < 4; i++) {
     for (int j = 0; j < 4; j++) {
       if (controller.tetrimino.mask >> get_from_pos(i, j) & 1) {
@@ -294,13 +296,10 @@ void Grid::update() {
 }
 void Grid::draw_ghost() { game.m_window.blit(ghost, ghost_topleft); }
 void Grid::draw() {
-  void *raw_pixels;
-  int pitch;
 
-  if (SDL_LockTexture(sand_texture.get(), nullptr, &raw_pixels, &pitch)) {
-    SDL_Log("Cant get memory address of sand texture:\n%s\n", SDL_GetError());
-    exit(1);
-  }
+  sand_texture.lock();
+
+  auto [raw_pixels, pitch] = sand_texture.get_lock();
 
   auto *pixels = reinterpret_cast<uint32_t *>(raw_pixels);
   int width_in_pixels = pitch / 4;
@@ -322,18 +321,9 @@ void Grid::draw() {
     }
   }
 
-  SDL_UnlockTexture(sand_texture.get());
+  sand_texture.unlock();
 
-  SDL_Rect dst_rect = {GRID_X, GRID_Y, GRID_WIDTH, GRID_HEIGHT};
-
-  SDL_SetRenderTarget(sdlgame::display::get_renderer(),
-                      game.m_window.getTexture());
-  if (SDL_RenderCopy(sdlgame::display::get_renderer(), sand_texture.get(),
-                     nullptr, &dst_rect)) {
-    printf("Failed to render the sand texture:\n%s\n", SDL_GetError());
-    exit(1);
-  }
-  SDL_SetRenderTarget(sdlgame::display::get_renderer(), nullptr);
+  game.m_window.blit(sand_texture, {GRID_X, GRID_Y});
 
   controller.draw();
   draw_ghost();

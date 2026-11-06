@@ -4,13 +4,12 @@
 #include <memory>
 
 OptionButton::OptionButton(Game &g) : game(&g) {
-  set_images(game->images.option_button_idle,
-             game->images.option_button_hover,
+  set_images(game->images.option_button_idle, game->images.option_button_hover,
              game->images.option_button_click);
 }
 
 void OptionButton::update() { Button::update(); }
-void OptionButton::handle_event(const Event &event) {
+void OptionButton::handle_event(const sdlgame::event::Event &event) {
   Button::handle_event(event);
 }
 void OptionButton::on_click() {

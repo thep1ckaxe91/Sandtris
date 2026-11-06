@@ -7,7 +7,7 @@
 
 class SplashScreen : public Scene {
 public:
-  std::shared_ptr<Animation> splash;
+  std::unique_ptr<Animation> splash;
   double time;
   bool done;
   /**
@@ -18,7 +18,7 @@ public:
    * transition end;
    */
   SplashScreen(Game &gameInstance, double duration,
-               std::shared_ptr<Animation> anim);
+               std::unique_ptr<Animation> anim);
   void play();
   virtual void on_finish() = 0;
   void handle_event(const sdlgame::event::Event &event) override;

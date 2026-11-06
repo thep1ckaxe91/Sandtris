@@ -1,5 +1,10 @@
 #include "Sand.hpp"
 #include "constant.hpp"
+#include <sdlgame/color.hpp>
+#include <sdlgame/random.hpp>
+
+using sdlgame::color::Color;
+
 
 // Bit shift for color check, not for actual color, does not include static_sand
 std::array<Color, 9> SandShiftColor = {

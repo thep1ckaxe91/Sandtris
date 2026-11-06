@@ -1,4 +1,6 @@
 #pragma once
+#include <SDL_render.h>
+#include <sdlgame/surface.hpp>
 #ifndef GAME_HPP
 #define GAME_HPP
 #include "AudioManager.hpp"
@@ -30,14 +32,14 @@ public:
   AudioManager audio_manager;
   sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET>
       m_window; // window is an actual texture getting drawn on
-  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET>
+  sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> &
       m_window_object; // a nullptr texture surface, represent the actual window
   sdlgame::time::Clock m_clock;
   sdlgame::math::Vector2
       m_window_draw_offset; // TODO: this is just a quick patch to be able
                             // to create a screen shake effect, there must
                             // be a cleaner way
-  Game();
+  Game(sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> &);
   virtual void draw() = 0;
   virtual void update() = 0;
   virtual void run() = 0;

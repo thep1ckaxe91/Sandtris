@@ -1,5 +1,18 @@
 #include "Slider.hpp"
 #include "constant.hpp"
+#include <sdlgame/color.hpp>
+#include <sdlgame/constants.hpp>
+#include <sdlgame/font.hpp>
+#include <sdlgame/math.hpp>
+#include <sdlgame/mouse.hpp>
+#include <sdlgame/rect.hpp>
+
+using sdlgame::color::Color;
+using sdlgame::font::Font;
+using sdlgame::math::Vector2;
+using sdlgame::rect::Rect;
+
+using namespace std::string_literals;
 
 /**
  * @brief Construct a new Slider:: Slider object
@@ -15,24 +28,23 @@ Slider::Slider(Vector2 _topleft, float _value, float _slide_length,
     : nob(Rect{0, 0, 3, 3}), topleft(_topleft),
       label_font(Font(font_path, FONT_SIZE)), value(_value),
       slide_length(_slide_length), max_value(_max_value), holding(0) {
-  set_label("default label", "white"s);
-  set_color("white"s, "white"s, "gray"s);
+  set_label("default label", Color("white"s));
+  set_color(Color("white"s), Color("white"s), Color("gray"s));
   nob.setCenter(topleft + Vector2(value / max_value * slide_length, 0));
 }
 Slider::Slider() = default;
-void Slider::set_label(std::string text, Color color) {
+void Slider::set_label(const std::string &text, Color color) {
   label_surf = label_font.render(text, sdlgame::font::AntiAlias::SOLID, color);
   label_rect = label_surf.get_rect();
   label_rect.setMidRight(topleft);
 }
 void Slider::update() {
   if (holding) {
-    nob.setCenter(sdlgame::math::clamp(sdlgame::mouse::get_pos().x,
-                                       topleft.x,
+    nob.setCenter(sdlgame::math::clamp(sdlgame::mouse::get_pos().x, topleft.x,
                                        topleft.x + slide_length),
                   topleft.y);
-    value =
-        static_cast<float>((nob.getCenterX() - topleft.x) / slide_length * max_value);
+    value = static_cast<float>((nob.getCenterX() - topleft.x) / slide_length *
+                               max_value);
   }
 }
 /**
@@ -47,7 +59,7 @@ void Slider::set_color(Color nobColor, Color valid, Color invalid) {
   value_color = valid;
   no_value_color = invalid;
 }
-void Slider::handle_event(const Event &event) {
+void Slider::handle_event(const sdlgame::event::Event &event) {
   if (event.type == sdlgame::MOUSEBUTTONDOWN and
       nob.collidepoint(sdlgame::mouse::get_pos())) {
     holding = 1;

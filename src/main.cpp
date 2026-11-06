@@ -1,18 +1,25 @@
 #include "SaveData.hpp"
 #include "SceneTransition.hpp"
 #include "constant.hpp"
-#include "constants.hpp"
-#include "engine.hpp"
 #include "scene_transitions.hpp"
 #include "splash_screens.hpp"
+#include <sdlgame/color.hpp>
+#include <sdlgame/constants.hpp>
+#include <sdlgame/engine.hpp>
+#include <sdlgame/math.hpp>
+#include <sdlgame/surface.hpp>
+
 #include <SDL2/SDL_render.h>
 #include <memory>
 #include <print>
-
 using namespace std::string_literals;
 
+using sdlgame::color::Color;
+using sdlgame::math::Vector2;
 using Timer = sdlgame::time::Timer;
 using TimerManager = sdlgame::time::TimerManager;
+
+template <SDL_TextureAccess Ac> using Surface = sdlgame::surface::Surface<Ac>;
 
 static void print_bench_stat() {
   for (auto &[name, stat] : TimerManager::instance().get_all()) {
@@ -26,11 +33,13 @@ class Sandtris : public Game {
 public:
   bool m_gameactive = true;
   bool played = false;
-  Sandtris() : Game() {
-    m_window_object =
-        sdlgame::display::set_mode(RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
-                                   0 | sdlgame::MAXIMIZED | sdlgame::RESIZABLE);
-    m_window = Surface(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
+  Sandtris()
+      : Game(sdlgame::display::set_mode(RESOLUTION_WIDTH, RESOLUTION_HEIGHT,
+                                        0 | sdlgame::MAXIMIZED |
+                                            sdlgame::RESIZABLE)) {
+
+    m_window =
+        Surface<SDL_TEXTUREACCESS_TARGET>(RESOLUTION_WIDTH, RESOLUTION_HEIGHT);
     sdlgame::display::get_window_size(); // TODO: this is intended to assign
                                          // proxy_surf a value it suppose to be,
                                          // but there should be a way to make
@@ -51,7 +60,6 @@ public:
     sdlgame::display::set_caption("Sandtris - Made by thep1ckaxe");
     sdlgame::display::set_icon(
         (base_path / "assets" / "image" / "icon" / "icon.png").c_str());
-
   }
   void update() override {
     Timer t("update");
@@ -109,12 +117,13 @@ public:
     }
   }
   void run() override {
-    auto studiosc_anim = std::make_shared<Animation>(*this, 10, true);
-    studiosc_anim->load(base_path / "assets" / "animations" / "splash" / "studio");
+    auto studiosc_anim = std::make_unique<Animation>(*this, 10, true);
+    studiosc_anim->load(base_path / "assets" / "animations" / "splash" /
+                        "studio");
     studiosc_anim->play();
     auto in = std::make_unique<InFade>();
     std::unique_ptr<Scene> next =
-        std::make_unique<StudioSC>(*this, studiosc_anim, 8);
+        std::make_unique<StudioSC>(*this, std::move(studiosc_anim), 8);
     add_scene(nullptr, std::move(next), std::move(in));
     bool running = true;
     while (running) {

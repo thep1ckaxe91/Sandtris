@@ -1,6 +1,8 @@
 #include "AudioManager.hpp"
 #include "SaveData.hpp"
 #include "TetrisEvent.hpp"
+#include <sdlgame/music.hpp>
+
 AudioManager::AudioManager() {
   sfx.load();
   sfx_volume = ::get_sfx_volume();
@@ -8,7 +10,7 @@ AudioManager::AudioManager() {
   set_sfx_volume(sfx_volume);
   set_music_volume(music_volume);
 }
-void AudioManager::handle_event(const Event &event) {
+void AudioManager::handle_event(const sdlgame::event::Event &event) {
   switch (event.type) {
   case BUTTON_CLICK:
     sfx.button_click.play();

@@ -4,13 +4,14 @@
 #include <memory>
 
 CreditButton::CreditButton(Game &g) : game(&g) {
-  set_images(game->images.credit_button_idle,
-             game->images.credit_button_hover,
+  set_images(game->images.credit_button_idle, game->images.credit_button_hover,
              game->images.credit_button_click);
 }
 
 void CreditButton::update() { Button::update(); }
-void CreditButton::handle_event(const Event &event) { Button::handle_event(event); }
+void CreditButton::handle_event(const sdlgame::event::Event &event) {
+  Button::handle_event(event);
+}
 void CreditButton::on_click() {
   auto in = std::make_unique<InFade>(1);
   auto out = std::make_unique<OutFade>(1);

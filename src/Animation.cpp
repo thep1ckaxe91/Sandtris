@@ -1,9 +1,11 @@
 #include "Animation.hpp"
-#include <algorithm>
+#include <SDL_render.h>
 #include <cassert>
-#include <filesystem>
-#include <memory>
+#include <sdlgame/image.hpp>
+#include <sdlgame/surface.hpp>
+
 namespace fs = std::filesystem;
+template <SDL_TextureAccess T> using Surface = sdlgame::surface::Surface<T>;
 
 Animation::Animation(Game &game_ref, uint32_t frame_rate, bool loop)
     : game(&game_ref), m_frame_rate(frame_rate), m_loop(loop) {}
@@ -15,8 +17,6 @@ Animation::Animation(Game &game_ref, uint32_t frame_rate, bool loop)
  */
 void Animation::load(const fs::path &path) {
   assert(fs::is_directory(path));
-  // FIXME: NOW there's segfault caused by a blit call by the first animation of the splash screen
-  // must check with gdb to see what 
   frames.clear();
   std::vector<fs::directory_entry> entries;
   for (const auto &entry : fs::directory_iterator(path)) {
@@ -29,7 +29,8 @@ void Animation::load(const fs::path &path) {
   std::ranges::sort(entries); // sort by name for consistency
 
   for (const auto &entry : entries) {
-    frames.emplace_back(sdlgame::image::load(entry.path()));
+    frames.emplace_back(std::make_shared<Surface<SDL_TEXTUREACCESS_STATIC>>(
+        sdlgame::image::load(entry.path())));
   }
 
   if (!default_img || !default_img->getTexture()) {
@@ -63,12 +64,14 @@ void Animation::update() {
 void Animation::play() { m_playing = 1; }
 void Animation::pause() { m_playing = 0; }
 void Animation::reset() { m_frame_id = 0; }
-void Animation::set_default_image(const std::shared_ptr<const Surface> &oth) {
+void Animation::set_default_image(
+    const std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> &oth) {
   default_img = oth;
   m_image = default_img;
 }
 
-const std::shared_ptr<const Surface> &Animation::get_default_image() const {
+const std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> &
+Animation::get_default_image() const {
   return default_img;
 }
 
@@ -86,6 +89,7 @@ void Animation::set_frame_rate(uint32_t frame_rate) {
   m_frame_rate = frame_rate;
 };
 
-std::span<const std::shared_ptr<const Surface>> Animation::get_frames() const {
+std::span<const std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>>>
+Animation::get_frames() const {
   return frames;
 }

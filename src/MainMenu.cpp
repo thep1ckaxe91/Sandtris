@@ -1,7 +1,10 @@
 #include "MainMenu.hpp"
 #include "SaveData.hpp"
 #include "constant.hpp"
-#include <iostream>
+#include <sdlgame/math.hpp>
+#include <sdlgame/music.hpp>
+
+using sdlgame::math::Vector2;
 
 MainMenu::MainMenu(Game &game_ref) : Scene(game_ref) {
   if (have_grid_data()) {
@@ -26,11 +29,12 @@ MainMenu::MainMenu(Game &game_ref) : Scene(game_ref) {
   option_button = std::make_shared<OptionButton>(game);
   option_button->get_rect().setTopLeft(119 - 64 - 4, 104);
 
-  sdlgame::music::load(base_path / "assets" / "audio" / "music" /"mainmenu_theme_loop.mp3");
+  sdlgame::music::load(base_path / "assets" / "audio" / "music" /
+                       "mainmenu_theme_loop.mp3");
   sdlgame::music::play(-1, 1000);
 }
 
-void MainMenu::handle_event(const Event &event) {
+void MainMenu::handle_event(const sdlgame::event::Event &event) {
   start_button->handle_event(event);
   quit_button->handle_event(event);
   credit_button->handle_event(event);

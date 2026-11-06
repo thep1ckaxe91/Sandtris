@@ -4,10 +4,10 @@
 
 #include "SplashScreen.hpp"
 #include <memory>
-// FIXME: shoudn't these Animation be hold by std::unique_ptr instead?
+// FIXME: shoudn't these Animation param be hold by std::unique_ptr instead?
 class StudioSC : public SplashScreen {
 public:
-  StudioSC(Game &gameInstance, std::shared_ptr<Animation> anim,
+  StudioSC(Game &gameInstance, std::unique_ptr<Animation> anim,
            double duration = 3);
   void handle_event(const sdlgame::event::Event &event) override;
   void update() override;
@@ -16,7 +16,7 @@ public:
 
 class SDLSC : public SplashScreen {
 public:
-  SDLSC(Game &gameInstance, std::shared_ptr<Animation> anim,
+  SDLSC(Game &gameInstance, std::unique_ptr<Animation> anim,
         double duration = 2);
   void handle_event(const sdlgame::event::Event &event) override;
   void update() override;

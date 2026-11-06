@@ -8,8 +8,8 @@
  */
 class SceneTransition {
 public:
-  double time; // time in second, the length of the animation
-  bool isDone;
+  double time = 1; // time in second, the length of the animation
+  bool isDone = false;
   SceneTransition(double time = 1);
   virtual void update(double delta_time) = 0;
   virtual void draw() = 0;

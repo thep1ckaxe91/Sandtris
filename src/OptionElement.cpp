@@ -1,16 +1,22 @@
 #include "OptionElement.hpp"
 #include "SaveData.hpp"
+#include <sdlgame/color.hpp>
+#include <sdlgame/draw.hpp>
+#include <sdlgame/math.hpp>
+
+using sdlgame::color::Color;
+using sdlgame::math::Vector2;
 
 using namespace std::string_literals;
 
 SFXVolumeSlider::SFXVolumeSlider(Game &g, Vector2 start_pos, float start_val,
                                  float length, float max_val)
     : Slider(start_pos, start_val, length, max_val), game(g) {
-  set_color("white"s, "white"s, "gray"s);
-  set_label("SFX Volume: "s, "white"s);
+  set_color(Color{"white"}, Color{"white"}, Color{"gray"});
+  set_label("SFX Volume: "s, Color{"white"});
 }
 void SFXVolumeSlider::update() { Slider::update(); }
-void SFXVolumeSlider::handle_event(const Event &event) {
+void SFXVolumeSlider::handle_event(const sdlgame::event::Event &event) {
   Slider::handle_event(event);
 }
 void SFXVolumeSlider::draw() {
@@ -26,14 +32,15 @@ void SFXVolumeSlider::on_change_value() {
   game.audio_manager.set_sfx_volume(value / max_value);
 }
 
-MusicVolumeSlider::MusicVolumeSlider(Game &g, Vector2 start_pos, float start_val,
-                                     float length, float max_val)
+MusicVolumeSlider::MusicVolumeSlider(Game &g, Vector2 start_pos,
+                                     float start_val, float length,
+                                     float max_val)
     : Slider(start_pos, start_val, length, max_val), game(g) {
-  set_color("white"s, "white"s, "gray"s);
-  set_label("Music Volume: "s, "white"s);
+  set_color(Color{"white"}, Color{"white"}, Color{"gray"});
+  set_label("Music Volume: "s, Color{"white"});
 }
 void MusicVolumeSlider::update() { Slider::update(); }
-void MusicVolumeSlider::handle_event(const Event &event) {
+void MusicVolumeSlider::handle_event(const sdlgame::event::Event &event) {
   Slider::handle_event(event);
 }
 void MusicVolumeSlider::draw() {
@@ -52,13 +59,13 @@ void MusicVolumeSlider::on_change_value() {
 FullscreenSlider::FullscreenSlider(Game &g, Vector2 start_pos, float start_val,
                                    float length, float max_val)
     : Slider(start_pos, start_val, length, max_val), game(g) {
-  set_color("white"s, "orange"s, "saddle brown"s);
-  set_label("Fullscreen :"s, "white"s);
+  set_color(Color{"white"}, Color{"orange"}, Color{"saddle brown"});
+  set_label("Fullscreen :"s, Color{"white"});
 }
 void FullscreenSlider::update() {
   nob.setCenter(topleft + Vector2(value * slide_length / max_value, 0));
 }
-void FullscreenSlider::handle_event(const Event &event) {
+void FullscreenSlider::handle_event(const sdlgame::event::Event &event) {
   Slider::handle_event(event);
 }
 void FullscreenSlider::draw() {

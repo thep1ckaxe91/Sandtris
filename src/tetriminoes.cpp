@@ -1,4 +1,5 @@
 #include "tetriminoes.hpp"
+#include <sdlgame/random.hpp>
 
 namespace Tetriminoes {
 // Return a random color I tetrimino

@@ -1,4 +1,8 @@
 #include "HowToPlay.hpp"
+#include <sdlgame/math.hpp>
+#include <sdlgame/constants.hpp>
+
+using sdlgame::math::Vector2;
 
 HowToPlay::HowToPlay(Game &game_ref) : Scene(game_ref) {
   back_button = std::make_shared<BackButton>(game);
@@ -6,7 +10,7 @@ HowToPlay::HowToPlay(Game &game_ref) : Scene(game_ref) {
   height_pos = 0;
 }
 
-void HowToPlay::handle_event(const Event &event) {
+void HowToPlay::handle_event(const sdlgame::event::Event &event) {
   back_button->handle_event(event);
   if (event.type == sdlgame::MOUSEWHEEL) {
     height_pos += static_cast<double>(event["y"] * 4);

@@ -1,15 +1,13 @@
 #include "StartButton.hpp"
 #include "GamePlay.hpp"
-#include "engine.hpp"
 #include "scene_transitions.hpp"
 
 StartButton::StartButton(Game &g) : game(&g) {
-  set_images(game->images.start_button_idle,
-             game->images.start_button_hover,
+  set_images(game->images.start_button_idle, game->images.start_button_hover,
              game->images.start_button_click);
 }
 
-void StartButton::handle_event(const Event &event) {
+void StartButton::handle_event(const sdlgame::event::Event &event) {
   Button::handle_event(event);
 }
 void StartButton::on_click() {

@@ -5,12 +5,11 @@
 #include <memory>
 
 RetryButton::RetryButton(Game &g) : game(&g) {
-  set_images(game->images.retry_button_idle,
-             game->images.retry_button_hover,
+  set_images(game->images.retry_button_idle, game->images.retry_button_hover,
              game->images.retry_button_click);
 }
 
-void RetryButton::handle_event(const Event &event) {
+void RetryButton::handle_event(const sdlgame::event::Event &event) {
   Button::handle_event(event);
 }
 void RetryButton::on_click() {

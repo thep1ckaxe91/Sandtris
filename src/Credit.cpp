@@ -1,12 +1,16 @@
 #include "Credit.hpp"
-#include "constant.hpp"
+#include <sdlgame/math.hpp>
+
+using sdlgame::math::Vector2;
 
 Credit::Credit(Game &game_ref) : Scene(game_ref) {
   back_button = std::make_shared<BackButton>(game);
   back_button->get_rect().setTopLeft(bb_pos);
 }
 
-void Credit::handle_event(const Event &event) { back_button->handle_event(event); }
+void Credit::handle_event(const sdlgame::event::Event &event) {
+  back_button->handle_event(event);
+}
 void Credit::update() { back_button->update(); }
 
 void Credit::draw() {

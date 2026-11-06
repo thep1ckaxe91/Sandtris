@@ -4,8 +4,7 @@
 #include <memory>
 
 PBButton::PBButton(Game &g) : game(&g) {
-  set_images(game->images.pb_button_idle,
-             game->images.pb_button_hover,
+  set_images(game->images.pb_button_idle, game->images.pb_button_hover,
              game->images.pb_button_click);
 }
 
@@ -17,6 +16,6 @@ void PBButton::on_click() {
 }
 
 void PBButton::update() { Button::update(); }
-void PBButton::handle_event(const Event &event) {
+void PBButton::handle_event(const sdlgame::event::Event &event) {
   Button::handle_event(event);
 }

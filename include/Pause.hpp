@@ -1,6 +1,6 @@
 #pragma once
-#include <font.hpp>
-#include <surface.hpp>
+#include <sdlgame/font.hpp>
+#include <sdlgame/surface.hpp>
 #ifndef PAUSE_HPP
 #define PAUSE_HPP
 
@@ -22,7 +22,7 @@ public:
   std::shared_ptr<RetryButton> retry_button;
   std::shared_ptr<BackButton> back_button;
   Pause(Game &game);
-  void render_message(std::string new_message);
+  void render_message(const std::string &new_message);
   void display_message();
   void update() override;
   void handle_event(const sdlgame::event::Event &event) override;

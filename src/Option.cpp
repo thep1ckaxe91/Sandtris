@@ -1,5 +1,8 @@
 #include "Option.hpp"
 #include "SaveData.hpp"
+#include <sdlgame/math.hpp>
+
+using sdlgame::math::Vector2;
 
 Option::Option(Game &_game) : Scene(_game) {
   sfx_slider = std::make_shared<SFXVolumeSlider>(
@@ -10,7 +13,7 @@ Option::Option(Game &_game) : Scene(_game) {
       game, Vector2(80, 96), sdlgame::display::is_fullscreen(), 5, 1);
   back_button = std::make_shared<BackButton>(game);
   back_button->get_rect().setBottomRight(RESOLUTION_WIDTH - 2,
-                                          RESOLUTION_HEIGHT - 2);
+                                         RESOLUTION_HEIGHT - 2);
 }
 
 void Option::update() {
@@ -19,7 +22,7 @@ void Option::update() {
   back_button->update();
   fs_slider->update();
 }
-void Option::handle_event(const Event &event) {
+void Option::handle_event(const sdlgame::event::Event &event) {
   sfx_slider->handle_event(event);
   music_slider->handle_event(event);
   back_button->handle_event(event);

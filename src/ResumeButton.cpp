@@ -4,13 +4,12 @@
 #include "scene_transitions.hpp"
 
 ResumeButton::ResumeButton(Game &g) : game(&g) {
-  set_images(game->images.resume_button_idle,
-             game->images.resume_button_hover,
+  set_images(game->images.resume_button_idle, game->images.resume_button_hover,
              game->images.resume_button_click);
 }
 
 void ResumeButton::update() { Button::update(); }
-void ResumeButton::handle_event(const Event &event) {
+void ResumeButton::handle_event(const sdlgame::event::Event &event) {
   Button::handle_event(event);
 }
 void ResumeButton::on_click() {

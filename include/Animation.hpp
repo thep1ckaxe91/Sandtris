@@ -9,11 +9,11 @@ namespace fs = std::filesystem;
 
 class Animation : public sdlgame::sprite::Sprite {
 protected:
-  std::shared_ptr<const sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>
+  std::shared_ptr<sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>
       default_img;
   double m_time_count = 0;
-  std::vector<std::shared_ptr<
-      const sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>>
+  std::vector<
+      std::shared_ptr<sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>>
       frames;
   Game *game;
   size_t m_frame_id;
@@ -39,10 +39,9 @@ public:
   void pause();
   void reset();
   void set_default_image(
-      const std::shared_ptr<
-          const sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>> &oth);
-  const std::shared_ptr<
-      const sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>> &
+      const std::shared_ptr<sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>
+          &oth);
+  const std::shared_ptr<sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>> &
   get_default_image() const;
   bool is_playing() const;
   bool is_looped() const;
@@ -56,6 +55,6 @@ public:
   void set_frame_rate(uint32_t frame_rate);
 
   std::span<const std::shared_ptr<
-      const sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>>
+      sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC>>>
   get_frames() const;
 };

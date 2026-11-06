@@ -1,11 +1,17 @@
 #include "SplashScreen.hpp"
+#include <memory>
+#include <sdlgame/constants.hpp>
+#include <sdlgame/math.hpp>
 
-SplashScreen::SplashScreen(Game &gameInstance, double duration, std::shared_ptr<Animation> anim)
-    : Scene(gameInstance), splash(anim), time(duration), done(false) {}
+using sdlgame::math::Vector2;
+
+SplashScreen::SplashScreen(Game &gameInstance, double duration,
+                           std::unique_ptr<Animation> anim)
+    : Scene(gameInstance), splash(std::move(anim)), time(duration), done(false) {}
 
 void SplashScreen::play() { splash->play(); }
 
-void SplashScreen::handle_event(const Event &event) {
+void SplashScreen::handle_event(const sdlgame::event::Event &event) {
   if (event.type == sdlgame::MOUSEBUTTONDOWN) {
     on_finish();
     done = true;
@@ -24,5 +30,7 @@ void SplashScreen::update() {
     done = true;
   }
 }
-void SplashScreen::draw() { game.m_window.blit(splash->get_image(), Vector2()); }
+void SplashScreen::draw() {
+  game.m_window.blit(splash->get_image(), Vector2());
+}
 SplashScreen::~SplashScreen() = default;
