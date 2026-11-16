@@ -1,0 +1,7 @@
+include(default)
+
+[replace_tool_requires]
+gettext/*: gettext/1.0
+
+[conf]
+tools.build:cflags=["-std=gnu17"]

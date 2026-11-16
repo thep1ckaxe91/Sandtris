@@ -18,7 +18,8 @@ class SandtrisConan(ConanFile):
 
     default_options = {
         "sdl/*:wayland": False,
-        "sdl/*:pulse": False,
+        "sdl/*:pulse": True,
+        "pulseaudio/*:shared": True,
     }
 
     def requirements(self):

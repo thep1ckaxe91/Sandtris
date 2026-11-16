@@ -9,13 +9,13 @@ all: relwithdebinfo_build
 
 # Conan dependency generation
 install_rwdi:
-	conan install . --build=missing -s build_type=RelWithDebInfo
+	conan install . --build=missing -s build_type=RelWithDebInfo -pr:a=./conan_profile
 
 install_db:
-	conan install . --build=missing -s build_type=Debug
+	conan install . --build=missing -s build_type=Debug -pr:a=./conan_profile
 
 install_rel:
-	conan install . --build=missing -s build_type=Release
+	conan install . --build=missing -s build_type=Release -pr:a=./conan_profile
 
 relwithdebinfo_build: install_rwdi
 	cmake --preset conan-relwithdebinfo
