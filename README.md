@@ -2,7 +2,7 @@
 
 [![C++23](https://img.shields.io/badge/C%2B%2B-23-blue.svg)](https://en.cppreference.com/w/cpp/23)
 [![Build System](https://img.shields.io/badge/Build-CMake%20%7C%20Conan%202-orange.svg)](https://conan.io/)
-[![Engine](https://img.shields.io/badge/Engine-libsdlgame-green.svg)](https://github.com/)
+[![Engine](https://img.shields.io/badge/Engine-libsdlgame-green.svg)](https://github.com/thep1ckaxe91/libsdlgame)
 
 A falling sand puzzle game merging classic Tetris tetromino mechanics with falling-sand cellular automata physics, re-architected with **C++23** for high performance, strict RAII lifecycle management, and scalable simulation.
 
