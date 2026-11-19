@@ -12,10 +12,17 @@
  * Yes, the array start from 1, the rest is the border
  */
 
+struct GridPos {
+  std::uint8_t row;
+  std::uint8_t col;
+
+  GridPos(std::uint8_t _row, std::uint8_t _col) : row(_row), col(_col) {}
+  constexpr bool operator==(const GridPos &) const = default;
+};
+
 class Grid {
 private:
   double update_timer = 0; // erm, rather use struct
-
 public:
   sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> ghost;
   Game &game;
@@ -25,7 +32,7 @@ public:
   TetriminoController controller;
   sdlgame::color::Color ghost_color;
 
-  std::vector<std::pair<Uint8, Uint8>> pos;
+  std::vector<GridPos> score_cells;
   Tetrimino next;
   int score1 = 0, score2 = 0;
 
@@ -37,7 +44,7 @@ public:
       const std::array<std::array<Sand, GRID_WIDTH + 2>, GRID_HEIGHT + 2> &grid,
       const Tetrimino &next, const TetriminoController &controller);
 
-  // maybe we should still allow moving and copying? or just create a
+  // TODO: maybe we should still allow moving and copying? or just create a
   // constructor that allow restore state
   Grid(const Grid &) = delete;
   Grid(Grid &&) = delete;
@@ -46,11 +53,11 @@ public:
 
   void normalize_tetrimino();
 
-  void collision_check(std::vector<std::pair<Uint8, Uint8>> &updated);
-  void merge(std::vector<std::pair<Uint8, Uint8>> &updated_sands);
+  void collision_check(std::vector<GridPos> &updated);
+  void merge(std::vector<GridPos> &updated_sands);
 
   int get_score();
-  int check_scoring(std::vector<std::pair<Uint8, Uint8>> &updated_sands);
+  int check_scoring(std::vector<GridPos> &updated_sands);
 
   void update_ghost();
   void update_ghost_shape();
@@ -60,7 +67,7 @@ public:
   void draw();
   void handle_event(const sdlgame::event::Event &event);
 
-  std::pair<Uint8, Uint8> step(int i, int j, int times);
+  GridPos step(GridPos, int);
 };
 
 #endif
