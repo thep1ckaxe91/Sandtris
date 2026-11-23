@@ -7,6 +7,10 @@
 #include <sdlgame/rect.hpp>
 #include <thread>
 
+using sdlgame::color::Color;
+using sdlgame::math::Vector2;
+using sdlgame::rect::Rect;
+
 const auto base_path = sdlgame::get_base_path();
 
 enum Window_Constant { RESOLUTION_WIDTH = 160, RESOLUTION_HEIGHT = 144 };
@@ -56,39 +60,30 @@ enum SandShift : uint8_t {
 
 const int FONT_SIZE = 10;
 
-const double fall_speed = 40;          // pixel per second
-const double fast_fall_speed = 80;     // pps
-const double sideway_move_speed = 100; // pps
+const double fall_speed_pps = 40;
+const double fast_fall_speed_pps = 80;     
+const double sideway_move_speed_pps = 100; 
 const int step_range = 3;
-const sdlgame::math::Vector2 score_display_center =
-    sdlgame::math::Vector2(132, 123);
+const Vector2 score_display_center = Vector2(132, 123);
 
-const sdlgame::color::Color RED_SAND_COLOR = sdlgame::color::Color("crimson");
-const sdlgame::color::Color GREEN_SAND_COLOR =
-    sdlgame::color::Color("forest green");
-const sdlgame::color::Color YELLOW_SAND_COLOR = sdlgame::color::Color("gold");
-const sdlgame::color::Color BLUE_SAND_COLOR =
-    sdlgame::color::Color("dodger blue");
+const Color RED_SAND_COLOR = Color("crimson");
+const Color GREEN_SAND_COLOR = Color("forest green");
+const Color YELLOW_SAND_COLOR = Color("gold");
+const Color BLUE_SAND_COLOR = Color("dodger blue");
 
-const sdlgame::math::Vector2 spawn_pos = sdlgame::math::Vector2(40, -32);
-const sdlgame::rect::Rect next_shape_display_area =
-    sdlgame::rect::Rect(116, 25, 32, 31);
-const sdlgame::rect::Rect next_shape_display_rect =
-    sdlgame::rect::Rect(120, 28, 24, 24);
-const sdlgame::rect::Rect left_barrier =
-    sdlgame::rect::Rect(8, -32, 8, int(RESOLUTION_HEIGHT + 32));
-const sdlgame::rect::Rect right_barrier =
-    sdlgame::rect::Rect(16 + GRID_WIDTH, -32, 8, int(RESOLUTION_HEIGHT + 32));
-const sdlgame::rect::Rect next_color_display_rect =
-    sdlgame::rect::Rect(129, 71, 7, 23);
-const sdlgame::rect::Rect count_down_display_rect =
-    sdlgame::rect::Rect(32, 51, 48, 16);
+const Vector2 spawn_pos = Vector2(40, -32);
+const Rect next_shape_display_area = Rect(116, 25, 32, 31);
+const Rect next_shape_display_rect = Rect(120, 28, 24, 24);
+const Rect left_barrier = Rect(8, -32, 8, int(RESOLUTION_HEIGHT + 32));
+const Rect right_barrier =
+    Rect(16 + GRID_WIDTH, -32, 8, int(RESOLUTION_HEIGHT + 32));
+const Rect next_color_display_rect = Rect(129, 71, 7, 23);
+const Rect count_down_display_rect = Rect(32, 51, 48, 16);
 
-const sdlgame::math::Vector2 menu_button_pos = sdlgame::math::Vector2(39, 97);
-const sdlgame::math::Vector2 retry_button_pos = sdlgame::math::Vector2(91, 97);
-const sdlgame::math::Vector2 midbottom_newscore =
-    sdlgame::math::Vector2(80, 42);
-const sdlgame::math::Vector2 midbottom_pb = sdlgame::math::Vector2(80, 77);
+const Vector2 menu_button_pos = Vector2(39, 97);
+const Vector2 retry_button_pos = Vector2(91, 97);
+const Vector2 midbottom_newscore = Vector2(80, 42);
+const Vector2 midbottom_pb = Vector2(80, 77);
 
 const double gameplay_bg_speed = 10;
 const double gforce = 1; // pix/sec^2

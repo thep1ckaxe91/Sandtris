@@ -28,8 +28,8 @@ Slider::Slider(Vector2 _topleft, float _value, float _slide_length,
     : nob(Rect{0, 0, 3, 3}), topleft(_topleft),
       label_font(Font(font_path, FONT_SIZE)), value(_value),
       slide_length(_slide_length), max_value(_max_value), holding(0) {
-  set_label("default label", Color("white"s));
-  set_color(Color("white"s), Color("white"s), Color("gray"s));
+  set_label("default label", Color{"white"});
+  set_color(Color{"white"}, Color{"white"}, Color("gray"s));
   nob.setCenter(topleft + Vector2(value / max_value * slide_length, 0));
 }
 Slider::Slider() = default;

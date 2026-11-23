@@ -27,10 +27,11 @@ void TetriminoController::update() {
   auto keys = sdlgame::key::get_pressed();
   topleft.x += ((keys[sdlgame::K_d] or keys[sdlgame::K_RIGHT]) -
                 (keys[sdlgame::K_a] or keys[sdlgame::K_LEFT])) *
-               sideway_move_speed * game.m_clock.delta_time().count();
-  topleft.y += game.m_clock.delta_time().count() *
-               (keys[sdlgame::K_s] or keys[sdlgame::K_DOWN] ? fast_fall_speed
-                                                            : fall_speed);
+               sideway_move_speed_pps * game.m_clock.delta_time().count();
+  topleft.y +=
+      game.m_clock.delta_time().count() *
+      (keys[sdlgame::K_s] or keys[sdlgame::K_DOWN] ? fast_fall_speed_pps
+                                                   : fall_speed_pps);
 }
 
 void TetriminoController::rotate() {

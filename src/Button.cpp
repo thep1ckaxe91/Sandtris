@@ -19,9 +19,9 @@ void Button::set_images(
 }
 
 void Button::handle_event(const sdlgame::event::Event &event) {
-  if (event.type == sdlgame::MOUSEBUTTONDOWN and hovering) {
+  if (event.type == sdlgame::MOUSEBUTTONDOWN && hovering) {
     m_image = m_click;
-  } else if (event.type == sdlgame::MOUSEBUTTONUP and hovering) {
+  } else if (event.type == sdlgame::MOUSEBUTTONUP && hovering) {
     sdlgame::event::post(BUTTON_CLICK);
     on_click();
   }
@@ -34,7 +34,7 @@ void Button::update() {
     m_image = m_idle;
     hovering = 0;
   }
-  if (hovering and !prev_hovered) {
+  if (hovering && !prev_hovered) {
     m_image = m_hover;
     sdlgame::event::post(BUTTON_HOVER);
   }

@@ -15,7 +15,7 @@ Pause::Pause(Game &game_ref) : Scene(game_ref) {
   message_font = Font(font_path, FONT_SIZE);
   message_surf =
       message_font.render("Progress will be save",
-                          sdlgame::font::AntiAlias::SOLID, Color{"white"s});
+                          sdlgame::font::AntiAlias::SOLID, Color{"white"});
   message_rect = message_surf.get_rect();
   message_rect.setCenter(static_cast<int>(RESOLUTION_WIDTH / 2),
                          static_cast<int>(RESOLUTION_HEIGHT) -
@@ -32,7 +32,7 @@ Pause::Pause(Game &game_ref) : Scene(game_ref) {
 
 void Pause::render_message(const std::string &new_message) {
   message_surf = message_font.render(
-      new_message, sdlgame::font::AntiAlias::SOLID, Color{"white"s});
+      new_message, sdlgame::font::AntiAlias::SOLID, Color{"white"});
   message_rect = message_surf.get_rect();
   message_rect.setCenter(static_cast<int>(RESOLUTION_WIDTH / 2),
                          static_cast<int>(RESOLUTION_HEIGHT) -
