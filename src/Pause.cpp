@@ -43,7 +43,7 @@ void Pause::display_message() {
 }
 void Pause::update() {
   menu_button->update();
-  if (menu_button->hovering and !menu_button->prev_hovered)
+  if (menu_button->hovering && !menu_button->prev_hovered)
     render_message("Progress will be save");
 
   option_button->update();
