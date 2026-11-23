@@ -3,16 +3,14 @@
 #include <sdlgame/mouse.hpp>
 #include <sdlgame/surface.hpp>
 
-template <SDL_TextureAccess Ac> using Surface = sdlgame::surface::Surface<Ac>;
-
 Button::Button()
     : m_idle(nullptr), m_hover(nullptr), m_click(nullptr), hovering(false),
       prev_hovered(false) {}
 
 void Button::set_images(
-    std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> idle,
-    std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> hover,
-    std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> click) {
+    const std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> &idle,
+    const std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> &hover,
+    const std::shared_ptr<Surface<SDL_TEXTUREACCESS_STATIC>> &click) {
   m_idle = idle;
   m_hover = hover;
   m_click = click;
