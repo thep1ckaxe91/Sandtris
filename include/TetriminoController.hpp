@@ -9,7 +9,7 @@
  *
  * The controller IS NOT RESPONSIBLE to check if the tetrimino is collide with
  * any Sand yet, that's the grid responsible for that this also responsible for
- * drawing and controlling the tetrimino movement, rotation The grid should have
+ * drawing and controlling the tetrimino movement and rotation. The grid should have
  * a properties of type TetriminoController
  */
 class TetriminoController {
