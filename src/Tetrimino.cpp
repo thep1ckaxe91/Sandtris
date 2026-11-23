@@ -8,12 +8,9 @@ ShapeInfo::ShapeInfo(uint16_t m0, uint16_t m1, uint16_t m2, uint16_t m3,
   mask[3] = m3;
   type = shape;
 }
-Tetrimino::Tetrimino(char shape, SandShift tetriminoColor) {
-  type = static_cast<std::uint8_t>(shape);
-  color = tetriminoColor;
-  mask = ShapeInfoList.at(static_cast<char>(type)).mask[0];
+
+Tetrimino::Tetrimino(char shape, SandShift tetriminoColor) : mask(ShapeInfoList.at(shape).mask[0]), type(ShapeInfoList.at(shape).type), color(tetriminoColor) {
 }
-Tetrimino::Tetrimino() = default;
 
 void Tetrimino::rotate() {
   current_rotation++;

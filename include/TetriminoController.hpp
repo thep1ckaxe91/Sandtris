@@ -15,9 +15,9 @@
 class TetriminoController {
 public:
   Game &game;
-  Tetrimino tetrimino;
   sdlgame::surface::Surface<SDL_TEXTUREACCESS_TARGET> draw_surf;
   sdlgame::math::Vector2 topleft;
+  Tetrimino tetrimino;
   TetriminoController(Game &game, Tetrimino tetrimino);
 
   // deleted default constructor because of Game&

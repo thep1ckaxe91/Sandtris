@@ -9,11 +9,11 @@
 #include <memory>
 
 class Option : public Scene {
-public:
   std::shared_ptr<BackButton> back_button;
   std::shared_ptr<SFXVolumeSlider> sfx_slider;
   std::shared_ptr<MusicVolumeSlider> music_slider;
   std::shared_ptr<FullscreenSlider> fs_slider;
+public:
   Option(Game &game);
   void update() override;
   void handle_event(const sdlgame::event::Event &event) override;

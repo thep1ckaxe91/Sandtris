@@ -12,7 +12,6 @@
 #include <memory>
 
 class Pause : public Scene {
-public:
   std::shared_ptr<MenuButton> menu_button;
   std::string message;
   sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC> message_surf;
@@ -21,6 +20,7 @@ public:
   std::shared_ptr<OptionButton> option_button;
   std::shared_ptr<RetryButton> retry_button;
   std::shared_ptr<BackButton> back_button;
+public:
   Pause(Game &game);
   void render_message(const std::string &new_message);
   void display_message();

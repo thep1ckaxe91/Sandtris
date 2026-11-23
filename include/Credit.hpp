@@ -8,9 +8,9 @@
 #include <memory>
 
 class Credit : public Scene {
-public:
+  constexpr static sdlgame::math::Vector2 bb_pos = sdlgame::math::Vector2(123, 123);
   std::shared_ptr<BackButton> back_button;
-  const sdlgame::math::Vector2 bb_pos = sdlgame::math::Vector2(123, 123);
+public:
   Credit(Game &game);
   void handle_event(const sdlgame::event::Event &event) override;
   void update() override;

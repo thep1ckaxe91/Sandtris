@@ -12,7 +12,6 @@
 #include <memory>
 
 class MainMenu : public Scene {
-public:
   std::shared_ptr<StartButton> start_button;
   std::shared_ptr<QuitButton> quit_button;
   std::shared_ptr<CreditButton> credit_button;
@@ -22,6 +21,7 @@ public:
   std::shared_ptr<ResumeButton> resume_button;
 
   bool can_resume;
+public:
   MainMenu(Game &game);
   void handle_event(const sdlgame::event::Event &event);
   void update();

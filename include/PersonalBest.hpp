@@ -1,4 +1,5 @@
 #pragma once
+#include <sdlgame/math.hpp>
 #include <sdlgame/surface.hpp>
 #ifndef PERSONAL_BEST_HPP
 #define PERSONAL_BEST_HPP
@@ -9,15 +10,18 @@
 #include <memory>
 #include <sdlgame/font.hpp>
 
+using sdlgame::math::Vector2;
+
 class PersonalBest : public Scene {
-public:
-  sdlgame::font::Font pb_font;
+  constexpr static Vector2 pb_center = Vector2(81, 79);
+  constexpr static Vector2 bb_pos = Vector2(66, 103);
+
   sdlgame::surface::Surface<SDL_TEXTUREACCESS_STATIC> pb_surf;
+  sdlgame::font::Font pb_font;
   sdlgame::rect::Rect pb_rect;
-  const sdlgame::math::Vector2 pb_center = sdlgame::math::Vector2(81, 79);
-  int score;
   std::shared_ptr<BackButton> back_button;
-  const sdlgame::math::Vector2 bb_pos = sdlgame::math::Vector2(66, 103);
+  int score;
+public:
   PersonalBest(Game &game);
   void update() override;
   void draw() override;

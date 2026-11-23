@@ -5,12 +5,12 @@
 #include <cstdint>
 #include <unordered_map>
 
-typedef struct ShapeInfo {
+struct ShapeInfo {
   uint16_t mask[4];
   char type;
-
+  constexpr ShapeInfo() = default;
   ShapeInfo(uint16_t m0, uint16_t m1, uint16_t m2, uint16_t m3, char shape);
-} ShapeInfo;
+};
 
 const ShapeInfo I_info = {0xf0, 0x2222, 0xf0, 0x2222, 'I'};
 const ShapeInfo O_info = {0x660, 0x660, 0x660, 0x660, 'O'};
@@ -29,11 +29,10 @@ const std::unordered_map<char, ShapeInfo> ShapeInfoList = {
  * it appear differenctly and control by Tetrimino Controller
  */
 struct Tetrimino {
-  SandShift color;
   /**
    * 1 bit is for 1 cell,
-   * 1 mean there are thing to draw, 0 mean no
-   * for better image, this is the T shape :
+   * 1 mean there are thing to draw, 0 mean nothing
+   * For better image, this is the T shape :
    * 0100
    * 1100
    * 0100
@@ -44,12 +43,13 @@ struct Tetrimino {
   uint16_t mask;
   uint8_t type;
   uint8_t current_rotation = 0;
+  SandShift color;
   /**
    * @param shape the character stand for the shape
    * @param color SandShift color for the shape
    */
   Tetrimino(char shape, SandShift tetriminoColor);
-  Tetrimino();
+  Tetrimino() = default;
 
   void rotate();
 };

@@ -8,10 +8,10 @@
 #include <memory>
 
 class HowToPlay : public Scene {
-public:
+  constexpr static sdlgame::math::Vector2 bb_pos = sdlgame::math::Vector2(123, 123);
   std::shared_ptr<BackButton> back_button;
   double height_pos;
-  const sdlgame::math::Vector2 bb_pos = sdlgame::math::Vector2(123, 123);
+public:
   HowToPlay(Game &game);
   void handle_event(const sdlgame::event::Event &event) override;
   void update() override;
